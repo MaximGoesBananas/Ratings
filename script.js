@@ -149,7 +149,7 @@ function showSection(id) {
  * Fetch the CSV data for movies, parse it using PapaParse, then
  * populate the filters and render the movie cards.
  *
- * Expected headers (matching your updated sheet):
+ * Expected headers:
  * Title, Score, Year, Runtime, Director, Score Date, PosterURL, ...
  */
 function fetchMovies() {
@@ -182,7 +182,7 @@ function fetchMovies() {
  * Populate the year and director filters based on available data.
  */
 function populateFilters(data) {
-  // Reset back to just "All" (avoid duplicates if refetch ever happens)
+  // Reset back to just "All" (avoid duplicates)
   yearFilterEl.innerHTML = '<option value="">All</option>';
   directorFilterEl.innerHTML = '<option value="">All</option>';
 
@@ -213,7 +213,12 @@ function populateFilters(data) {
 
 /**
  * Render the movie cards based on current filters and sorting.
- * Score is displayed as a circular overlay badge on the poster.
+ *
+ * Changes requested:
+ * 1) Top Rated sort now secondarily sorts by Year (newest first).
+ * 2) Year shown in parentheses next to title.
+ * 3) Remove old "Year:" row entirely.
+ * 4) Remove "Director:" prefix in director row.
  */
 function renderMovies() {
   if (!moviesData) return;
@@ -228,7 +233,17 @@ function renderMovies() {
   });
 
   if (currentSort === 'score') {
-    filtered.sort((a, b) => b.score - a.score);
+    filtered.sort((a, b) => {
+      const ds = b.score - a.score;
+      if (ds !== 0) return ds;
+
+      const ya = parseInt(a.year, 10) || 0;
+      const yb = parseInt(b.year, 10) || 0;
+      const dy = yb - ya;
+      if (dy !== 0) return dy;
+
+      return a.title.localeCompare(b.title);
+    });
   } else if (currentSort === 'date') {
     filtered.sort((a, b) => {
       const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
@@ -264,21 +279,19 @@ function renderMovies() {
     const content = document.createElement('div');
     content.className = 'card-content';
 
+    // Title with year in parentheses
     const title = document.createElement('div');
     title.className = 'card-title';
-    title.textContent = movie.title;
+    title.textContent = movie.year ? `${movie.title} (${movie.year})` : movie.title;
     content.appendChild(title);
 
-    const year = document.createElement('div');
-    year.className = 'card-details';
-    year.textContent = `Year: ${movie.year}`;
-    content.appendChild(year);
-
+    // Director row WITHOUT "Director:"
     const director = document.createElement('div');
     director.className = 'card-details';
-    director.textContent = `Director: ${movie.director}`;
+    director.textContent = movie.director || '';
     content.appendChild(director);
 
+    // Date rated
     const date = document.createElement('div');
     date.className = 'card-details';
     date.textContent = `Rated: ${movie.scoreDate}`;
