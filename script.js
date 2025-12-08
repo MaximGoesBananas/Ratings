@@ -27,6 +27,8 @@ sections.forEach(id => {
 });
 
 // Movie-specific DOM elements
+const minScoreFilterEl = document.getElementById('minScoreFilter');
+const maxScoreFilterEl = document.getElementById('maxScoreFilter');
 const yearFilterEl = document.getElementById('yearFilter');
 const directorFilterEl = document.getElementById('directorFilter');
 const moviesContainer = document.getElementById('moviesContainer');
@@ -120,9 +122,6 @@ function buildScoreBadge(score) {
    Navigation
 ---------------------------- */
 
-/**
- * Show the requested section and hide others. Also update the URL hash.
- */
 function showSection(id) {
   sections.forEach(sec => {
     if (sectionElements[sec]) {
@@ -146,9 +145,6 @@ function showSection(id) {
 ---------------------------- */
 
 /**
- * Fetch the CSV data for movies, parse it using PapaParse, then
- * populate the filters and render the movie cards.
- *
  * Expected headers:
  * Title, Score, Year, Runtime, Director, Score Date, PosterURL, ...
  */
@@ -178,11 +174,7 @@ function fetchMovies() {
     });
 }
 
-/**
- * Populate the year and director filters based on available data.
- */
 function populateFilters(data) {
-  // Reset back to just "All" (avoid duplicates)
   yearFilterEl.innerHTML = '<option value="">All</option>';
   directorFilterEl.innerHTML = '<option value="">All</option>';
 
@@ -211,25 +203,43 @@ function populateFilters(data) {
    Rendering
 ---------------------------- */
 
+function getScoreBounds() {
+  const minVal = parseFloat(minScoreFilterEl?.value);
+  const maxVal = parseFloat(maxScoreFilterEl?.value);
+
+  let minScore = Number.isFinite(minVal) ? minVal : -Infinity;
+  let maxScore = Number.isFinite(maxVal) ? maxVal : Infinity;
+
+  if (minScore > maxScore) {
+    const tmp = minScore;
+    minScore = maxScore;
+    maxScore = tmp;
+  }
+
+  return { minScore, maxScore };
+}
+
 /**
  * Render the movie cards based on current filters and sorting.
  *
- * Changes requested:
- * 1) Top Rated sort now secondarily sorts by Year (newest first).
- * 2) Year shown in parentheses next to title.
- * 3) Remove old "Year:" row entirely.
- * 4) Remove "Director:" prefix in director row.
+ * Top Rated: score desc, then year desc.
+ * Title shows (Year).
+ * No "Year:" row.
+ * Director row has no "Director:" prefix.
+ * New score range filter.
  */
 function renderMovies() {
   if (!moviesData) return;
 
   const selectedYear = yearFilterEl.value;
   const selectedDirector = directorFilterEl.value;
+  const { minScore, maxScore } = getScoreBounds();
 
   let filtered = moviesData.filter(movie => {
     const yearMatch = selectedYear ? movie.year === selectedYear : true;
     const directorMatch = selectedDirector ? movie.director === selectedDirector : true;
-    return yearMatch && directorMatch;
+    const scoreMatch = movie.score >= minScore && movie.score <= maxScore;
+    return yearMatch && directorMatch && scoreMatch;
   });
 
   if (currentSort === 'score') {
@@ -258,7 +268,6 @@ function renderMovies() {
     const card = document.createElement('div');
     card.className = 'card';
 
-    // Poster wrapper for overlay badge
     const posterWrap = document.createElement('div');
     posterWrap.className = 'poster-wrap';
 
@@ -275,23 +284,19 @@ function renderMovies() {
     posterWrap.appendChild(buildScoreBadge(movie.score));
     card.appendChild(posterWrap);
 
-    // Content
     const content = document.createElement('div');
     content.className = 'card-content';
 
-    // Title with year in parentheses
     const title = document.createElement('div');
     title.className = 'card-title';
     title.textContent = movie.year ? `${movie.title} (${movie.year})` : movie.title;
     content.appendChild(title);
 
-    // Director row WITHOUT "Director:"
     const director = document.createElement('div');
     director.className = 'card-details';
     director.textContent = movie.director || '';
     content.appendChild(director);
 
-    // Date rated
     const date = document.createElement('div');
     date.className = 'card-details';
     date.textContent = `Rated: ${movie.scoreDate}`;
@@ -323,6 +328,9 @@ function init() {
     });
   });
 
+  // Filter changes
+  minScoreFilterEl?.addEventListener('change', renderMovies);
+  maxScoreFilterEl?.addEventListener('change', renderMovies);
   yearFilterEl.addEventListener('change', renderMovies);
   directorFilterEl.addEventListener('change', renderMovies);
 
