@@ -1,39 +1,34 @@
 /*
  * Main JavaScript for the Maxim's Ratings SPA
  *
- * This script handles navigation between sections, fetches CSV data
- * from the published Google Sheets, parses it into JavaScript objects,
- * and renders movie cards with filtering and sorting controls.
+ * Handles navigation, fetches CSV data from Google Sheets,
+ * parses it into objects, and renders movie cards with
+ * sorting + filtering + score badge + rated pill.
  */
 
 // Movies CSV URL
 const MOVIES_CSV_URL =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmO1htUVAzTQHYcE73oHxvcKUmg5c4ZD6CdskMSA3wj3LkGhUbt1kpFqffbHNhERJ7_ksgfYEm_q2L/pub?gid=1920189918&single=true&output=csv';
 
-// Store loaded data in memory to avoid refetching on every view switch
+// Store loaded data in memory
 let moviesData = null;
 
-// DEFAULT SORT is "latest"
+// Default sort
 let currentSort = 'latest';
 
-// DOM element references
-const sectionElements = {};
-const categoryButtons = document.querySelectorAll('.category-button');
+// Section management
 const sections = ['home', 'movies', 'games', 'mice', 'mousepads'];
+const sectionElements = {};
 
-// Initialize references to each section for quick lookup
-sections.forEach(id => {
-  sectionElements[id] = document.getElementById(id);
-});
-
-// Movie-specific DOM elements
-const minScoreFilterEl = document.getElementById('minScoreFilter');
-const maxScoreFilterEl = document.getElementById('maxScoreFilter');
-const yearFilterEl = document.getElementById('yearFilter');
-const directorFilterEl = document.getElementById('directorFilter');
-const moviesContainer = document.getElementById('moviesContainer');
-const sortButtons = document.querySelectorAll('.sort-button');
-const backToHomeBtn = document.getElementById('backToHome');
+// DOM refs populated in init
+let categoryButtons;
+let minScoreFilterEl;
+let maxScoreFilterEl;
+let yearFilterEl;
+let directorFilterEl;
+let moviesContainer;
+let sortButtons;
+let backToHomeBtn;
 
 /* ---------------------------
    Helpers for score visuals
@@ -75,25 +70,20 @@ function buildScoreBadge(score) {
   const badge = document.createElement('div');
   badge.className = 'score-badge';
 
-  // Normalize: 1 -> 0, 10 -> 1
   const t = clamp((score - 1) / 9, 0, 1);
 
-  // Number/star color: gray -> rich yellow
   const lowColor = '#9b9b9b';
   const highColor = '#ffd54a';
   const scoreColor = lerpColorHex(lowColor, highColor, t);
 
-  // Number size scaling (rem)
   const minNumber = 0.85;
   const maxNumber = 1.35;
   const numberSize = lerp(minNumber, maxNumber, Math.pow(t, 0.9));
 
-  // Star size scaling (rem)
   const minStar = 0.75;
   const maxStar = 1.05;
   const starSize = lerp(minStar, maxStar, Math.pow(t, 0.9));
 
-  // Badge circle size scaling (px)
   const minBadge = 38;
   const maxBadge = 58;
   const badgeSize = lerp(minBadge, maxBadge, Math.pow(t, 0.85));
@@ -125,9 +115,8 @@ function buildScoreBadge(score) {
 
 function showSection(id) {
   sections.forEach(sec => {
-    if (sectionElements[sec]) {
-      sectionElements[sec].classList.toggle('hidden', sec !== id);
-    }
+    const el = sectionElements[sec];
+    if (el) el.classList.toggle('hidden', sec !== id);
   });
 
   if (id !== 'home') {
@@ -141,31 +130,34 @@ function showSection(id) {
   }
 }
 
+function handleHashChange() {
+  const hash = window.location.hash.replace('#', '');
+  if (sections.includes(hash) && hash !== '') {
+    showSection(hash);
+  } else {
+    showSection('home');
+  }
+}
+
 /* ---------------------------
    Data loading
 ---------------------------- */
 
-/**
- * Expected headers:
- * Title, Score, Year, Runtime, Director, Score Date, PosterURL, ...
- */
 function fetchMovies() {
   fetch(MOVIES_CSV_URL)
     .then(response => response.text())
     .then(text => {
       const parsed = Papa.parse(text.trim(), { header: true }).data;
 
-      moviesData = parsed.map(row => {
-        return {
-          title: row['Title']?.trim() || '',
-          score: parseFloat(row['Score'] || 0) || 0,
-          year: (row['Year'] || '').toString().trim(),
-          runtime: (row['Runtime'] || '').toString().trim(),
-          director: row['Director']?.trim() || '',
-          scoreDate: row['Score Date']?.trim() || '',
-          posterUrl: row['PosterURL']?.trim() || '',
-        };
-      }).filter(movie => movie.title);
+      moviesData = parsed.map(row => ({
+        title: row['Title']?.trim() || '',
+        score: parseFloat(row['Score'] || 0) || 0,
+        year: (row['Year'] || '').toString().trim(),
+        runtime: (row['Runtime'] || '').toString().trim(),
+        director: row['Director']?.trim() || '',
+        scoreDate: row['Score Date']?.trim() || '',
+        posterUrl: row['PosterURL']?.trim() || '',
+      })).filter(movie => movie.title);
 
       populateFilters(moviesData);
       renderMovies();
@@ -201,7 +193,7 @@ function populateFilters(data) {
 }
 
 /* ---------------------------
-   Rendering
+   Filtering + Sorting
 ---------------------------- */
 
 function getScoreBounds() {
@@ -220,16 +212,6 @@ function getScoreBounds() {
   return { minScore, maxScore };
 }
 
-/**
- * Sorting rules:
- * - latest (DEFAULT): Year desc, then Score Date desc, then Score desc, then Title
- * - score: Score desc, then Year desc, then Title
- * - date: Score Date desc
- *
- * Title shows (Year).
- * Director row has no "Director:" prefix.
- * "Rated" shown as a styled pill.
- */
 function renderMovies() {
   if (!moviesData) return;
 
@@ -293,7 +275,6 @@ function renderMovies() {
     const img = document.createElement('img');
     img.src = movie.posterUrl || '';
     img.alt = movie.title;
-
     img.onerror = () => {
       img.src = '';
       img.style.backgroundColor = '#3a3a3a';
@@ -316,7 +297,7 @@ function renderMovies() {
     director.textContent = movie.director || '';
     content.appendChild(director);
 
-    // 1) Styled rated pill
+    // Rated pill (THIS is the key fix)
     const date = document.createElement('div');
     date.className = 'rated-pill';
     date.textContent = movie.scoreDate ? `Rated: ${movie.scoreDate}` : 'Rated: —';
@@ -332,6 +313,32 @@ function renderMovies() {
 ---------------------------- */
 
 function init() {
+  // Sections
+  sections.forEach(id => {
+    sectionElements[id] = document.getElementById(id);
+  });
+
+  // Navigation buttons
+  categoryButtons = document.querySelectorAll('.category-button');
+
+  // Filters
+  minScoreFilterEl = document.getElementById('minScoreFilter');
+  maxScoreFilterEl = document.getElementById('maxScoreFilter');
+  yearFilterEl = document.getElementById('yearFilter');
+  directorFilterEl = document.getElementById('directorFilter');
+
+  // Sort buttons
+  sortButtons = document.querySelectorAll('.sort-button');
+
+  // Container
+  moviesContainer = document.getElementById('moviesContainer');
+
+  // Home/back button (robust: id OR class)
+  backToHomeBtn =
+    document.getElementById('backToHome') ||
+    document.querySelector('.back-button');
+
+  // Category navigation
   categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.getAttribute('data-section');
@@ -339,6 +346,7 @@ function init() {
     });
   });
 
+  // Sort buttons
   sortButtons.forEach(button => {
     button.addEventListener('click', () => {
       sortButtons.forEach(b => b.classList.remove('active'));
@@ -348,26 +356,20 @@ function init() {
     });
   });
 
-  // 2) Back to home button
-  backToHomeBtn?.addEventListener('click', () => showSection('home'));
+  // Back to home (THIS is the key fix)
+  if (backToHomeBtn) {
+    backToHomeBtn.addEventListener('click', () => showSection('home'));
+  }
 
-  // Filters
+  // Filter changes
   minScoreFilterEl?.addEventListener('change', renderMovies);
   maxScoreFilterEl?.addEventListener('change', renderMovies);
-  yearFilterEl.addEventListener('change', renderMovies);
-  directorFilterEl.addEventListener('change', renderMovies);
+  yearFilterEl?.addEventListener('change', renderMovies);
+  directorFilterEl?.addEventListener('change', renderMovies);
 
+  // Initial route
   handleHashChange();
   window.addEventListener('hashchange', handleHashChange);
-}
-
-function handleHashChange() {
-  const hash = window.location.hash.replace('#', '');
-  if (sections.includes(hash) && hash !== '') {
-    showSection(hash);
-  } else {
-    showSection('home');
-  }
 }
 
 document.addEventListener('DOMContentLoaded', init);
