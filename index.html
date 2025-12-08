@@ -9,44 +9,41 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome (NO integrity hash) -->
+  <!-- Font Awesome (no integrity to avoid blocking) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Site styles -->
   <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
   <main>
-
-    <!-- Home -->
+    <!-- Home section -->
     <section id="home" class="section">
       <h1>Maxim's Ratings</h1>
-
       <div class="categories">
         <button class="category-button" data-section="movies">
-          <i class="fa-solid fa-film"></i><span>Movies</span>
+          <i class="fa-solid fa-film" aria-hidden="true"></i>
+          <span>Movies</span>
         </button>
-
         <button class="category-button" data-section="games">
-          <i class="fa-solid fa-gamepad"></i><span>Games</span>
+          <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+          <span>Games</span>
         </button>
-
         <button class="category-button" data-section="mice">
-          <i class="fa-solid fa-computer-mouse"></i><span>Mice</span>
+          <i class="fa-solid fa-computer-mouse" aria-hidden="true"></i>
+          <span>Mice</span>
         </button>
-
         <button class="category-button" data-section="mousepads">
-          <i class="fa-solid fa-mouse-pointer"></i><span>Mousepads</span>
+          <i class="fa-solid fa-mouse-pointer" aria-hidden="true"></i>
+          <span>Mousepads</span>
         </button>
       </div>
     </section>
 
-    <!-- Movies -->
+    <!-- Movies section -->
     <section id="movies" class="section hidden">
       <div class="section-header">
         <h2>Movies</h2>
-
         <div class="controls">
           <div class="filters">
             <label for="yearFilter">Year:</label>
@@ -62,12 +59,8 @@
 
           <div class="sorting">
             <span>Sort by:</span>
-            <button id="sortByScore" class="sort-button active" data-sort="score">
-              Top Rated
-            </button>
-            <button id="sortByDate" class="sort-button" data-sort="date">
-              Recently Rated
-            </button>
+            <button id="sortByScore" class="sort-button active" data-sort="score">Top Rated</button>
+            <button id="sortByDate" class="sort-button" data-sort="date">Recently Rated</button>
           </div>
         </div>
       </div>
@@ -75,7 +68,7 @@
       <div id="moviesContainer" class="cards-container"></div>
     </section>
 
-    <!-- Game/Mice/Mousepad placeholders -->
+    <!-- Placeholder sections -->
     <section id="games" class="section hidden">
       <h2>Games</h2>
       <p>Games ratings will appear here in the future.</p>
@@ -90,14 +83,12 @@
       <h2>Mousepads</h2>
       <p>Mousepad ratings will appear here in the future.</p>
     </section>
-
   </main>
 
-  <!-- PapaParse (NO integrity hash) -->
+  <!-- PapaParse (no integrity to avoid blocking) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <!-- Site script -->
   <script src="script.js"></script>
-
 </body>
 </html>
