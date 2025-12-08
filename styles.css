@@ -7,6 +7,7 @@
   --accent-soft: rgba(255, 213, 74, 0.12);
   --border: rgba(255, 255, 255, 0.06);
   --shadow: 0 10px 30px rgba(0,0,0,0.35);
+  --select-bg: #0f1422;
 }
 
 * { box-sizing: border-box; }
@@ -125,16 +126,45 @@ main {
   font-size: 0.9rem;
 }
 
+/* 2) Fix bright dropdown background on desktop */
 select {
-  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  background: linear-gradient(180deg, var(--select-bg), #0b0f1b);
+  background-color: var(--select-bg);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 10px;
   padding: 8px 10px;
   outline: none;
+
+  /* Hint to browsers to use dark UI for native dropdowns */
+  color-scheme: dark;
 }
 
-/* 3) Make the director filter shorter */
+select option {
+  background-color: var(--select-bg);
+  color: var(--text);
+}
+
+/* Score range mini layout */
+.score-range {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.score-range-sep {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 2px;
+}
+
+/* Keep score selects compact */
+#minScoreFilter,
+#maxScoreFilter {
+  width: 74px;
+}
+
+/* Director filter shorter */
 #directorFilter {
   width: 160px;
   max-width: 60vw;
@@ -244,7 +274,6 @@ select {
   transform: translateY(-1px);
 }
 
-/* Star symbol */
 .score-star {
   line-height: 1;
   font-size: var(--star-size, 0.95rem);
@@ -252,7 +281,6 @@ select {
   text-shadow: 0 0 6px rgba(255, 215, 0, 0.25);
 }
 
-/* Score number */
 .score-value {
   font-weight: 900;
   line-height: 1;
@@ -264,7 +292,6 @@ select {
   font-variant-numeric: tabular-nums;
 }
 
-/* Extra glow for high scores */
 .score-badge.is-high {
   box-shadow:
     0 6px 18px rgba(0,0,0,0.38),
