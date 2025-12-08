@@ -1,16 +1,18 @@
 /*
- * Main JavaScript for the Maxim's Ratings SPA
+ * Maxim's Ratings SPA
  *
- * Now supports:
+ * Supports:
  * - Movies (single tab)
- * - Games (MERGED from "Simple Games" + "Complex Games")
+ * - Games (merged Simple + Complex)
+ * - Mice (prepared)
+ * - Mousepads (prepared)
  *
- * Each category has independent filters, sorting, and rendering.
+ * Each category defines:
+ * - gids
+ * - DOM ids
+ * - mapRow (category-specific parsing)
+ * - search keys
  */
-
-/* ---------------------------
-   Published sheet base
----------------------------- */
 
 const PUBLISHED_BASE =
   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmO1htUVAzTQHYcE73oHxvcKUmg5c4ZD6CdskMSA3wj3LkGhUbt1kpFqffbHNhERJ7_ksgfYEm_q2L/pub';
@@ -20,70 +22,118 @@ function buildPublishedCsvUrl(gid) {
 }
 
 /* ---------------------------
-   GIDs (set these)
+   GIDs
 ---------------------------- */
-
-// GIDs
 const MOVIES_GID = '1920189918';
 const SIMPLE_GAMES_GID = '1303529120';
 const COMPLEX_GAMES_GID = '1556084448';
 
-const MOVIES_CSV_URL = buildPublishedCsvUrl(MOVIES_GID);
+// Prepare for future
+const MICE_GIDS = [];        // add later
+const MOUSEPADS_GIDS = [];   // add later
 
-// Games URLs will be constructed only if gids exist
-const SIMPLE_GAMES_CSV_URL = SIMPLE_GAMES_GID ? buildPublishedCsvUrl(SIMPLE_GAMES_GID) : '';
-const COMPLEX_GAMES_CSV_URL = COMPLEX_GAMES_GID ? buildPublishedCsvUrl(COMPLEX_GAMES_GID) : '';
+/* ---------------------------
+   Category config
+---------------------------- */
+const CATEGORY = {
+  movies: {
+    label: 'Movies',
+    gids: [MOVIES_GID],
+    dom: {
+      container: 'moviesContainer',
+      minScore: 'minScoreFilter',
+      maxScore: 'maxScoreFilter',
+      year: 'yearFilter',
+      search: 'searchFilter',
+      back: 'backToHomeMovies',
+    },
+    sortDefault: 'latest',
+    searchKeys: ['title', 'person'],
+    mapRow: row => ({
+      title: row['Title']?.trim() || '',
+      score: parseFloat(row['Score'] || 0) || 0,
+      year: (row['Year'] || '').toString().trim(),
+      person: row['Director']?.trim() || '',
+      scoreDate: row['Score Date']?.trim() || '',
+      posterUrl: row['PosterURL']?.trim() || '',
+    }),
+  },
+
+  games: {
+    label: 'Games',
+    gids: [SIMPLE_GAMES_GID, COMPLEX_GAMES_GID],
+    dom: {
+      container: 'gamesContainer',
+      minScore: 'gamesMinScoreFilter',
+      maxScore: 'gamesMaxScoreFilter',
+      year: 'gamesYearFilter',
+      search: 'gamesSearchFilter',
+      back: 'backToHomeGames',
+    },
+    sortDefault: 'latest',
+    searchKeys: ['title', 'person'],
+    mapRow: row => ({
+      title: row['Title']?.trim() || '',
+      score: parseFloat(row['Score'] || 0) || 0,
+      year: (row['Year'] || '').toString().trim(),
+      person: row['Developers']?.trim() || '',
+      scoreDate: row['Score Date']?.trim() || '',
+      posterUrl: row['PosterURL']?.trim() || '',
+    }),
+  },
+
+  mice: {
+    label: 'Mice',
+    gids: MICE_GIDS,
+    dom: {
+      container: 'miceContainer',
+      minScore: 'miceMinScoreFilter',
+      maxScore: 'miceMaxScoreFilter',
+      year: 'miceYearFilter',
+      search: 'miceSearchFilter',
+      back: 'backToHomeMice',
+    },
+    sortDefault: 'latest',
+    searchKeys: ['title', 'person'],
+    mapRow: null, // set when you provide headers
+  },
+
+  mousepads: {
+    label: 'Mousepads',
+    gids: MOUSEPADS_GIDS,
+    dom: {
+      container: 'mousepadsContainer',
+      minScore: 'mousepadsMinScoreFilter',
+      maxScore: 'mousepadsMaxScoreFilter',
+      year: 'mousepadsYearFilter',
+      search: 'mousepadsSearchFilter',
+      back: 'backToHomeMousepads',
+    },
+    sortDefault: 'latest',
+    searchKeys: ['title', 'person'],
+    mapRow: null, // set when you provide headers
+  },
+};
 
 /* ---------------------------
    State
 ---------------------------- */
-
-let moviesData = null;
-let gamesData = null;
-
-let currentMoviesSort = 'latest';
-let currentGamesSort = 'latest';
+const state = {
+  movies: { data: null, sort: CATEGORY.movies.sortDefault },
+  games: { data: null, sort: CATEGORY.games.sortDefault },
+  mice: { data: null, sort: CATEGORY.mice.sortDefault },
+  mousepads: { data: null, sort: CATEGORY.mousepads.sortDefault },
+};
 
 /* ---------------------------
-   Section management
+   Sections
 ---------------------------- */
-
 const sections = ['home', 'movies', 'games', 'mice', 'mousepads'];
 const sectionElements = {};
-let categoryButtons;
-
-/* ---------------------------
-   Movies DOM
----------------------------- */
-
-let minScoreFilterEl;
-let maxScoreFilterEl;
-let yearFilterEl;
-let searchFilterEl;
-let moviesContainer;
-let backToHomeBtn;
-
-/* ---------------------------
-   Games DOM
----------------------------- */
-
-let gamesMinScoreFilterEl;
-let gamesMaxScoreFilterEl;
-let gamesYearFilterEl;
-let gamesSearchFilterEl;
-let gamesContainer;
-let backToHomeGamesBtn;
-
-/* ---------------------------
-   Shared DOM
----------------------------- */
-
-let sortButtons;
 
 /* ---------------------------
    Helpers
 ---------------------------- */
-
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
 }
@@ -121,22 +171,13 @@ function buildScoreBadge(score) {
   badge.className = 'score-badge';
 
   const t = clamp((score - 1) / 9, 0, 1);
-
   const lowColor = '#9b9b9b';
   const highColor = '#ffd54a';
   const scoreColor = lerpColorHex(lowColor, highColor, t);
 
-  const minNumber = 0.85;
-  const maxNumber = 1.35;
-  const numberSize = lerp(minNumber, maxNumber, Math.pow(t, 0.9));
-
-  const minStar = 0.75;
-  const maxStar = 1.05;
-  const starSize = lerp(minStar, maxStar, Math.pow(t, 0.9));
-
-  const minBadge = 38;
-  const maxBadge = 58;
-  const badgeSize = lerp(minBadge, maxBadge, Math.pow(t, 0.85));
+  const numberSize = lerp(0.85, 1.35, Math.pow(t, 0.9));
+  const starSize = lerp(0.75, 1.05, Math.pow(t, 0.9));
+  const badgeSize = lerp(38, 58, Math.pow(t, 0.85));
 
   badge.style.setProperty('--score-color', scoreColor);
   badge.style.setProperty('--score-size', `${numberSize}rem`);
@@ -163,6 +204,10 @@ function normalize(s) {
   return (s || '').toString().toLowerCase();
 }
 
+function getEl(id) {
+  return document.getElementById(id);
+}
+
 function getScoreBounds(minEl, maxEl) {
   const minVal = parseFloat(minEl?.value);
   const maxVal = parseFloat(maxEl?.value);
@@ -179,10 +224,14 @@ function getScoreBounds(minEl, maxEl) {
   return { minScore, maxScore };
 }
 
+function matchesSearch(item, term, keys) {
+  if (!term) return true;
+  return keys.some(k => normalize(item[k]).includes(term));
+}
+
 /* ---------------------------
    Navigation
 ---------------------------- */
-
 function showSection(id) {
   sections.forEach(sec => {
     const el = sectionElements[sec];
@@ -195,12 +244,8 @@ function showSection(id) {
     history.replaceState(null, '', window.location.pathname);
   }
 
-  if (id === 'movies' && moviesData === null) {
-    fetchMovies();
-  }
-
-  if (id === 'games' && gamesData === null) {
-    fetchGames();
+  if (id in CATEGORY && state[id].data === null) {
+    fetchCategory(id);
   }
 }
 
@@ -214,213 +259,88 @@ function handleHashChange() {
 }
 
 /* ---------------------------
-   Movies: fetch + parse + filters
+   Data fetch + parse
 ---------------------------- */
-
-function fetchMovies() {
-  fetch(MOVIES_CSV_URL)
-    .then(r => r.text())
-    .then(text => {
-      const parsed = Papa.parse(text.trim(), { header: true }).data;
-
-      moviesData = parsed.map(row => ({
-        title: row['Title']?.trim() || '',
-        score: parseFloat(row['Score'] || 0) || 0,
-        year: (row['Year'] || '').toString().trim(),
-        director: row['Director']?.trim() || '',
-        scoreDate: row['Score Date']?.trim() || '',
-        posterUrl: row['PosterURL']?.trim() || '',
-      })).filter(m => m.title);
-
-      populateMoviesYearFilter(moviesData);
-      renderMovies();
-    })
-    .catch(err => console.error('Movies CSV error:', err));
+function parseCsvWithMap(text, mapRow) {
+  const parsed = Papa.parse(text.trim(), { header: true, skipEmptyLines: true }).data;
+  return parsed.map(mapRow).filter(x => x.title);
 }
 
-function populateMoviesYearFilter(data) {
-  yearFilterEl.innerHTML = '<option value="">All</option>';
-  const years = Array.from(new Set(data.map(m => m.year).filter(Boolean)));
-  years.sort((a, b) => b.localeCompare(a));
-  years.forEach(y => {
-    const opt = document.createElement('option');
-    opt.value = y;
-    opt.textContent = y;
-    yearFilterEl.appendChild(opt);
-  });
-}
+async function fetchCategory(key) {
+  const cfg = CATEGORY[key];
+  const st = state[key];
 
-/* ---------------------------
-   Movies: render
----------------------------- */
+  const container = getEl(cfg.dom.container);
 
-function sortMovies(list) {
-  if (currentMoviesSort === 'latest') {
-    list.sort((a, b) => {
-      const ya = parseInt(a.year, 10) || 0;
-      const yb = parseInt(b.year, 10) || 0;
-      const dy = yb - ya;
-      if (dy !== 0) return dy;
-
-      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
-      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
-      const dd = db - da;
-      if (dd !== 0) return dd;
-
-      const ds = b.score - a.score;
-      if (ds !== 0) return ds;
-
-      return a.title.localeCompare(b.title);
-    });
-  } else if (currentMoviesSort === 'score') {
-    list.sort((a, b) => {
-      const ds = b.score - a.score;
-      if (ds !== 0) return ds;
-
-      const ya = parseInt(a.year, 10) || 0;
-      const yb = parseInt(b.year, 10) || 0;
-      const dy = yb - ya;
-      if (dy !== 0) return dy;
-
-      return a.title.localeCompare(b.title);
-    });
-  } else if (currentMoviesSort === 'date') {
-    list.sort((a, b) => {
-      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
-      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
-      return db - da;
-    });
-  }
-}
-
-function renderMovies() {
-  if (!moviesData) return;
-
-  const selectedYear = yearFilterEl.value;
-  const { minScore, maxScore } = getScoreBounds(minScoreFilterEl, maxScoreFilterEl);
-  const searchTerm = normalize(searchFilterEl?.value).trim();
-
-  let filtered = moviesData.filter(movie => {
-    const yearMatch = selectedYear ? movie.year === selectedYear : true;
-    const scoreMatch = movie.score >= minScore && movie.score <= maxScore;
-
-    const title = normalize(movie.title);
-    const director = normalize(movie.director);
-
-    const searchMatch = searchTerm
-      ? (title.includes(searchTerm) || director.includes(searchTerm))
-      : true;
-
-    return yearMatch && scoreMatch && searchMatch;
-  });
-
-  sortMovies(filtered);
-
-  moviesContainer.innerHTML = '';
-
-  filtered.forEach(movie => {
-    const card = document.createElement('div');
-    card.className = 'card';
-
-    const posterWrap = document.createElement('div');
-    posterWrap.className = 'poster-wrap';
-
-    const img = document.createElement('img');
-    img.src = movie.posterUrl || '';
-    img.alt = movie.title;
-    img.onerror = () => {
-      img.src = '';
-      img.style.backgroundColor = '#3a3a3a';
-    };
-
-    posterWrap.appendChild(img);
-    posterWrap.appendChild(buildScoreBadge(movie.score));
-    card.appendChild(posterWrap);
-
-    const content = document.createElement('div');
-    content.className = 'card-content';
-
-    const titleEl = document.createElement('div');
-    titleEl.className = 'card-title';
-    titleEl.textContent = movie.year ? `${movie.title} (${movie.year})` : movie.title;
-    content.appendChild(titleEl);
-
-    const directorEl = document.createElement('div');
-    directorEl.className = 'card-details';
-    directorEl.textContent = movie.director || '';
-    content.appendChild(directorEl);
-
-    const dateEl = document.createElement('div');
-    dateEl.className = 'rated-pill';
-    dateEl.textContent = movie.scoreDate ? `Rated: ${movie.scoreDate}` : 'Rated: —';
-    content.appendChild(dateEl);
-
-    card.appendChild(content);
-    moviesContainer.appendChild(card);
-  });
-}
-
-/* ---------------------------
-   Games: fetch + parse + filters
----------------------------- */
-
-function parseGamesCsv(text) {
-  const parsed = Papa.parse(text.trim(), { header: true }).data;
-
-  return parsed.map(row => ({
-    title: row['Title']?.trim() || '',
-    score: parseFloat(row['Score'] || 0) || 0,
-    year: (row['Year'] || '').toString().trim(),
-    developers: row['Developers']?.trim() || '',
-    scoreDate: row['Score Date']?.trim() || '',
-    posterUrl: row['PosterURL']?.trim() || '',
-  })).filter(g => g.title);
-}
-
-function fetchGames() {
-  // If gids not configured yet, keep section empty but safe
-  if (!SIMPLE_GAMES_CSV_URL || !COMPLEX_GAMES_CSV_URL) {
-    gamesData = [];
-    gamesContainer.innerHTML =
-      '<div class="card"><div class="card-content"><div class="card-title">Games data not linked yet</div><div class="card-details">Paste the Simple Games and Complex Games gid values into script.js.</div></div></div>';
+  // Not configured yet
+  if (!cfg.mapRow || !cfg.gids || cfg.gids.length === 0) {
+    st.data = [];
+    if (container) {
+      container.innerHTML = `
+        <div class="card">
+          <div class="card-content">
+            <div class="card-title">${cfg.label} is ready for setup</div>
+            <div class="card-details">
+              Add this category's GIDs and provide its header mapping in script.js.
+            </div>
+          </div>
+        </div>
+      `;
+    }
     return;
   }
 
-  Promise.all([
-    fetch(SIMPLE_GAMES_CSV_URL).then(r => r.text()),
-    fetch(COMPLEX_GAMES_CSV_URL).then(r => r.text()),
-  ])
-    .then(([simpleText, complexText]) => {
-      const simple = parseGamesCsv(simpleText);
-      const complex = parseGamesCsv(complexText);
+  try {
+    const texts = await Promise.all(
+      cfg.gids.map(gid => fetch(buildPublishedCsvUrl(gid)).then(r => r.text()))
+    );
 
-      // Merge
-      gamesData = [...simple, ...complex];
+    const merged = texts.flatMap(t => parseCsvWithMap(t, cfg.mapRow));
 
-      populateGamesYearFilter(gamesData);
-      renderGames();
-    })
-    .catch(err => console.error('Games CSV error:', err));
+    st.data = merged;
+
+    populateYearFilter(key);
+    renderCategory(key);
+  } catch (err) {
+    console.error(`${cfg.label} CSV error:`, err);
+    if (container) {
+      container.innerHTML = `
+        <div class="card">
+          <div class="card-content">
+            <div class="card-title">Could not load ${cfg.label}</div>
+            <div class="card-details">Check CSV publishing and GIDs.</div>
+          </div>
+        </div>
+      `;
+    }
+  }
 }
 
-function populateGamesYearFilter(data) {
-  gamesYearFilterEl.innerHTML = '<option value="">All</option>';
-  const years = Array.from(new Set(data.map(g => g.year).filter(Boolean)));
+function populateYearFilter(key) {
+  const cfg = CATEGORY[key];
+  const st = state[key];
+  const yearEl = getEl(cfg.dom.year);
+
+  if (!yearEl) return;
+
+  yearEl.innerHTML = '<option value="">All</option>';
+
+  const years = Array.from(new Set((st.data || []).map(x => x.year).filter(Boolean)));
   years.sort((a, b) => b.localeCompare(a));
+
   years.forEach(y => {
     const opt = document.createElement('option');
     opt.value = y;
     opt.textContent = y;
-    gamesYearFilterEl.appendChild(opt);
+    yearEl.appendChild(opt);
   });
 }
 
 /* ---------------------------
-   Games: render
+   Sorting
 ---------------------------- */
-
-function sortGames(list) {
-  if (currentGamesSort === 'latest') {
+function applySort(list, sortKey) {
+  if (sortKey === 'latest') {
     list.sort((a, b) => {
       const ya = parseInt(a.year, 10) || 0;
       const yb = parseInt(b.year, 10) || 0;
@@ -432,14 +352,16 @@ function sortGames(list) {
       const dd = db - da;
       if (dd !== 0) return dd;
 
-      const ds = b.score - a.score;
+      const ds = (b.score || 0) - (a.score || 0);
       if (ds !== 0) return ds;
 
-      return a.title.localeCompare(b.title);
+      return (a.title || '').localeCompare(b.title || '');
     });
-  } else if (currentGamesSort === 'score') {
+  }
+
+  if (sortKey === 'score') {
     list.sort((a, b) => {
-      const ds = b.score - a.score;
+      const ds = (b.score || 0) - (a.score || 0);
       if (ds !== 0) return ds;
 
       const ya = parseInt(a.year, 10) || 0;
@@ -447,9 +369,11 @@ function sortGames(list) {
       const dy = yb - ya;
       if (dy !== 0) return dy;
 
-      return a.title.localeCompare(b.title);
+      return (a.title || '').localeCompare(b.title || '');
     });
-  } else if (currentGamesSort === 'date') {
+  }
+
+  if (sortKey === 'date') {
     list.sort((a, b) => {
       const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
       const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
@@ -458,32 +382,39 @@ function sortGames(list) {
   }
 }
 
-function renderGames() {
-  if (!gamesData) return;
+/* ---------------------------
+   Render
+---------------------------- */
+function renderCategory(key) {
+  const cfg = CATEGORY[key];
+  const st = state[key];
 
-  const selectedYear = gamesYearFilterEl.value;
-  const { minScore, maxScore } = getScoreBounds(gamesMinScoreFilterEl, gamesMaxScoreFilterEl);
-  const searchTerm = normalize(gamesSearchFilterEl?.value).trim();
+  if (!st.data) return;
 
-  let filtered = gamesData.filter(game => {
-    const yearMatch = selectedYear ? game.year === selectedYear : true;
-    const scoreMatch = game.score >= minScore && game.score <= maxScore;
+  const container = getEl(cfg.dom.container);
+  const minEl = getEl(cfg.dom.minScore);
+  const maxEl = getEl(cfg.dom.maxScore);
+  const yearEl = getEl(cfg.dom.year);
+  const searchEl = getEl(cfg.dom.search);
 
-    const title = normalize(game.title);
-    const devs = normalize(game.developers);
+  const selectedYear = yearEl?.value || '';
+  const { minScore, maxScore } = getScoreBounds(minEl, maxEl);
+  const searchTerm = normalize(searchEl?.value).trim();
 
-    const searchMatch = searchTerm
-      ? (title.includes(searchTerm) || devs.includes(searchTerm))
-      : true;
-
+  let filtered = (st.data || []).filter(item => {
+    const yearMatch = selectedYear ? item.year === selectedYear : true;
+    const scoreMatch = (item.score ?? 0) >= minScore && (item.score ?? 0) <= maxScore;
+    const searchMatch = matchesSearch(item, searchTerm, cfg.searchKeys || []);
     return yearMatch && scoreMatch && searchMatch;
   });
 
-  sortGames(filtered);
+  applySort(filtered, st.sort);
 
-  gamesContainer.innerHTML = '';
+  if (!container) return;
 
-  filtered.forEach(game => {
+  container.innerHTML = '';
+
+  filtered.forEach(item => {
     const card = document.createElement('div');
     card.className = 'card';
 
@@ -491,15 +422,15 @@ function renderGames() {
     posterWrap.className = 'poster-wrap';
 
     const img = document.createElement('img');
-    img.src = game.posterUrl || '';
-    img.alt = game.title;
+    img.src = item.posterUrl || '';
+    img.alt = item.title || '';
     img.onerror = () => {
       img.src = '';
       img.style.backgroundColor = '#3a3a3a';
     };
 
     posterWrap.appendChild(img);
-    posterWrap.appendChild(buildScoreBadge(game.score));
+    posterWrap.appendChild(buildScoreBadge(item.score || 0));
     card.appendChild(posterWrap);
 
     const content = document.createElement('div');
@@ -507,54 +438,57 @@ function renderGames() {
 
     const titleEl = document.createElement('div');
     titleEl.className = 'card-title';
-    titleEl.textContent = game.year ? `${game.title} (${game.year})` : game.title;
+    titleEl.textContent = item.year ? `${item.title} (${item.year})` : item.title;
     content.appendChild(titleEl);
 
-    const devEl = document.createElement('div');
-    devEl.className = 'card-details';
-    devEl.textContent = game.developers || '';
-    content.appendChild(devEl);
+    if (item.person) {
+      const personEl = document.createElement('div');
+      personEl.className = 'card-details';
+      personEl.textContent = item.person;
+      content.appendChild(personEl);
+    }
 
     const dateEl = document.createElement('div');
     dateEl.className = 'rated-pill';
-    dateEl.textContent = game.scoreDate ? `Rated: ${game.scoreDate}` : 'Rated: —';
+    dateEl.textContent = item.scoreDate ? `Rated: ${item.scoreDate}` : 'Rated: —';
     content.appendChild(dateEl);
 
     card.appendChild(content);
-    gamesContainer.appendChild(card);
+    container.appendChild(card);
   });
+}
+
+/* ---------------------------
+   Events
+---------------------------- */
+function wireCategoryFilters(key) {
+  const cfg = CATEGORY[key];
+
+  const minEl = getEl(cfg.dom.minScore);
+  const maxEl = getEl(cfg.dom.maxScore);
+  const yearEl = getEl(cfg.dom.year);
+  const searchEl = getEl(cfg.dom.search);
+  const backEl = getEl(cfg.dom.back);
+
+  minEl?.addEventListener('change', () => renderCategory(key));
+  maxEl?.addEventListener('change', () => renderCategory(key));
+  yearEl?.addEventListener('change', () => renderCategory(key));
+  searchEl?.addEventListener('input', () => renderCategory(key));
+
+  backEl?.addEventListener('click', () => showSection('home'));
 }
 
 /* ---------------------------
    Init
 ---------------------------- */
-
 function init() {
-  // Section elements
+  // Sections
   sections.forEach(id => {
-    sectionElements[id] = document.getElementById(id);
+    sectionElements[id] = getEl(id);
   });
 
-  categoryButtons = document.querySelectorAll('.category-button');
-  sortButtons = document.querySelectorAll('.sort-button');
-
-  // Movies refs
-  minScoreFilterEl = document.getElementById('minScoreFilter');
-  maxScoreFilterEl = document.getElementById('maxScoreFilter');
-  yearFilterEl = document.getElementById('yearFilter');
-  searchFilterEl = document.getElementById('searchFilter');
-  moviesContainer = document.getElementById('moviesContainer');
-  backToHomeBtn = document.getElementById('backToHome') || document.querySelector('#movies .back-button');
-
-  // Games refs
-  gamesMinScoreFilterEl = document.getElementById('gamesMinScoreFilter');
-  gamesMaxScoreFilterEl = document.getElementById('gamesMaxScoreFilter');
-  gamesYearFilterEl = document.getElementById('gamesYearFilter');
-  gamesSearchFilterEl = document.getElementById('gamesSearchFilter');
-  gamesContainer = document.getElementById('gamesContainer');
-  backToHomeGamesBtn = document.getElementById('backToHomeGames') || document.querySelector('#games .back-button');
-
-  // Category navigation
+  // Category nav
+  const categoryButtons = document.querySelectorAll('.category-button');
   categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.getAttribute('data-section');
@@ -562,42 +496,28 @@ function init() {
     });
   });
 
-  // Sort buttons (scoped by data-target)
+  // Sort buttons
+  const sortButtons = document.querySelectorAll('.sort-button');
   sortButtons.forEach(button => {
     button.addEventListener('click', () => {
-      const target = button.getAttribute('data-target') || 'movies';
+      const target = button.getAttribute('data-target');
       const sortValue = button.getAttribute('data-sort');
 
+      // Toggle active only within that target group
       document.querySelectorAll(`.sort-button[data-target="${target}"]`)
         .forEach(b => b.classList.remove('active'));
 
       button.classList.add('active');
 
-      if (target === 'movies') {
-        currentMoviesSort = sortValue;
-        renderMovies();
-      } else if (target === 'games') {
-        currentGamesSort = sortValue;
-        renderGames();
+      if (target && state[target]) {
+        state[target].sort = sortValue;
+        renderCategory(target);
       }
     });
   });
 
-  // Back buttons
-  backToHomeBtn?.addEventListener('click', () => showSection('home'));
-  backToHomeGamesBtn?.addEventListener('click', () => showSection('home'));
-
-  // Movies filters
-  minScoreFilterEl?.addEventListener('change', renderMovies);
-  maxScoreFilterEl?.addEventListener('change', renderMovies);
-  yearFilterEl?.addEventListener('change', renderMovies);
-  searchFilterEl?.addEventListener('input', renderMovies);
-
-  // Games filters
-  gamesMinScoreFilterEl?.addEventListener('change', renderGames);
-  gamesMaxScoreFilterEl?.addEventListener('change', renderGames);
-  gamesYearFilterEl?.addEventListener('change', renderGames);
-  gamesSearchFilterEl?.addEventListener('input', renderGames);
+  // Wire filters/back buttons for all categories
+  Object.keys(CATEGORY).forEach(wireCategoryFilters);
 
   // Initial route
   handleHashChange();
