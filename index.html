@@ -5,14 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Maxim's Ratings</title>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- Font Awesome (no integrity to avoid blocking) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Site styles -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -46,7 +44,7 @@
 
         <div class="section-title-row">
           <h2>Movies</h2>
-          <button id="backToHome" class="back-button" type="button" aria-label="Back to categories">
+          <button id="backToHomeMovies" class="back-button" type="button">
             <i class="fa-solid fa-house"></i>
             <span>Home</span>
           </button>
@@ -54,36 +52,21 @@
 
         <div class="controls">
           <div class="filters">
-
             <label>Score:</label>
             <div class="score-range">
               <select id="minScoreFilter" aria-label="Minimum score">
                 <option value="">Min</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
                 <option value="10">10</option>
               </select>
-
               <span class="score-range-sep">–</span>
-
               <select id="maxScoreFilter" aria-label="Maximum score">
                 <option value="">Max</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
                 <option value="10">10</option>
               </select>
             </div>
@@ -106,9 +89,9 @@
 
           <div class="sorting">
             <span>Sort by:</span>
-            <button id="sortByLatest" class="sort-button active" data-sort="latest" data-target="movies">Latest</button>
-            <button id="sortByScore" class="sort-button" data-sort="score" data-target="movies">Top Rated</button>
-            <button id="sortByDate" class="sort-button" data-sort="date" data-target="movies">Recently Rated</button>
+            <button class="sort-button active" data-target="movies" data-sort="latest">Latest</button>
+            <button class="sort-button" data-target="movies" data-sort="score">Top Rated</button>
+            <button class="sort-button" data-target="movies" data-sort="date">Recently Rated</button>
           </div>
         </div>
 
@@ -125,13 +108,13 @@
       <div id="moviesContainer" class="cards-container"></div>
     </section>
 
-    <!-- Games section (MERGED Simple + Complex) -->
+    <!-- Games section (merged) -->
     <section id="games" class="section hidden">
       <div class="section-header">
 
         <div class="section-title-row">
           <h2>Games</h2>
-          <button id="backToHomeGames" class="back-button" type="button" aria-label="Back to categories">
+          <button id="backToHomeGames" class="back-button" type="button">
             <i class="fa-solid fa-house"></i>
             <span>Home</span>
           </button>
@@ -139,36 +122,21 @@
 
         <div class="controls">
           <div class="filters">
-
             <label>Score:</label>
             <div class="score-range">
               <select id="gamesMinScoreFilter" aria-label="Minimum score">
                 <option value="">Min</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
                 <option value="10">10</option>
               </select>
-
               <span class="score-range-sep">–</span>
-
               <select id="gamesMaxScoreFilter" aria-label="Maximum score">
                 <option value="">Max</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
                 <option value="10">10</option>
               </select>
             </div>
@@ -191,9 +159,9 @@
 
           <div class="sorting">
             <span>Sort by:</span>
-            <button id="gamesSortByLatest" class="sort-button active" data-sort="latest" data-target="games">Latest</button>
-            <button id="gamesSortByScore" class="sort-button" data-sort="score" data-target="games">Top Rated</button>
-            <button id="gamesSortByDate" class="sort-button" data-sort="date" data-target="games">Recently Rated</button>
+            <button class="sort-button active" data-target="games" data-sort="latest">Latest</button>
+            <button class="sort-button" data-target="games" data-sort="score">Top Rated</button>
+            <button class="sort-button" data-target="games" data-sort="date">Recently Rated</button>
           </div>
         </div>
 
@@ -205,22 +173,139 @@
       <div id="gamesContainer" class="cards-container"></div>
     </section>
 
-    <!-- Placeholder sections -->
+    <!-- Mice section (prepared) -->
     <section id="mice" class="section hidden">
-      <h2>Mice</h2>
-      <p>Mice ratings will appear here in the future.</p>
+      <div class="section-header">
+
+        <div class="section-title-row">
+          <h2>Mice</h2>
+          <button id="backToHomeMice" class="back-button" type="button">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+          </button>
+        </div>
+
+        <div class="controls">
+          <div class="filters">
+            <label>Score:</label>
+            <div class="score-range">
+              <select id="miceMinScoreFilter" aria-label="Minimum score">
+                <option value="">Min</option>
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+              <span class="score-range-sep">–</span>
+              <select id="miceMaxScoreFilter" aria-label="Maximum score">
+                <option value="">Max</option>
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+
+            <label for="miceYearFilter">Year:</label>
+            <select id="miceYearFilter">
+              <option value="">All</option>
+            </select>
+
+            <label for="miceSearchFilter">Search:</label>
+            <input
+              id="miceSearchFilter"
+              class="search-input"
+              type="search"
+              placeholder="Search..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+
+          <div class="sorting">
+            <span>Sort by:</span>
+            <button class="sort-button active" data-target="mice" data-sort="latest">Latest</button>
+            <button class="sort-button" data-target="mice" data-sort="score">Top Rated</button>
+            <button class="sort-button" data-target="mice" data-sort="date">Recently Rated</button>
+          </div>
+        </div>
+
+        <p class="disclaimer">
+          Mice section is ready. Add GIDs + headers mapping when you’re ready.
+        </p>
+      </div>
+
+      <div id="miceContainer" class="cards-container"></div>
     </section>
 
+    <!-- Mousepads section (prepared) -->
     <section id="mousepads" class="section hidden">
-      <h2>Mousepads</h2>
-      <p>Mousepad ratings will appear here in the future.</p>
+      <div class="section-header">
+
+        <div class="section-title-row">
+          <h2>Mousepads</h2>
+          <button id="backToHomeMousepads" class="back-button" type="button">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+          </button>
+        </div>
+
+        <div class="controls">
+          <div class="filters">
+            <label>Score:</label>
+            <div class="score-range">
+              <select id="mousepadsMinScoreFilter" aria-label="Minimum score">
+                <option value="">Min</option>
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+              <span class="score-range-sep">–</span>
+              <select id="mousepadsMaxScoreFilter" aria-label="Maximum score">
+                <option value="">Max</option>
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+
+            <label for="mousepadsYearFilter">Year:</label>
+            <select id="mousepadsYearFilter">
+              <option value="">All</option>
+            </select>
+
+            <label for="mousepadsSearchFilter">Search:</label>
+            <input
+              id="mousepadsSearchFilter"
+              class="search-input"
+              type="search"
+              placeholder="Search..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+
+          <div class="sorting">
+            <span>Sort by:</span>
+            <button class="sort-button active" data-target="mousepads" data-sort="latest">Latest</button>
+            <button class="sort-button" data-target="mousepads" data-sort="score">Top Rated</button>
+            <button class="sort-button" data-target="mousepads" data-sort="date">Recently Rated</button>
+          </div>
+        </div>
+
+        <p class="disclaimer">
+          Mousepads section is ready. Add GIDs + headers mapping when you’re ready.
+        </p>
+      </div>
+
+      <div id="mousepadsContainer" class="cards-container"></div>
     </section>
+
   </main>
 
-  <!-- PapaParse -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-
-  <!-- Site script -->
   <script src="script.js"></script>
 </body>
 </html>
