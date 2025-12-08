@@ -370,7 +370,7 @@ select option {
   color: var(--muted);
 }
 
-/* 1) Styled "Rated" pill */
+/* --- Styled "Rated" pill --- */
 .rated-pill {
   display: inline-flex;
   align-items: center;
