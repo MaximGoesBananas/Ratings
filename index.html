@@ -47,7 +47,7 @@
         <div class="controls">
           <div class="filters">
 
-            <!-- 1) Score range filter BEFORE Year -->
+            <!-- Score range filter -->
             <label>Score:</label>
             <div class="score-range">
               <select id="minScoreFilter" aria-label="Minimum score">
@@ -94,8 +94,19 @@
 
           <div class="sorting">
             <span>Sort by:</span>
-            <button id="sortByScore" class="sort-button active" data-sort="score">Top Rated</button>
-            <button id="sortByDate" class="sort-button" data-sort="date">Recently Rated</button>
+
+            <!-- NEW default -->
+            <button id="sortByLatest" class="sort-button active" data-sort="latest">
+              Latest
+            </button>
+
+            <button id="sortByScore" class="sort-button" data-sort="score">
+              Top Rated
+            </button>
+
+            <button id="sortByDate" class="sort-button" data-sort="date">
+              Recently Rated
+            </button>
           </div>
         </div>
       </div>
@@ -120,7 +131,7 @@
     </section>
   </main>
 
-  <!-- PapaParse (no integrity to avoid blocking) -->
+  <!-- PapaParse -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <!-- Site script -->
