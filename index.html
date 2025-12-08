@@ -95,15 +95,22 @@
               <option value="">All</option>
             </select>
 
-            <label for="directorFilter">Director:</label>
-            <select id="directorFilter">
-              <option value="">All</option>
-            </select>
+            <!-- NEW unified search -->
+            <label for="searchFilter">Search:</label>
+            <input
+              id="searchFilter"
+              class="search-input"
+              type="search"
+              placeholder="Title or director..."
+              autocomplete="off"
+              spellcheck="false"
+            />
           </div>
 
           <div class="sorting">
             <span>Sort by:</span>
 
+            <!-- Default -->
             <button id="sortByLatest" class="sort-button active" data-sort="latest">
               Latest
             </button>
