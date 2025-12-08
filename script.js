@@ -25,7 +25,7 @@ let categoryButtons;
 let minScoreFilterEl;
 let maxScoreFilterEl;
 let yearFilterEl;
-let directorFilterEl;
+let searchFilterEl;
 let moviesContainer;
 let sortButtons;
 let backToHomeBtn;
@@ -159,7 +159,7 @@ function fetchMovies() {
         posterUrl: row['PosterURL']?.trim() || '',
       })).filter(movie => movie.title);
 
-      populateFilters(moviesData);
+      populateYearFilter(moviesData);
       renderMovies();
     })
     .catch(err => {
@@ -167,28 +167,17 @@ function fetchMovies() {
     });
 }
 
-function populateFilters(data) {
+function populateYearFilter(data) {
   yearFilterEl.innerHTML = '<option value="">All</option>';
-  directorFilterEl.innerHTML = '<option value="">All</option>';
 
   const years = Array.from(new Set(data.map(m => m.year).filter(Boolean)));
-  const directors = Array.from(new Set(data.map(m => m.director).filter(Boolean)));
-
   years.sort((a, b) => b.localeCompare(a));
-  directors.sort((a, b) => a.localeCompare(b));
 
   years.forEach(y => {
     const opt = document.createElement('option');
     opt.value = y;
     opt.textContent = y;
     yearFilterEl.appendChild(opt);
-  });
-
-  directors.forEach(d => {
-    const opt = document.createElement('option');
-    opt.value = d;
-    opt.textContent = d;
-    directorFilterEl.appendChild(opt);
   });
 }
 
@@ -212,18 +201,30 @@ function getScoreBounds() {
   return { minScore, maxScore };
 }
 
+function normalize(s) {
+  return (s || '').toString().toLowerCase();
+}
+
 function renderMovies() {
   if (!moviesData) return;
 
   const selectedYear = yearFilterEl.value;
-  const selectedDirector = directorFilterEl.value;
   const { minScore, maxScore } = getScoreBounds();
+
+  const searchTerm = normalize(searchFilterEl?.value).trim();
 
   let filtered = moviesData.filter(movie => {
     const yearMatch = selectedYear ? movie.year === selectedYear : true;
-    const directorMatch = selectedDirector ? movie.director === selectedDirector : true;
     const scoreMatch = movie.score >= minScore && movie.score <= maxScore;
-    return yearMatch && directorMatch && scoreMatch;
+
+    const title = normalize(movie.title);
+    const director = normalize(movie.director);
+
+    const searchMatch = searchTerm
+      ? (title.includes(searchTerm) || director.includes(searchTerm))
+      : true;
+
+    return yearMatch && scoreMatch && searchMatch;
   });
 
   if (currentSort === 'latest') {
@@ -297,7 +298,6 @@ function renderMovies() {
     director.textContent = movie.director || '';
     content.appendChild(director);
 
-    // Rated pill (THIS is the key fix)
     const date = document.createElement('div');
     date.className = 'rated-pill';
     date.textContent = movie.scoreDate ? `Rated: ${movie.scoreDate}` : 'Rated: —';
@@ -318,14 +318,14 @@ function init() {
     sectionElements[id] = document.getElementById(id);
   });
 
-  // Navigation buttons
+  // Navigation
   categoryButtons = document.querySelectorAll('.category-button');
 
   // Filters
   minScoreFilterEl = document.getElementById('minScoreFilter');
   maxScoreFilterEl = document.getElementById('maxScoreFilter');
   yearFilterEl = document.getElementById('yearFilter');
-  directorFilterEl = document.getElementById('directorFilter');
+  searchFilterEl = document.getElementById('searchFilter');
 
   // Sort buttons
   sortButtons = document.querySelectorAll('.sort-button');
@@ -333,7 +333,7 @@ function init() {
   // Container
   moviesContainer = document.getElementById('moviesContainer');
 
-  // Home/back button (robust: id OR class)
+  // Home/back button (robust)
   backToHomeBtn =
     document.getElementById('backToHome') ||
     document.querySelector('.back-button');
@@ -356,16 +356,18 @@ function init() {
     });
   });
 
-  // Back to home (THIS is the key fix)
+  // Back to home
   if (backToHomeBtn) {
     backToHomeBtn.addEventListener('click', () => showSection('home'));
   }
 
-  // Filter changes
+  // Filters
   minScoreFilterEl?.addEventListener('change', renderMovies);
   maxScoreFilterEl?.addEventListener('change', renderMovies);
   yearFilterEl?.addEventListener('change', renderMovies);
-  directorFilterEl?.addEventListener('change', renderMovies);
+
+  // Search should be real-time
+  searchFilterEl?.addEventListener('input', renderMovies);
 
   // Initial route
   handleHashChange();
