@@ -44,7 +44,6 @@
     <section id="movies" class="section hidden">
       <div class="section-header">
 
-        <!-- Title row with back button -->
         <div class="section-title-row">
           <h2>Movies</h2>
           <button id="backToHome" class="back-button" type="button" aria-label="Back to categories">
@@ -56,7 +55,6 @@
         <div class="controls">
           <div class="filters">
 
-            <!-- Score range filter -->
             <label>Score:</label>
             <div class="score-range">
               <select id="minScoreFilter" aria-label="Minimum score">
@@ -95,7 +93,6 @@
               <option value="">All</option>
             </select>
 
-            <!-- NEW unified search -->
             <label for="searchFilter">Search:</label>
             <input
               id="searchFilter"
@@ -109,23 +106,12 @@
 
           <div class="sorting">
             <span>Sort by:</span>
-
-            <!-- Default -->
-            <button id="sortByLatest" class="sort-button active" data-sort="latest">
-              Latest
-            </button>
-
-            <button id="sortByScore" class="sort-button" data-sort="score">
-              Top Rated
-            </button>
-
-            <button id="sortByDate" class="sort-button" data-sort="date">
-              Recently Rated
-            </button>
+            <button id="sortByLatest" class="sort-button active" data-sort="latest" data-target="movies">Latest</button>
+            <button id="sortByScore" class="sort-button" data-sort="score" data-target="movies">Top Rated</button>
+            <button id="sortByDate" class="sort-button" data-sort="date" data-target="movies">Recently Rated</button>
           </div>
         </div>
 
-        <!-- Disclaimer -->
         <p class="disclaimer">
           Ratings on this page are pulled live from the raw data in this
           <a
@@ -139,12 +125,87 @@
       <div id="moviesContainer" class="cards-container"></div>
     </section>
 
-    <!-- Placeholder sections -->
+    <!-- Games section (MERGED Simple + Complex) -->
     <section id="games" class="section hidden">
-      <h2>Games</h2>
-      <p>Games ratings will appear here in the future.</p>
+      <div class="section-header">
+
+        <div class="section-title-row">
+          <h2>Games</h2>
+          <button id="backToHomeGames" class="back-button" type="button" aria-label="Back to categories">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+          </button>
+        </div>
+
+        <div class="controls">
+          <div class="filters">
+
+            <label>Score:</label>
+            <div class="score-range">
+              <select id="gamesMinScoreFilter" aria-label="Minimum score">
+                <option value="">Min</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+
+              <span class="score-range-sep">–</span>
+
+              <select id="gamesMaxScoreFilter" aria-label="Maximum score">
+                <option value="">Max</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+
+            <label for="gamesYearFilter">Year:</label>
+            <select id="gamesYearFilter">
+              <option value="">All</option>
+            </select>
+
+            <label for="gamesSearchFilter">Search:</label>
+            <input
+              id="gamesSearchFilter"
+              class="search-input"
+              type="search"
+              placeholder="Title or developers..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+
+          <div class="sorting">
+            <span>Sort by:</span>
+            <button id="gamesSortByLatest" class="sort-button active" data-sort="latest" data-target="games">Latest</button>
+            <button id="gamesSortByScore" class="sort-button" data-sort="score" data-target="games">Top Rated</button>
+            <button id="gamesSortByDate" class="sort-button" data-sort="date" data-target="games">Recently Rated</button>
+          </div>
+        </div>
+
+        <p class="disclaimer">
+          Games data is pulled live from the same public spreadsheet.
+        </p>
+      </div>
+
+      <div id="gamesContainer" class="cards-container"></div>
     </section>
 
+    <!-- Placeholder sections -->
     <section id="mice" class="section hidden">
       <h2>Mice</h2>
       <p>Mice ratings will appear here in the future.</p>
