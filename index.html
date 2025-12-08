@@ -46,6 +46,41 @@
         <h2>Movies</h2>
         <div class="controls">
           <div class="filters">
+
+            <!-- 1) Score range filter BEFORE Year -->
+            <label>Score:</label>
+            <div class="score-range">
+              <select id="minScoreFilter" aria-label="Minimum score">
+                <option value="">Min</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+
+              <span class="score-range-sep">–</span>
+
+              <select id="maxScoreFilter" aria-label="Maximum score">
+                <option value="">Max</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+
             <label for="yearFilter">Year:</label>
             <select id="yearFilter">
               <option value="">All</option>
