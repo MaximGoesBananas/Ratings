@@ -236,27 +236,3 @@ function handleHashChange() {
 
 // Kick off initialization once the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', init);
-
-// Override fetchMovies to use correct CSV URL
-function fetchMovies() {
-  fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vSmO1htUVAzTQHYcE73oHxvcKUmg5c4ZD6CdskMSA3wj3LkGhUbt1kpFqffbHNhERJ7_ksgfYEm_q2L/pub?gid=1920189918&single=true&output=csv')
-    .then(response => response.text())
-    .then(text => {
-      const parsed = Papa.parse(text.trim(), { header: true }).data;
-      moviesData = parsed.map(row => {
-        return {
-          title: row['Title']?.trim() || '',
-          score: parseFloat(row['Score (1-10)'] || row['Score'] || 0) || 0,
-          year: (row['Year'] || '').toString().trim(),
-          director: row['Director']?.trim() || '',
-          scoreDate: row['Score Date']?.trim() || row['Date']?.trim() || '',
-          posterUrl: row['PosterURL']?.trim() || row['Poster']?.trim() || '',
-        };
-      }).filter(movie => movie.title);
-      populateFilters(moviesData);
-      renderMovies();
-    })
-    .catch(err => {
-      console.error('Error fetching or parsing movies CSV:', err);
-    });
-}
