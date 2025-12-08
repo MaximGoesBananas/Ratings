@@ -4,65 +4,78 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Maxim's Ratings</title>
-  <!-- Google Fonts for typography -->
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-4Z1trAxlfHhDBpcZQc7scnOj2JKZLrQP1XxV5bES/5CiJw+t74PX5XbxhuuVWJ6qrtnSNBj53TA69QlWeZLO3g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Font Awesome (NO integrity hash) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <!-- Site styles -->
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <main>
-    <!-- Home section -->
+
+    <!-- Home -->
     <section id="home" class="section">
       <h1>Maxim's Ratings</h1>
+
       <div class="categories">
         <button class="category-button" data-section="movies">
-          <i class="fa-solid fa-film" aria-hidden="true"></i>
-          <span>Movies</span>
+          <i class="fa-solid fa-film"></i><span>Movies</span>
         </button>
+
         <button class="category-button" data-section="games">
-          <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
-          <span>Games</span>
+          <i class="fa-solid fa-gamepad"></i><span>Games</span>
         </button>
+
         <button class="category-button" data-section="mice">
-          <i class="fa-solid fa-computer-mouse" aria-hidden="true"></i>
-          <span>Mice</span>
+          <i class="fa-solid fa-computer-mouse"></i><span>Mice</span>
         </button>
+
         <button class="category-button" data-section="mousepads">
-          <i class="fa-solid fa-mouse-pointer" aria-hidden="true"></i>
-          <span>Mousepads</span>
+          <i class="fa-solid fa-mouse-pointer"></i><span>Mousepads</span>
         </button>
       </div>
     </section>
 
-    <!-- Movies section -->
+    <!-- Movies -->
     <section id="movies" class="section hidden">
       <div class="section-header">
         <h2>Movies</h2>
+
         <div class="controls">
           <div class="filters">
             <label for="yearFilter">Year:</label>
             <select id="yearFilter">
               <option value="">All</option>
             </select>
+
             <label for="directorFilter">Director:</label>
             <select id="directorFilter">
               <option value="">All</option>
             </select>
           </div>
+
           <div class="sorting">
             <span>Sort by:</span>
-            <button id="sortByScore" class="sort-button active" data-sort="score">Top Rated</button>
-            <button id="sortByDate" class="sort-button" data-sort="date">Recently Rated</button>
+            <button id="sortByScore" class="sort-button active" data-sort="score">
+              Top Rated
+            </button>
+            <button id="sortByDate" class="sort-button" data-sort="date">
+              Recently Rated
+            </button>
           </div>
         </div>
       </div>
+
       <div id="moviesContainer" class="cards-container"></div>
     </section>
 
-    <!-- Placeholder sections for future categories -->
+    <!-- Game/Mice/Mousepad placeholders -->
     <section id="games" class="section hidden">
       <h2>Games</h2>
       <p>Games ratings will appear here in the future.</p>
@@ -77,11 +90,14 @@
       <h2>Mousepads</h2>
       <p>Mousepad ratings will appear here in the future.</p>
     </section>
+
   </main>
 
-  <!-- PapaParse library for CSV parsing -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" integrity="sha512-1B8F5/kWtCJW5iiRK+XdyJkv0y+6lEAjvlT/3VuIN5IVwtfInqU3wIGCcUlRJR/d3DdDs++EUt7o1E+WUKKudQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- PapaParse (NO integrity hash) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
   <!-- Site script -->
   <script src="script.js"></script>
+
 </body>
 </html>
