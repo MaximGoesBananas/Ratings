@@ -1,37 +1,89 @@
 /*
  * Main JavaScript for the Maxim's Ratings SPA
  *
- * Handles navigation, fetches CSV data from Google Sheets,
- * parses it into objects, and renders movie cards with
- * sorting + filtering + score badge + rated pill.
+ * Now supports:
+ * - Movies (single tab)
+ * - Games (MERGED from "Simple Games" + "Complex Games")
+ *
+ * Each category has independent filters, sorting, and rendering.
  */
 
-// Movies CSV URL
-const MOVIES_CSV_URL =
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmO1htUVAzTQHYcE73oHxvcKUmg5c4ZD6CdskMSA3wj3LkGhUbt1kpFqffbHNhERJ7_ksgfYEm_q2L/pub?gid=1920189918&single=true&output=csv';
+/* ---------------------------
+   Published sheet base
+---------------------------- */
 
-// Store loaded data in memory
+const PUBLISHED_BASE =
+  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmO1htUVAzTQHYcE73oHxvcKUmg5c4ZD6CdskMSA3wj3LkGhUbt1kpFqffbHNhERJ7_ksgfYEm_q2L/pub';
+
+function buildPublishedCsvUrl(gid) {
+  return `${PUBLISHED_BASE}?gid=${gid}&single=true&output=csv`;
+}
+
+/* ---------------------------
+   GIDs (set these)
+---------------------------- */
+
+// ✅ Known Movies gid (keeps Movies stable)
+const MOVIES_GID = '1920189918';
+
+// ⚠️ You MUST paste these two gids:
+const SIMPLE_GAMES_GID = '';   // <- paste gid for "Simple Games"
+const COMPLEX_GAMES_GID = '';  // <- paste gid for "Complex Games"
+
+const MOVIES_CSV_URL = buildPublishedCsvUrl(MOVIES_GID);
+
+// Games URLs will be constructed only if gids exist
+const SIMPLE_GAMES_CSV_URL = SIMPLE_GAMES_GID ? buildPublishedCsvUrl(SIMPLE_GAMES_GID) : '';
+const COMPLEX_GAMES_CSV_URL = COMPLEX_GAMES_GID ? buildPublishedCsvUrl(COMPLEX_GAMES_GID) : '';
+
+/* ---------------------------
+   State
+---------------------------- */
+
 let moviesData = null;
+let gamesData = null;
 
-// Default sort
-let currentSort = 'latest';
+let currentMoviesSort = 'latest';
+let currentGamesSort = 'latest';
 
-// Section management
+/* ---------------------------
+   Section management
+---------------------------- */
+
 const sections = ['home', 'movies', 'games', 'mice', 'mousepads'];
 const sectionElements = {};
-
-// DOM refs populated in init
 let categoryButtons;
+
+/* ---------------------------
+   Movies DOM
+---------------------------- */
+
 let minScoreFilterEl;
 let maxScoreFilterEl;
 let yearFilterEl;
 let searchFilterEl;
 let moviesContainer;
-let sortButtons;
 let backToHomeBtn;
 
 /* ---------------------------
-   Helpers for score visuals
+   Games DOM
+---------------------------- */
+
+let gamesMinScoreFilterEl;
+let gamesMaxScoreFilterEl;
+let gamesYearFilterEl;
+let gamesSearchFilterEl;
+let gamesContainer;
+let backToHomeGamesBtn;
+
+/* ---------------------------
+   Shared DOM
+---------------------------- */
+
+let sortButtons;
+
+/* ---------------------------
+   Helpers
 ---------------------------- */
 
 function clamp(n, min, max) {
@@ -109,6 +161,26 @@ function buildScoreBadge(score) {
   return badge;
 }
 
+function normalize(s) {
+  return (s || '').toString().toLowerCase();
+}
+
+function getScoreBounds(minEl, maxEl) {
+  const minVal = parseFloat(minEl?.value);
+  const maxVal = parseFloat(maxEl?.value);
+
+  let minScore = Number.isFinite(minVal) ? minVal : -Infinity;
+  let maxScore = Number.isFinite(maxVal) ? maxVal : Infinity;
+
+  if (minScore > maxScore) {
+    const tmp = minScore;
+    minScore = maxScore;
+    maxScore = tmp;
+  }
+
+  return { minScore, maxScore };
+}
+
 /* ---------------------------
    Navigation
 ---------------------------- */
@@ -128,6 +200,10 @@ function showSection(id) {
   if (id === 'movies' && moviesData === null) {
     fetchMovies();
   }
+
+  if (id === 'games' && gamesData === null) {
+    fetchGames();
+  }
 }
 
 function handleHashChange() {
@@ -140,12 +216,12 @@ function handleHashChange() {
 }
 
 /* ---------------------------
-   Data loading
+   Movies: fetch + parse + filters
 ---------------------------- */
 
 function fetchMovies() {
   fetch(MOVIES_CSV_URL)
-    .then(response => response.text())
+    .then(r => r.text())
     .then(text => {
       const parsed = Papa.parse(text.trim(), { header: true }).data;
 
@@ -153,26 +229,21 @@ function fetchMovies() {
         title: row['Title']?.trim() || '',
         score: parseFloat(row['Score'] || 0) || 0,
         year: (row['Year'] || '').toString().trim(),
-        runtime: (row['Runtime'] || '').toString().trim(),
         director: row['Director']?.trim() || '',
         scoreDate: row['Score Date']?.trim() || '',
         posterUrl: row['PosterURL']?.trim() || '',
-      })).filter(movie => movie.title);
+      })).filter(m => m.title);
 
-      populateYearFilter(moviesData);
+      populateMoviesYearFilter(moviesData);
       renderMovies();
     })
-    .catch(err => {
-      console.error('Error fetching or parsing movies CSV:', err);
-    });
+    .catch(err => console.error('Movies CSV error:', err));
 }
 
-function populateYearFilter(data) {
+function populateMoviesYearFilter(data) {
   yearFilterEl.innerHTML = '<option value="">All</option>';
-
   const years = Array.from(new Set(data.map(m => m.year).filter(Boolean)));
   years.sort((a, b) => b.localeCompare(a));
-
   years.forEach(y => {
     const opt = document.createElement('option');
     opt.value = y;
@@ -182,35 +253,53 @@ function populateYearFilter(data) {
 }
 
 /* ---------------------------
-   Filtering + Sorting
+   Movies: render
 ---------------------------- */
 
-function getScoreBounds() {
-  const minVal = parseFloat(minScoreFilterEl?.value);
-  const maxVal = parseFloat(maxScoreFilterEl?.value);
+function sortMovies(list) {
+  if (currentMoviesSort === 'latest') {
+    list.sort((a, b) => {
+      const ya = parseInt(a.year, 10) || 0;
+      const yb = parseInt(b.year, 10) || 0;
+      const dy = yb - ya;
+      if (dy !== 0) return dy;
 
-  let minScore = Number.isFinite(minVal) ? minVal : -Infinity;
-  let maxScore = Number.isFinite(maxVal) ? maxVal : Infinity;
+      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
+      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
+      const dd = db - da;
+      if (dd !== 0) return dd;
 
-  if (minScore > maxScore) {
-    const tmp = minScore;
-    minScore = maxScore;
-    maxScore = tmp;
+      const ds = b.score - a.score;
+      if (ds !== 0) return ds;
+
+      return a.title.localeCompare(b.title);
+    });
+  } else if (currentMoviesSort === 'score') {
+    list.sort((a, b) => {
+      const ds = b.score - a.score;
+      if (ds !== 0) return ds;
+
+      const ya = parseInt(a.year, 10) || 0;
+      const yb = parseInt(b.year, 10) || 0;
+      const dy = yb - ya;
+      if (dy !== 0) return dy;
+
+      return a.title.localeCompare(b.title);
+    });
+  } else if (currentMoviesSort === 'date') {
+    list.sort((a, b) => {
+      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
+      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
+      return db - da;
+    });
   }
-
-  return { minScore, maxScore };
-}
-
-function normalize(s) {
-  return (s || '').toString().toLowerCase();
 }
 
 function renderMovies() {
   if (!moviesData) return;
 
   const selectedYear = yearFilterEl.value;
-  const { minScore, maxScore } = getScoreBounds();
-
+  const { minScore, maxScore } = getScoreBounds(minScoreFilterEl, maxScoreFilterEl);
   const searchTerm = normalize(searchFilterEl?.value).trim();
 
   let filtered = moviesData.filter(movie => {
@@ -227,42 +316,7 @@ function renderMovies() {
     return yearMatch && scoreMatch && searchMatch;
   });
 
-  if (currentSort === 'latest') {
-    filtered.sort((a, b) => {
-      const ya = parseInt(a.year, 10) || 0;
-      const yb = parseInt(b.year, 10) || 0;
-      const dy = yb - ya;
-      if (dy !== 0) return dy;
-
-      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
-      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
-      const dd = db - da;
-      if (dd !== 0) return dd;
-
-      const ds = b.score - a.score;
-      if (ds !== 0) return ds;
-
-      return a.title.localeCompare(b.title);
-    });
-  } else if (currentSort === 'score') {
-    filtered.sort((a, b) => {
-      const ds = b.score - a.score;
-      if (ds !== 0) return ds;
-
-      const ya = parseInt(a.year, 10) || 0;
-      const yb = parseInt(b.year, 10) || 0;
-      const dy = yb - ya;
-      if (dy !== 0) return dy;
-
-      return a.title.localeCompare(b.title);
-    });
-  } else if (currentSort === 'date') {
-    filtered.sort((a, b) => {
-      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
-      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
-      return db - da;
-    });
-  }
+  sortMovies(filtered);
 
   moviesContainer.innerHTML = '';
 
@@ -288,23 +342,188 @@ function renderMovies() {
     const content = document.createElement('div');
     content.className = 'card-content';
 
-    const title = document.createElement('div');
-    title.className = 'card-title';
-    title.textContent = movie.year ? `${movie.title} (${movie.year})` : movie.title;
-    content.appendChild(title);
+    const titleEl = document.createElement('div');
+    titleEl.className = 'card-title';
+    titleEl.textContent = movie.year ? `${movie.title} (${movie.year})` : movie.title;
+    content.appendChild(titleEl);
 
-    const director = document.createElement('div');
-    director.className = 'card-details';
-    director.textContent = movie.director || '';
-    content.appendChild(director);
+    const directorEl = document.createElement('div');
+    directorEl.className = 'card-details';
+    directorEl.textContent = movie.director || '';
+    content.appendChild(directorEl);
 
-    const date = document.createElement('div');
-    date.className = 'rated-pill';
-    date.textContent = movie.scoreDate ? `Rated: ${movie.scoreDate}` : 'Rated: —';
-    content.appendChild(date);
+    const dateEl = document.createElement('div');
+    dateEl.className = 'rated-pill';
+    dateEl.textContent = movie.scoreDate ? `Rated: ${movie.scoreDate}` : 'Rated: —';
+    content.appendChild(dateEl);
 
     card.appendChild(content);
     moviesContainer.appendChild(card);
+  });
+}
+
+/* ---------------------------
+   Games: fetch + parse + filters
+---------------------------- */
+
+function parseGamesCsv(text) {
+  const parsed = Papa.parse(text.trim(), { header: true }).data;
+
+  return parsed.map(row => ({
+    title: row['Title']?.trim() || '',
+    score: parseFloat(row['Score'] || 0) || 0,
+    year: (row['Year'] || '').toString().trim(),
+    developers: row['Developers']?.trim() || '',
+    scoreDate: row['Score Date']?.trim() || '',
+    posterUrl: row['PosterURL']?.trim() || '',
+  })).filter(g => g.title);
+}
+
+function fetchGames() {
+  // If gids not configured yet, keep section empty but safe
+  if (!SIMPLE_GAMES_CSV_URL || !COMPLEX_GAMES_CSV_URL) {
+    gamesData = [];
+    gamesContainer.innerHTML =
+      '<div class="card"><div class="card-content"><div class="card-title">Games data not linked yet</div><div class="card-details">Paste the Simple Games and Complex Games gid values into script.js.</div></div></div>';
+    return;
+  }
+
+  Promise.all([
+    fetch(SIMPLE_GAMES_CSV_URL).then(r => r.text()),
+    fetch(COMPLEX_GAMES_CSV_URL).then(r => r.text()),
+  ])
+    .then(([simpleText, complexText]) => {
+      const simple = parseGamesCsv(simpleText);
+      const complex = parseGamesCsv(complexText);
+
+      // Merge
+      gamesData = [...simple, ...complex];
+
+      populateGamesYearFilter(gamesData);
+      renderGames();
+    })
+    .catch(err => console.error('Games CSV error:', err));
+}
+
+function populateGamesYearFilter(data) {
+  gamesYearFilterEl.innerHTML = '<option value="">All</option>';
+  const years = Array.from(new Set(data.map(g => g.year).filter(Boolean)));
+  years.sort((a, b) => b.localeCompare(a));
+  years.forEach(y => {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    gamesYearFilterEl.appendChild(opt);
+  });
+}
+
+/* ---------------------------
+   Games: render
+---------------------------- */
+
+function sortGames(list) {
+  if (currentGamesSort === 'latest') {
+    list.sort((a, b) => {
+      const ya = parseInt(a.year, 10) || 0;
+      const yb = parseInt(b.year, 10) || 0;
+      const dy = yb - ya;
+      if (dy !== 0) return dy;
+
+      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
+      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
+      const dd = db - da;
+      if (dd !== 0) return dd;
+
+      const ds = b.score - a.score;
+      if (ds !== 0) return ds;
+
+      return a.title.localeCompare(b.title);
+    });
+  } else if (currentGamesSort === 'score') {
+    list.sort((a, b) => {
+      const ds = b.score - a.score;
+      if (ds !== 0) return ds;
+
+      const ya = parseInt(a.year, 10) || 0;
+      const yb = parseInt(b.year, 10) || 0;
+      const dy = yb - ya;
+      if (dy !== 0) return dy;
+
+      return a.title.localeCompare(b.title);
+    });
+  } else if (currentGamesSort === 'date') {
+    list.sort((a, b) => {
+      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
+      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
+      return db - da;
+    });
+  }
+}
+
+function renderGames() {
+  if (!gamesData) return;
+
+  const selectedYear = gamesYearFilterEl.value;
+  const { minScore, maxScore } = getScoreBounds(gamesMinScoreFilterEl, gamesMaxScoreFilterEl);
+  const searchTerm = normalize(gamesSearchFilterEl?.value).trim();
+
+  let filtered = gamesData.filter(game => {
+    const yearMatch = selectedYear ? game.year === selectedYear : true;
+    const scoreMatch = game.score >= minScore && game.score <= maxScore;
+
+    const title = normalize(game.title);
+    const devs = normalize(game.developers);
+
+    const searchMatch = searchTerm
+      ? (title.includes(searchTerm) || devs.includes(searchTerm))
+      : true;
+
+    return yearMatch && scoreMatch && searchMatch;
+  });
+
+  sortGames(filtered);
+
+  gamesContainer.innerHTML = '';
+
+  filtered.forEach(game => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const posterWrap = document.createElement('div');
+    posterWrap.className = 'poster-wrap';
+
+    const img = document.createElement('img');
+    img.src = game.posterUrl || '';
+    img.alt = game.title;
+    img.onerror = () => {
+      img.src = '';
+      img.style.backgroundColor = '#3a3a3a';
+    };
+
+    posterWrap.appendChild(img);
+    posterWrap.appendChild(buildScoreBadge(game.score));
+    card.appendChild(posterWrap);
+
+    const content = document.createElement('div');
+    content.className = 'card-content';
+
+    const titleEl = document.createElement('div');
+    titleEl.className = 'card-title';
+    titleEl.textContent = game.year ? `${game.title} (${game.year})` : game.title;
+    content.appendChild(titleEl);
+
+    const devEl = document.createElement('div');
+    devEl.className = 'card-details';
+    devEl.textContent = game.developers || '';
+    content.appendChild(devEl);
+
+    const dateEl = document.createElement('div');
+    dateEl.className = 'rated-pill';
+    dateEl.textContent = game.scoreDate ? `Rated: ${game.scoreDate}` : 'Rated: —';
+    content.appendChild(dateEl);
+
+    card.appendChild(content);
+    gamesContainer.appendChild(card);
   });
 }
 
@@ -313,30 +532,29 @@ function renderMovies() {
 ---------------------------- */
 
 function init() {
-  // Sections
+  // Section elements
   sections.forEach(id => {
     sectionElements[id] = document.getElementById(id);
   });
 
-  // Navigation
   categoryButtons = document.querySelectorAll('.category-button');
+  sortButtons = document.querySelectorAll('.sort-button');
 
-  // Filters
+  // Movies refs
   minScoreFilterEl = document.getElementById('minScoreFilter');
   maxScoreFilterEl = document.getElementById('maxScoreFilter');
   yearFilterEl = document.getElementById('yearFilter');
   searchFilterEl = document.getElementById('searchFilter');
-
-  // Sort buttons
-  sortButtons = document.querySelectorAll('.sort-button');
-
-  // Container
   moviesContainer = document.getElementById('moviesContainer');
+  backToHomeBtn = document.getElementById('backToHome') || document.querySelector('#movies .back-button');
 
-  // Home/back button (robust)
-  backToHomeBtn =
-    document.getElementById('backToHome') ||
-    document.querySelector('.back-button');
+  // Games refs
+  gamesMinScoreFilterEl = document.getElementById('gamesMinScoreFilter');
+  gamesMaxScoreFilterEl = document.getElementById('gamesMaxScoreFilter');
+  gamesYearFilterEl = document.getElementById('gamesYearFilter');
+  gamesSearchFilterEl = document.getElementById('gamesSearchFilter');
+  gamesContainer = document.getElementById('gamesContainer');
+  backToHomeGamesBtn = document.getElementById('backToHomeGames') || document.querySelector('#games .back-button');
 
   // Category navigation
   categoryButtons.forEach(btn => {
@@ -346,28 +564,42 @@ function init() {
     });
   });
 
-  // Sort buttons
+  // Sort buttons (scoped by data-target)
   sortButtons.forEach(button => {
     button.addEventListener('click', () => {
-      sortButtons.forEach(b => b.classList.remove('active'));
+      const target = button.getAttribute('data-target') || 'movies';
+      const sortValue = button.getAttribute('data-sort');
+
+      document.querySelectorAll(`.sort-button[data-target="${target}"]`)
+        .forEach(b => b.classList.remove('active'));
+
       button.classList.add('active');
-      currentSort = button.getAttribute('data-sort');
-      renderMovies();
+
+      if (target === 'movies') {
+        currentMoviesSort = sortValue;
+        renderMovies();
+      } else if (target === 'games') {
+        currentGamesSort = sortValue;
+        renderGames();
+      }
     });
   });
 
-  // Back to home
-  if (backToHomeBtn) {
-    backToHomeBtn.addEventListener('click', () => showSection('home'));
-  }
+  // Back buttons
+  backToHomeBtn?.addEventListener('click', () => showSection('home'));
+  backToHomeGamesBtn?.addEventListener('click', () => showSection('home'));
 
-  // Filters
+  // Movies filters
   minScoreFilterEl?.addEventListener('change', renderMovies);
   maxScoreFilterEl?.addEventListener('change', renderMovies);
   yearFilterEl?.addEventListener('change', renderMovies);
-
-  // Search should be real-time
   searchFilterEl?.addEventListener('input', renderMovies);
+
+  // Games filters
+  gamesMinScoreFilterEl?.addEventListener('change', renderGames);
+  gamesMaxScoreFilterEl?.addEventListener('change', renderGames);
+  gamesYearFilterEl?.addEventListener('change', renderGames);
+  gamesSearchFilterEl?.addEventListener('input', renderGames);
 
   // Initial route
   handleHashChange();
