@@ -105,7 +105,7 @@ main {
   }
 }
 
-/* --- Movies header controls --- */
+/* --- Section header controls --- */
 
 .section-header {
   display: flex;
@@ -199,7 +199,7 @@ select option {
   color: var(--text);
 }
 
-/* NEW search input styled to match selects */
+/* Search input styled to match selects */
 .search-input {
   background: linear-gradient(180deg, var(--select-bg), #0b0f1b);
   background-color: var(--select-bg);
@@ -217,7 +217,7 @@ select option {
   color: rgba(167, 175, 195, 0.75);
 }
 
-/* Score range mini layout */
+/* Score range */
 .score-range {
   display: inline-flex;
   align-items: center;
@@ -232,7 +232,13 @@ select option {
 
 /* Keep score selects compact */
 #minScoreFilter,
-#maxScoreFilter {
+#maxScoreFilter,
+#gamesMinScoreFilter,
+#gamesMaxScoreFilter,
+#miceMinScoreFilter,
+#miceMaxScoreFilter,
+#mousepadsMinScoreFilter,
+#mousepadsMaxScoreFilter {
   width: 74px;
 }
 
