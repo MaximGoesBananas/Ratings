@@ -23,12 +23,10 @@ function buildPublishedCsvUrl(gid) {
    GIDs (set these)
 ---------------------------- */
 
-// ✅ Known Movies gid (keeps Movies stable)
+// GIDs
 const MOVIES_GID = '1920189918';
-
-// ⚠️ You MUST paste these two gids:
-const SIMPLE_GAMES_GID = '';   // <- paste gid for "Simple Games"
-const COMPLEX_GAMES_GID = '';  // <- paste gid for "Complex Games"
+const SIMPLE_GAMES_GID = '1303529120';
+const COMPLEX_GAMES_GID = '1556084448';
 
 const MOVIES_CSV_URL = buildPublishedCsvUrl(MOVIES_GID);
 
