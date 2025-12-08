@@ -13,8 +13,8 @@ const MOVIES_CSV_URL =
 // Store loaded data in memory to avoid refetching on every view switch
 let moviesData = null;
 
-// Keep track of current sort field ('score' or 'date')
-let currentSort = 'score';
+// DEFAULT SORT is now "latest"
+let currentSort = 'latest';
 
 // DOM element references
 const sectionElements = {};
@@ -220,13 +220,15 @@ function getScoreBounds() {
 }
 
 /**
- * Render the movie cards based on current filters and sorting.
+ * Sorting rules:
+ * - latest (DEFAULT): Year desc, then Score Date desc, then Score desc, then Title
+ * - score: Score desc, then Year desc, then Title
+ * - date: Score Date desc
  *
- * Top Rated: score desc, then year desc.
  * Title shows (Year).
  * No "Year:" row.
  * Director row has no "Director:" prefix.
- * New score range filter.
+ * Score range filter included.
  */
 function renderMovies() {
   if (!moviesData) return;
@@ -242,7 +244,24 @@ function renderMovies() {
     return yearMatch && directorMatch && scoreMatch;
   });
 
-  if (currentSort === 'score') {
+  if (currentSort === 'latest') {
+    filtered.sort((a, b) => {
+      const ya = parseInt(a.year, 10) || 0;
+      const yb = parseInt(b.year, 10) || 0;
+      const dy = yb - ya;
+      if (dy !== 0) return dy;
+
+      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
+      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
+      const dd = db - da;
+      if (dd !== 0) return dd;
+
+      const ds = b.score - a.score;
+      if (ds !== 0) return ds;
+
+      return a.title.localeCompare(b.title);
+    });
+  } else if (currentSort === 'score') {
     filtered.sort((a, b) => {
       const ds = b.score - a.score;
       if (ds !== 0) return ds;
@@ -328,7 +347,6 @@ function init() {
     });
   });
 
-  // Filter changes
   minScoreFilterEl?.addEventListener('change', renderMovies);
   maxScoreFilterEl?.addEventListener('change', renderMovies);
   yearFilterEl.addEventListener('change', renderMovies);
