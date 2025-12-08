@@ -13,7 +13,7 @@ const MOVIES_CSV_URL =
 // Store loaded data in memory to avoid refetching on every view switch
 let moviesData = null;
 
-// DEFAULT SORT is now "latest"
+// DEFAULT SORT is "latest"
 let currentSort = 'latest';
 
 // DOM element references
@@ -33,6 +33,7 @@ const yearFilterEl = document.getElementById('yearFilter');
 const directorFilterEl = document.getElementById('directorFilter');
 const moviesContainer = document.getElementById('moviesContainer');
 const sortButtons = document.querySelectorAll('.sort-button');
+const backToHomeBtn = document.getElementById('backToHome');
 
 /* ---------------------------
    Helpers for score visuals
@@ -226,9 +227,8 @@ function getScoreBounds() {
  * - date: Score Date desc
  *
  * Title shows (Year).
- * No "Year:" row.
  * Director row has no "Director:" prefix.
- * Score range filter included.
+ * "Rated" shown as a styled pill.
  */
 function renderMovies() {
   if (!moviesData) return;
@@ -316,9 +316,10 @@ function renderMovies() {
     director.textContent = movie.director || '';
     content.appendChild(director);
 
+    // 1) Styled rated pill
     const date = document.createElement('div');
-    date.className = 'card-details';
-    date.textContent = `Rated: ${movie.scoreDate}`;
+    date.className = 'rated-pill';
+    date.textContent = movie.scoreDate ? `Rated: ${movie.scoreDate}` : 'Rated: —';
     content.appendChild(date);
 
     card.appendChild(content);
@@ -347,6 +348,10 @@ function init() {
     });
   });
 
+  // 2) Back to home button
+  backToHomeBtn?.addEventListener('click', () => showSection('home'));
+
+  // Filters
   minScoreFilterEl?.addEventListener('change', renderMovies);
   maxScoreFilterEl?.addEventListener('change', renderMovies);
   yearFilterEl.addEventListener('change', renderMovies);
