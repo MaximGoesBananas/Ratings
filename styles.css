@@ -134,6 +134,12 @@ select {
   outline: none;
 }
 
+/* 3) Make the director filter shorter */
+#directorFilter {
+  width: 160px;
+  max-width: 60vw;
+}
+
 .sorting span {
   color: var(--muted);
   font-size: 0.9rem;
@@ -246,7 +252,7 @@ select {
   text-shadow: 0 0 6px rgba(255, 215, 0, 0.25);
 }
 
-/* Score number (driven by CSS variables from JS) */
+/* Score number */
 .score-value {
   font-weight: 900;
   line-height: 1;
