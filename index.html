@@ -43,7 +43,16 @@
     <!-- Movies section -->
     <section id="movies" class="section hidden">
       <div class="section-header">
-        <h2>Movies</h2>
+
+        <!-- Title row with back button -->
+        <div class="section-title-row">
+          <h2>Movies</h2>
+          <button id="backToHome" class="back-button" type="button" aria-label="Back to categories">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+          </button>
+        </div>
+
         <div class="controls">
           <div class="filters">
 
@@ -95,7 +104,7 @@
           <div class="sorting">
             <span>Sort by:</span>
 
-            <!-- NEW default -->
+            <!-- Default -->
             <button id="sortByLatest" class="sort-button active" data-sort="latest">
               Latest
             </button>
@@ -109,6 +118,16 @@
             </button>
           </div>
         </div>
+
+        <!-- Disclaimer -->
+        <p class="disclaimer">
+          Ratings on this page are pulled live from the raw data in this
+          <a
+            href="https://docs.google.com/spreadsheets/d/1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4/edit?gid=0#gid=0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Google Sheet</a>.
+        </p>
       </div>
 
       <div id="moviesContainer" class="cards-container"></div>
