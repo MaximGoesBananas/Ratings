@@ -10,7 +10,7 @@
  * Features:
  * - Row-aware "Rated" links to Google Sheet (best-effort mapping)
  * - Product-style placeholders for Mice/Mousepads with watermark
- * - Simple per-section loading text
+ * - Simple per-section loading text (now mobile-safe)
  */
 
 const PUBLISHED_BASE =
@@ -346,6 +346,10 @@ function parseCsvWithMap(text, mapRow, gid) {
   }).filter(x => x.title);
 }
 
+/* ---------------------------
+   ✅ MOBILE FIX HERE
+   Force one paint frame after setting loading text
+---------------------------- */
 async function fetchCategory(key) {
   const cfg = CATEGORY[key];
   const st = state[key];
@@ -354,6 +358,9 @@ async function fetchCategory(key) {
   if (container) {
     container.innerHTML = `<div class="loading-text">Loading entries...</div>`;
   }
+
+  // Let the browser paint the loading text (important on mobile)
+  await new Promise(resolve => requestAnimationFrame(() => resolve()));
 
   try {
     const texts = await Promise.all(
