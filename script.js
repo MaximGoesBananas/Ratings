@@ -7,7 +7,8 @@
  * - Mice
  * - Mousepads
  *
- * Config-driven to keep it clean.
+ * Adds:
+ * - Row-aware "Rated" links to Google Sheet (best-effort mapping)
  */
 
 const PUBLISHED_BASE =
@@ -27,10 +28,19 @@ const MICE_GID = '1727287959';
 const MOUSEPADS_GID = '929203458';
 
 /* ---------------------------
-   Shared sheet link for disclaimer
+   Human sheet link (for row deep-links)
 ---------------------------- */
-const SHEET_LINK =
-  'https://docs.google.com/spreadsheets/d/1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4/edit?gid=0#gid=0';
+const SHEET_ID = '1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4';
+const SHEET_EDIT_BASE = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
+
+/*
+  Build a best-effort link to an item's row.
+  CSV index 0 is assumed to be row 2 in the sheet (row 1 = headers).
+*/
+function buildRowLink(gid, rowNumber) {
+  if (!gid || !rowNumber) return `${SHEET_EDIT_BASE}#gid=${gid}`;
+  return `${SHEET_EDIT_BASE}#gid=${gid}&range=A${rowNumber}`;
+}
 
 /* ---------------------------
    Categories
@@ -108,9 +118,7 @@ const CATEGORY = {
     hasImages: false,
     placeholderClass: 'compact',
     placeholderText: () => 'Mice',
-    /* Title line = Brand + Model only */
     makeTitle: item => item.title,
-    /* Second line = year only */
     renderDetails: item => item.year ? [String(item.year)] : [],
     mapRow: row => {
       const brand = row['Brand']?.trim() || '';
@@ -145,9 +153,7 @@ const CATEGORY = {
     hasImages: false,
     placeholderClass: 'compact',
     placeholderText: () => 'Mousepads',
-    /* Title line = Brand + Product only */
     makeTitle: item => item.title,
-    /* Second line = year only */
     renderDetails: item => item.year ? [String(item.year)] : [],
     mapRow: row => {
       const brand = row['Brand']?.trim() || '';
@@ -329,11 +335,18 @@ function handleHashChange() {
 }
 
 /* ---------------------------
-   Data fetch
+   Data fetch with row tracking
 ---------------------------- */
-function parseCsvWithMap(text, mapRow) {
+function parseCsvWithMap(text, mapRow, gid) {
   const parsed = Papa.parse(text.trim(), { header: true, skipEmptyLines: true }).data;
-  return parsed.map(mapRow).filter(x => x.title);
+
+  return parsed.map((row, index) => {
+    const item = mapRow(row) || {};
+    // Best-effort mapping: header row is row 1
+    item._row = index + 2;
+    item._gid = gid;
+    return item;
+  }).filter(x => x.title);
 }
 
 async function fetchCategory(key) {
@@ -346,7 +359,10 @@ async function fetchCategory(key) {
       cfg.gids.map(gid => fetch(buildPublishedCsvUrl(gid)).then(r => r.text()))
     );
 
-    const merged = texts.flatMap(t => parseCsvWithMap(t, cfg.mapRow));
+    const merged = texts.flatMap((t, i) => {
+      const gid = cfg.gids[i];
+      return parseCsvWithMap(t, cfg.mapRow, gid);
+    });
 
     st.data = merged;
 
@@ -520,10 +536,15 @@ function renderCategory(key) {
       content.appendChild(d);
     });
 
-    const dateEl = document.createElement('div');
-    dateEl.className = 'rated-pill';
-    dateEl.textContent = item.scoreDate ? `Rated: ${item.scoreDate}` : 'Rated: —';
-    content.appendChild(dateEl);
+    // Rated pill becomes link to the exact row (best-effort)
+    const dateLink = document.createElement('a');
+    dateLink.className = 'rated-pill';
+    dateLink.textContent = item.scoreDate ? `Rated: ${item.scoreDate}` : 'Rated: —';
+    dateLink.href = buildRowLink(item._gid, item._row);
+    dateLink.target = '_blank';
+    dateLink.rel = 'noopener noreferrer';
+
+    content.appendChild(dateLink);
 
     card.appendChild(content);
     container.appendChild(card);
