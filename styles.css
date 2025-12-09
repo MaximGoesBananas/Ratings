@@ -335,7 +335,7 @@ select option {
   width: 100%;
   aspect-ratio: 2 / 3;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-start;
   padding: 14px;
 
@@ -350,8 +350,7 @@ select option {
 
 /* Compact placeholder for Mice/Mousepads */
 .media-placeholder.compact {
-  aspect-ratio: 16 / 10; /* noticeably shorter than posters */
-  align-items: center;
+  aspect-ratio: 16 / 10;
 }
 
 .media-placeholder .placeholder-text {
@@ -452,6 +451,7 @@ select option {
   letter-spacing: 0.15px;
 
   color: var(--text);
+  text-decoration: none;
 
   background:
     linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
@@ -461,6 +461,13 @@ select option {
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,0.02),
     0 4px 12px rgba(0,0,0,0.25);
+
+  transition: border-color 120ms ease, transform 120ms ease, background 120ms ease;
+}
+
+.rated-pill:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 213, 74, 0.45);
 }
 
 /* --- Animations --- */
