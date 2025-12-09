@@ -14,6 +14,16 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+  <!-- Global loader -->
+  <div id="globalLoader" class="global-loader" aria-live="polite" aria-busy="true">
+    <div class="global-loader-inner">
+      <div class="spinner" aria-hidden="true"></div>
+      <div class="global-loader-title">Loading ratings…</div>
+      <div class="global-loader-sub">Fetching live data from Google Sheets</div>
+    </div>
+  </div>
+
   <main>
     <!-- Home section -->
     <section id="home" class="section">
@@ -41,7 +51,6 @@
     <!-- Movies section -->
     <section id="movies" class="section hidden">
       <div class="section-header">
-
         <div class="section-title-row">
           <button id="backToHomeMovies" class="back-button" type="button">
             <i class="fa-solid fa-house"></i>
@@ -52,7 +61,6 @@
 
         <div class="controls">
           <div class="filters">
-
             <label>Score:</label>
             <div class="score-range">
               <select id="minScoreFilter" aria-label="Minimum score">
@@ -112,7 +120,6 @@
     <!-- Games section -->
     <section id="games" class="section hidden">
       <div class="section-header">
-
         <div class="section-title-row">
           <button id="backToHomeGames" class="back-button" type="button">
             <i class="fa-solid fa-house"></i>
@@ -123,7 +130,6 @@
 
         <div class="controls">
           <div class="filters">
-
             <label>Score:</label>
             <div class="score-range">
               <select id="gamesMinScoreFilter" aria-label="Minimum score">
@@ -183,7 +189,6 @@
     <!-- Mice section -->
     <section id="mice" class="section hidden">
       <div class="section-header">
-
         <div class="section-title-row">
           <button id="backToHomeMice" class="back-button" type="button">
             <i class="fa-solid fa-house"></i>
@@ -194,7 +199,6 @@
 
         <div class="controls">
           <div class="filters">
-
             <label>Score:</label>
             <div class="score-range">
               <select id="miceMinScoreFilter" aria-label="Minimum score">
@@ -254,7 +258,6 @@
     <!-- Mousepads section -->
     <section id="mousepads" class="section hidden">
       <div class="section-header">
-
         <div class="section-title-row">
           <button id="backToHomeMousepads" class="back-button" type="button">
             <i class="fa-solid fa-house"></i>
@@ -265,7 +268,6 @@
 
         <div class="controls">
           <div class="filters">
-
             <label>Score:</label>
             <div class="score-range">
               <select id="mousepadsMinScoreFilter" aria-label="Minimum score">
@@ -321,9 +323,9 @@
 
       <div id="mousepadsContainer" class="cards-container"></div>
     </section>
-
   </main>
 
+  <!-- PapaParse (no integrity to avoid blocking) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="script.js"></script>
 </body>
