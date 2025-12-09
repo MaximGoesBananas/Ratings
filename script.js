@@ -7,8 +7,10 @@
  * - Mice
  * - Mousepads
  *
- * Adds:
+ * Features:
  * - Row-aware "Rated" links to Google Sheet (best-effort mapping)
+ * - Product-style placeholders for Mice/Mousepads with watermark
+ * - Global loading overlay
  */
 
 const PUBLISHED_BASE =
@@ -43,6 +45,17 @@ function buildRowLink(gid, rowNumber) {
 }
 
 /* ---------------------------
+   Loader
+---------------------------- */
+let globalLoaderEl = null;
+
+function hideGlobalLoader() {
+  if (!globalLoaderEl) return;
+  globalLoaderEl.classList.add('is-hidden');
+  globalLoaderEl.setAttribute('aria-busy', 'false');
+}
+
+/* ---------------------------
    Categories
 ---------------------------- */
 const CATEGORY = {
@@ -60,8 +73,7 @@ const CATEGORY = {
     sortDefault: 'latest',
     searchKeys: ['title', 'person'],
     hasImages: true,
-    placeholderClass: '',
-    placeholderText: () => 'Movies',
+    placeholderClasses: '',
     makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
     renderDetails: item => item.person ? [item.person] : [],
     mapRow: row => ({
@@ -88,8 +100,7 @@ const CATEGORY = {
     sortDefault: 'latest',
     searchKeys: ['title', 'person'],
     hasImages: true,
-    placeholderClass: '',
-    placeholderText: () => 'Games',
+    placeholderClasses: '',
     makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
     renderDetails: item => item.person ? [item.person] : [],
     mapRow: row => ({
@@ -116,8 +127,8 @@ const CATEGORY = {
     sortDefault: 'latest',
     searchKeys: ['brand', 'name', 'title'],
     hasImages: false,
-    placeholderClass: 'compact',
-    placeholderText: () => 'Mice',
+    /* product-card placeholder styling */
+    placeholderClasses: 'compact product product-mice',
     makeTitle: item => item.title,
     renderDetails: item => item.year ? [String(item.year)] : [],
     mapRow: row => {
@@ -151,8 +162,8 @@ const CATEGORY = {
     sortDefault: 'latest',
     searchKeys: ['brand', 'name', 'title'],
     hasImages: false,
-    placeholderClass: 'compact',
-    placeholderText: () => 'Mousepads',
+    /* product-card placeholder styling */
+    placeholderClasses: 'compact product product-mousepads',
     makeTitle: item => item.title,
     renderDetails: item => item.year ? [String(item.year)] : [],
     mapRow: row => {
@@ -342,8 +353,7 @@ function parseCsvWithMap(text, mapRow, gid) {
 
   return parsed.map((row, index) => {
     const item = mapRow(row) || {};
-    // Best-effort mapping: header row is row 1
-    item._row = index + 2;
+    item._row = index + 2; // header row is 1
     item._gid = gid;
     return item;
   }).filter(x => x.title);
@@ -469,15 +479,11 @@ function buildMedia(cfg, item) {
     wrap.appendChild(img);
   } else {
     const placeholder = document.createElement('div');
-    placeholder.className = cfg.placeholderClass
-      ? `media-placeholder ${cfg.placeholderClass}`
+    placeholder.className = cfg.placeholderClasses
+      ? `media-placeholder ${cfg.placeholderClasses}`
       : 'media-placeholder';
 
-    const text = document.createElement('div');
-    text.className = 'placeholder-text';
-    text.textContent = cfg.placeholderText ? cfg.placeholderText(item) : cfg.label;
-
-    placeholder.appendChild(text);
+    // No text for product placeholders (per your request)
     wrap.appendChild(placeholder);
   }
 
@@ -536,14 +542,12 @@ function renderCategory(key) {
       content.appendChild(d);
     });
 
-    // Rated pill becomes link to the exact row (best-effort)
     const dateLink = document.createElement('a');
     dateLink.className = 'rated-pill';
     dateLink.textContent = item.scoreDate ? `Rated: ${item.scoreDate}` : 'Rated: —';
     dateLink.href = buildRowLink(item._gid, item._row);
     dateLink.target = '_blank';
     dateLink.rel = 'noopener noreferrer';
-
     content.appendChild(dateLink);
 
     card.appendChild(content);
@@ -575,6 +579,8 @@ function wireCategoryFilters(key) {
    Init
 ---------------------------- */
 function init() {
+  globalLoaderEl = getEl('globalLoader');
+
   sections.forEach(id => {
     sectionElements[id] = getEl(id);
   });
@@ -609,6 +615,18 @@ function init() {
 
   handleHashChange();
   window.addEventListener('hashchange', handleHashChange);
+
+  // Hide loader after first SPA init paint
+  requestAnimationFrame(() => hideGlobalLoader());
 }
+
+// Extra safety: hide loader once everything is loaded
+window.addEventListener('load', () => {
+  const el = document.getElementById('globalLoader');
+  if (el) {
+    el.classList.add('is-hidden');
+    el.setAttribute('aria-busy', 'false');
+  }
+});
 
 document.addEventListener('DOMContentLoaded', init);
