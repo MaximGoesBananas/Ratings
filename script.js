@@ -2,16 +2,12 @@
  * Maxim's Ratings SPA
  *
  * Supports:
- * - Movies (single tab)
+ * - Movies
  * - Games (merged Simple + Complex)
- * - Mice (prepared)
- * - Mousepads (prepared)
+ * - Mice
+ * - Mousepads
  *
- * Each category defines:
- * - gids
- * - DOM ids
- * - mapRow (category-specific parsing)
- * - search keys
+ * Uses a small config-driven architecture to avoid duplication.
  */
 
 const PUBLISHED_BASE =
@@ -27,14 +23,15 @@ function buildPublishedCsvUrl(gid) {
 const MOVIES_GID = '1920189918';
 const SIMPLE_GAMES_GID = '1303529120';
 const COMPLEX_GAMES_GID = '1556084448';
-
-// Prepare for future
-const MICE_GIDS = [];        // add later
-const MOUSEPADS_GIDS = [];   // add later
+const MICE_GID = '1727287959';
+const MOUSEPADS_GID = '929203458';
 
 /* ---------------------------
-   Category config
+   Config
 ---------------------------- */
+const SHEET_LINK =
+  'https://docs.google.com/spreadsheets/d/1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4/edit?gid=0#gid=0';
+
 const CATEGORY = {
   movies: {
     label: 'Movies',
@@ -49,6 +46,9 @@ const CATEGORY = {
     },
     sortDefault: 'latest',
     searchKeys: ['title', 'person'],
+    makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
+    renderDetails: item => item.person ? [item.person] : [],
+    hasImages: true,
     mapRow: row => ({
       title: row['Title']?.trim() || '',
       score: parseFloat(row['Score'] || 0) || 0,
@@ -72,6 +72,9 @@ const CATEGORY = {
     },
     sortDefault: 'latest',
     searchKeys: ['title', 'person'],
+    makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
+    renderDetails: item => item.person ? [item.person] : [],
+    hasImages: true,
     mapRow: row => ({
       title: row['Title']?.trim() || '',
       score: parseFloat(row['Score'] || 0) || 0,
@@ -84,7 +87,7 @@ const CATEGORY = {
 
   mice: {
     label: 'Mice',
-    gids: MICE_GIDS,
+    gids: [MICE_GID],
     dom: {
       container: 'miceContainer',
       minScore: 'miceMinScoreFilter',
@@ -94,13 +97,30 @@ const CATEGORY = {
       back: 'backToHomeMice',
     },
     sortDefault: 'latest',
-    searchKeys: ['title', 'person'],
-    mapRow: null, // set when you provide headers
+    searchKeys: ['brand', 'name', 'title'],
+    makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
+    renderDetails: () => [],
+    hasImages: false,
+    mapRow: row => {
+      const brand = row['Brand']?.trim() || '';
+      const name = row['Model']?.trim() || '';
+      const title = `${brand} ${name}`.trim();
+
+      return {
+        title,
+        brand,
+        name,
+        score: parseFloat(row['Score'] || 0) || 0,
+        year: (row['Release'] || '').toString().trim(),
+        scoreDate: row['Score Date']?.trim() || '',
+        posterUrl: '',
+      };
+    },
   },
 
   mousepads: {
     label: 'Mousepads',
-    gids: MOUSEPADS_GIDS,
+    gids: [MOUSEPADS_GID],
     dom: {
       container: 'mousepadsContainer',
       minScore: 'mousepadsMinScoreFilter',
@@ -110,8 +130,25 @@ const CATEGORY = {
       back: 'backToHomeMousepads',
     },
     sortDefault: 'latest',
-    searchKeys: ['title', 'person'],
-    mapRow: null, // set when you provide headers
+    searchKeys: ['brand', 'name', 'title'],
+    makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
+    renderDetails: () => [],
+    hasImages: false,
+    mapRow: row => {
+      const brand = row['Brand']?.trim() || '';
+      const name = row['Product']?.trim() || '';
+      const title = `${brand} ${name}`.trim();
+
+      return {
+        title,
+        brand,
+        name,
+        score: parseFloat(row['Score'] || 0) || 0,
+        year: (row['Release'] || '').toString().trim(),
+        scoreDate: row['Score Date']?.trim() || '',
+        posterUrl: '',
+      };
+    },
   },
 };
 
@@ -166,11 +203,20 @@ function formatScore(score) {
   return Number.isInteger(score) ? String(score) : score.toFixed(1);
 }
 
+function getStarCount(score) {
+  if (!Number.isFinite(score)) return 0;
+  if (score <= 5) return 0;
+  if (score <= 7) return 1;
+  if (score <= 9) return 2;
+  return 3; // > 9.0
+}
+
 function buildScoreBadge(score) {
   const badge = document.createElement('div');
   badge.className = 'score-badge';
 
   const t = clamp((score - 1) / 9, 0, 1);
+
   const lowColor = '#9b9b9b';
   const highColor = '#ffd54a';
   const scoreColor = lerpColorHex(lowColor, highColor, t);
@@ -186,15 +232,18 @@ function buildScoreBadge(score) {
 
   if (score >= 9.0) badge.classList.add('is-high');
 
-  const star = document.createElement('span');
-  star.className = 'score-star';
-  star.textContent = '★';
+  const starCount = getStarCount(score);
+  if (starCount > 0) {
+    const stars = document.createElement('span');
+    stars.className = 'score-stars';
+    stars.textContent = '★'.repeat(starCount);
+    badge.appendChild(stars);
+  }
 
   const value = document.createElement('span');
   value.className = 'score-value';
   value.textContent = formatScore(score);
 
-  badge.appendChild(star);
   badge.appendChild(value);
 
   return badge;
@@ -226,7 +275,7 @@ function getScoreBounds(minEl, maxEl) {
 
 function matchesSearch(item, term, keys) {
   if (!term) return true;
-  return keys.some(k => normalize(item[k]).includes(term));
+  return (keys || []).some(k => normalize(item[k]).includes(term));
 }
 
 /* ---------------------------
@@ -244,7 +293,7 @@ function showSection(id) {
     history.replaceState(null, '', window.location.pathname);
   }
 
-  if (id in CATEGORY && state[id].data === null) {
+  if (CATEGORY[id] && state[id].data === null) {
     fetchCategory(id);
   }
 }
@@ -259,7 +308,7 @@ function handleHashChange() {
 }
 
 /* ---------------------------
-   Data fetch + parse
+   Data fetch
 ---------------------------- */
 function parseCsvWithMap(text, mapRow) {
   const parsed = Papa.parse(text.trim(), { header: true, skipEmptyLines: true }).data;
@@ -269,26 +318,7 @@ function parseCsvWithMap(text, mapRow) {
 async function fetchCategory(key) {
   const cfg = CATEGORY[key];
   const st = state[key];
-
   const container = getEl(cfg.dom.container);
-
-  // Not configured yet
-  if (!cfg.mapRow || !cfg.gids || cfg.gids.length === 0) {
-    st.data = [];
-    if (container) {
-      container.innerHTML = `
-        <div class="card">
-          <div class="card-content">
-            <div class="card-title">${cfg.label} is ready for setup</div>
-            <div class="card-details">
-              Add this category's GIDs and provide its header mapping in script.js.
-            </div>
-          </div>
-        </div>
-      `;
-    }
-    return;
-  }
 
   try {
     const texts = await Promise.all(
@@ -303,12 +333,14 @@ async function fetchCategory(key) {
     renderCategory(key);
   } catch (err) {
     console.error(`${cfg.label} CSV error:`, err);
+    st.data = [];
+
     if (container) {
       container.innerHTML = `
         <div class="card">
           <div class="card-content">
             <div class="card-title">Could not load ${cfg.label}</div>
-            <div class="card-details">Check CSV publishing and GIDs.</div>
+            <div class="card-details">Check publishing and gid values.</div>
           </div>
         </div>
       `;
@@ -385,6 +417,35 @@ function applySort(list, sortKey) {
 /* ---------------------------
    Render
 ---------------------------- */
+function buildMedia(cfg, item) {
+  const wrap = document.createElement('div');
+  wrap.className = 'media-wrap';
+
+  if (cfg.hasImages && item.posterUrl) {
+    const img = document.createElement('img');
+    img.src = item.posterUrl;
+    img.alt = item.title || '';
+    img.onerror = () => {
+      img.src = '';
+      img.style.backgroundColor = '#3a3a3a';
+    };
+    wrap.appendChild(img);
+  } else {
+    const placeholder = document.createElement('div');
+    placeholder.className = 'media-placeholder';
+
+    const text = document.createElement('div');
+    text.className = 'placeholder-text';
+    text.textContent = item.title || cfg.label;
+
+    placeholder.appendChild(text);
+    wrap.appendChild(placeholder);
+  }
+
+  wrap.appendChild(buildScoreBadge(item.score || 0));
+  return wrap;
+}
+
 function renderCategory(key) {
   const cfg = CATEGORY[key];
   const st = state[key];
@@ -404,7 +465,7 @@ function renderCategory(key) {
   let filtered = (st.data || []).filter(item => {
     const yearMatch = selectedYear ? item.year === selectedYear : true;
     const scoreMatch = (item.score ?? 0) >= minScore && (item.score ?? 0) <= maxScore;
-    const searchMatch = matchesSearch(item, searchTerm, cfg.searchKeys || []);
+    const searchMatch = matchesSearch(item, searchTerm, cfg.searchKeys);
     return yearMatch && scoreMatch && searchMatch;
   });
 
@@ -418,35 +479,24 @@ function renderCategory(key) {
     const card = document.createElement('div');
     card.className = 'card';
 
-    const posterWrap = document.createElement('div');
-    posterWrap.className = 'poster-wrap';
-
-    const img = document.createElement('img');
-    img.src = item.posterUrl || '';
-    img.alt = item.title || '';
-    img.onerror = () => {
-      img.src = '';
-      img.style.backgroundColor = '#3a3a3a';
-    };
-
-    posterWrap.appendChild(img);
-    posterWrap.appendChild(buildScoreBadge(item.score || 0));
-    card.appendChild(posterWrap);
+    // Media area (poster or placeholder)
+    card.appendChild(buildMedia(cfg, item));
 
     const content = document.createElement('div');
     content.className = 'card-content';
 
     const titleEl = document.createElement('div');
     titleEl.className = 'card-title';
-    titleEl.textContent = item.year ? `${item.title} (${item.year})` : item.title;
+    titleEl.textContent = cfg.makeTitle ? cfg.makeTitle(item) : (item.year ? `${item.title} (${item.year})` : item.title);
     content.appendChild(titleEl);
 
-    if (item.person) {
-      const personEl = document.createElement('div');
-      personEl.className = 'card-details';
-      personEl.textContent = item.person;
-      content.appendChild(personEl);
-    }
+    const details = cfg.renderDetails ? cfg.renderDetails(item) : [];
+    details.filter(Boolean).forEach(line => {
+      const d = document.createElement('div');
+      d.className = 'card-details';
+      d.textContent = line;
+      content.appendChild(d);
+    });
 
     const dateEl = document.createElement('div');
     dateEl.className = 'rated-pill';
@@ -482,12 +532,11 @@ function wireCategoryFilters(key) {
    Init
 ---------------------------- */
 function init() {
-  // Sections
   sections.forEach(id => {
     sectionElements[id] = getEl(id);
   });
 
-  // Category nav
+  // Category navigation
   const categoryButtons = document.querySelectorAll('.category-button');
   categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -503,20 +552,19 @@ function init() {
       const target = button.getAttribute('data-target');
       const sortValue = button.getAttribute('data-sort');
 
-      // Toggle active only within that target group
+      if (!target || !state[target]) return;
+
       document.querySelectorAll(`.sort-button[data-target="${target}"]`)
         .forEach(b => b.classList.remove('active'));
 
       button.classList.add('active');
 
-      if (target && state[target]) {
-        state[target].sort = sortValue;
-        renderCategory(target);
-      }
+      state[target].sort = sortValue;
+      renderCategory(target);
     });
   });
 
-  // Wire filters/back buttons for all categories
+  // Wire filters/back
   Object.keys(CATEGORY).forEach(wireCategoryFilters);
 
   // Initial route
