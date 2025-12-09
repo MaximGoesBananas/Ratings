@@ -10,7 +10,7 @@
  * Features:
  * - Row-aware "Rated" links to Google Sheet (best-effort mapping)
  * - Product-style placeholders for Mice/Mousepads with watermark
- * - Global loading overlay
+ * - Simple per-section loading text
  */
 
 const PUBLISHED_BASE =
@@ -42,17 +42,6 @@ const SHEET_EDIT_BASE = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit
 function buildRowLink(gid, rowNumber) {
   if (!gid || !rowNumber) return `${SHEET_EDIT_BASE}#gid=${gid}`;
   return `${SHEET_EDIT_BASE}#gid=${gid}&range=A${rowNumber}`;
-}
-
-/* ---------------------------
-   Loader
----------------------------- */
-let globalLoaderEl = null;
-
-function hideGlobalLoader() {
-  if (!globalLoaderEl) return;
-  globalLoaderEl.classList.add('is-hidden');
-  globalLoaderEl.setAttribute('aria-busy', 'false');
 }
 
 /* ---------------------------
@@ -127,7 +116,6 @@ const CATEGORY = {
     sortDefault: 'latest',
     searchKeys: ['brand', 'name', 'title'],
     hasImages: false,
-    /* product-card placeholder styling */
     placeholderClasses: 'compact product product-mice',
     makeTitle: item => item.title,
     renderDetails: item => item.year ? [String(item.year)] : [],
@@ -162,7 +150,6 @@ const CATEGORY = {
     sortDefault: 'latest',
     searchKeys: ['brand', 'name', 'title'],
     hasImages: false,
-    /* product-card placeholder styling */
     placeholderClasses: 'compact product product-mousepads',
     makeTitle: item => item.title,
     renderDetails: item => item.year ? [String(item.year)] : [],
@@ -364,6 +351,10 @@ async function fetchCategory(key) {
   const st = state[key];
   const container = getEl(cfg.dom.container);
 
+  if (container) {
+    container.innerHTML = `<div class="loading-text">Loading entries...</div>`;
+  }
+
   try {
     const texts = await Promise.all(
       cfg.gids.map(gid => fetch(buildPublishedCsvUrl(gid)).then(r => r.text()))
@@ -483,7 +474,7 @@ function buildMedia(cfg, item) {
       ? `media-placeholder ${cfg.placeholderClasses}`
       : 'media-placeholder';
 
-    // No text for product placeholders (per your request)
+    // No text for product placeholders
     wrap.appendChild(placeholder);
   }
 
@@ -519,6 +510,11 @@ function renderCategory(key) {
   if (!container) return;
 
   container.innerHTML = '';
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="loading-text">No entries match your filters.</div>`;
+    return;
+  }
 
   filtered.forEach(item => {
     const card = document.createElement('div');
@@ -579,8 +575,6 @@ function wireCategoryFilters(key) {
    Init
 ---------------------------- */
 function init() {
-  globalLoaderEl = getEl('globalLoader');
-
   sections.forEach(id => {
     sectionElements[id] = getEl(id);
   });
@@ -615,18 +609,6 @@ function init() {
 
   handleHashChange();
   window.addEventListener('hashchange', handleHashChange);
-
-  // Hide loader after first SPA init paint
-  requestAnimationFrame(() => hideGlobalLoader());
 }
-
-// Extra safety: hide loader once everything is loaded
-window.addEventListener('load', () => {
-  const el = document.getElementById('globalLoader');
-  if (el) {
-    el.classList.add('is-hidden');
-    el.setAttribute('aria-busy', 'false');
-  }
-});
 
 document.addEventListener('DOMContentLoaded', init);
