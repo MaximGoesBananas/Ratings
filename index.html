@@ -43,15 +43,16 @@
       <div class="section-header">
 
         <div class="section-title-row">
-          <h2>Movies</h2>
           <button id="backToHomeMovies" class="back-button" type="button">
             <i class="fa-solid fa-house"></i>
             <span>Home</span>
           </button>
+          <h2>Movies</h2>
         </div>
 
         <div class="controls">
           <div class="filters">
+
             <label>Score:</label>
             <div class="score-range">
               <select id="minScoreFilter" aria-label="Minimum score">
@@ -108,20 +109,21 @@
       <div id="moviesContainer" class="cards-container"></div>
     </section>
 
-    <!-- Games section (merged) -->
+    <!-- Games section -->
     <section id="games" class="section hidden">
       <div class="section-header">
 
         <div class="section-title-row">
-          <h2>Games</h2>
           <button id="backToHomeGames" class="back-button" type="button">
             <i class="fa-solid fa-house"></i>
             <span>Home</span>
           </button>
+          <h2>Games</h2>
         </div>
 
         <div class="controls">
           <div class="filters">
+
             <label>Score:</label>
             <div class="score-range">
               <select id="gamesMinScoreFilter" aria-label="Minimum score">
@@ -166,27 +168,33 @@
         </div>
 
         <p class="disclaimer">
-          Games data is pulled live from the same public spreadsheet.
+          Ratings on this page are pulled live from the raw data in this
+          <a
+            href="https://docs.google.com/spreadsheets/d/1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4/edit?gid=0#gid=0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Google Sheet</a>.
         </p>
       </div>
 
       <div id="gamesContainer" class="cards-container"></div>
     </section>
 
-    <!-- Mice section (prepared) -->
+    <!-- Mice section -->
     <section id="mice" class="section hidden">
       <div class="section-header">
 
         <div class="section-title-row">
-          <h2>Mice</h2>
           <button id="backToHomeMice" class="back-button" type="button">
             <i class="fa-solid fa-house"></i>
             <span>Home</span>
           </button>
+          <h2>Mice</h2>
         </div>
 
         <div class="controls">
           <div class="filters">
+
             <label>Score:</label>
             <div class="score-range">
               <select id="miceMinScoreFilter" aria-label="Minimum score">
@@ -206,7 +214,7 @@
               </select>
             </div>
 
-            <label for="miceYearFilter">Year:</label>
+            <label for="miceYearFilter">Release:</label>
             <select id="miceYearFilter">
               <option value="">All</option>
             </select>
@@ -216,7 +224,7 @@
               id="miceSearchFilter"
               class="search-input"
               type="search"
-              placeholder="Search..."
+              placeholder="Model or brand..."
               autocomplete="off"
               spellcheck="false"
             />
@@ -231,27 +239,33 @@
         </div>
 
         <p class="disclaimer">
-          Mice section is ready. Add GIDs + headers mapping when you’re ready.
+          Ratings on this page are pulled live from the raw data in this
+          <a
+            href="https://docs.google.com/spreadsheets/d/1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4/edit?gid=0#gid=0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Google Sheet</a>.
         </p>
       </div>
 
       <div id="miceContainer" class="cards-container"></div>
     </section>
 
-    <!-- Mousepads section (prepared) -->
+    <!-- Mousepads section -->
     <section id="mousepads" class="section hidden">
       <div class="section-header">
 
         <div class="section-title-row">
-          <h2>Mousepads</h2>
           <button id="backToHomeMousepads" class="back-button" type="button">
             <i class="fa-solid fa-house"></i>
             <span>Home</span>
           </button>
+          <h2>Mousepads</h2>
         </div>
 
         <div class="controls">
           <div class="filters">
+
             <label>Score:</label>
             <div class="score-range">
               <select id="mousepadsMinScoreFilter" aria-label="Minimum score">
@@ -271,7 +285,7 @@
               </select>
             </div>
 
-            <label for="mousepadsYearFilter">Year:</label>
+            <label for="mousepadsYearFilter">Release:</label>
             <select id="mousepadsYearFilter">
               <option value="">All</option>
             </select>
@@ -281,7 +295,7 @@
               id="mousepadsSearchFilter"
               class="search-input"
               type="search"
-              placeholder="Search..."
+              placeholder="Product or brand..."
               autocomplete="off"
               spellcheck="false"
             />
@@ -296,7 +310,12 @@
         </div>
 
         <p class="disclaimer">
-          Mousepads section is ready. Add GIDs + headers mapping when you’re ready.
+          Ratings on this page are pulled live from the raw data in this
+          <a
+            href="https://docs.google.com/spreadsheets/d/1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4/edit?gid=0#gid=0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Google Sheet</a>.
         </p>
       </div>
 
