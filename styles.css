@@ -330,7 +330,7 @@ select option {
   background: #202433;
 }
 
-/* No-image placeholder for Mice/Mousepads */
+/* No-image placeholder */
 .media-placeholder {
   width: 100%;
   aspect-ratio: 2 / 3;
@@ -346,6 +346,12 @@ select option {
   color: rgba(233,236,243,0.9);
   font-weight: 700;
   letter-spacing: 0.2px;
+}
+
+/* Compact placeholder for Mice/Mousepads */
+.media-placeholder.compact {
+  aspect-ratio: 16 / 10; /* noticeably shorter than posters */
+  align-items: center;
 }
 
 .media-placeholder .placeholder-text {
