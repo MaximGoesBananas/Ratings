@@ -7,7 +7,7 @@
  * - Mice
  * - Mousepads
  *
- * Uses a small config-driven architecture to avoid duplication.
+ * Config-driven to keep it clean.
  */
 
 const PUBLISHED_BASE =
@@ -27,11 +27,14 @@ const MICE_GID = '1727287959';
 const MOUSEPADS_GID = '929203458';
 
 /* ---------------------------
-   Config
+   Shared sheet link for disclaimer
 ---------------------------- */
 const SHEET_LINK =
   'https://docs.google.com/spreadsheets/d/1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4/edit?gid=0#gid=0';
 
+/* ---------------------------
+   Categories
+---------------------------- */
 const CATEGORY = {
   movies: {
     label: 'Movies',
@@ -46,9 +49,11 @@ const CATEGORY = {
     },
     sortDefault: 'latest',
     searchKeys: ['title', 'person'],
+    hasImages: true,
+    placeholderClass: '',
+    placeholderText: () => 'Movies',
     makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
     renderDetails: item => item.person ? [item.person] : [],
-    hasImages: true,
     mapRow: row => ({
       title: row['Title']?.trim() || '',
       score: parseFloat(row['Score'] || 0) || 0,
@@ -72,9 +77,11 @@ const CATEGORY = {
     },
     sortDefault: 'latest',
     searchKeys: ['title', 'person'],
+    hasImages: true,
+    placeholderClass: '',
+    placeholderText: () => 'Games',
     makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
     renderDetails: item => item.person ? [item.person] : [],
-    hasImages: true,
     mapRow: row => ({
       title: row['Title']?.trim() || '',
       score: parseFloat(row['Score'] || 0) || 0,
@@ -98,9 +105,13 @@ const CATEGORY = {
     },
     sortDefault: 'latest',
     searchKeys: ['brand', 'name', 'title'],
-    makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
-    renderDetails: () => [],
     hasImages: false,
+    placeholderClass: 'compact',
+    placeholderText: () => 'Mice',
+    /* Title line = Brand + Model only */
+    makeTitle: item => item.title,
+    /* Second line = year only */
+    renderDetails: item => item.year ? [String(item.year)] : [],
     mapRow: row => {
       const brand = row['Brand']?.trim() || '';
       const name = row['Model']?.trim() || '';
@@ -131,9 +142,13 @@ const CATEGORY = {
     },
     sortDefault: 'latest',
     searchKeys: ['brand', 'name', 'title'],
-    makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
-    renderDetails: () => [],
     hasImages: false,
+    placeholderClass: 'compact',
+    placeholderText: () => 'Mousepads',
+    /* Title line = Brand + Product only */
+    makeTitle: item => item.title,
+    /* Second line = year only */
+    renderDetails: item => item.year ? [String(item.year)] : [],
     mapRow: row => {
       const brand = row['Brand']?.trim() || '';
       const name = row['Product']?.trim() || '';
@@ -203,12 +218,18 @@ function formatScore(score) {
   return Number.isInteger(score) ? String(score) : score.toFixed(1);
 }
 
+/* Star tiers:
+   1–5: 0
+   6–7: 1
+   8–9: 2
+   9.01–10: 3
+*/
 function getStarCount(score) {
   if (!Number.isFinite(score)) return 0;
   if (score <= 5) return 0;
   if (score <= 7) return 1;
   if (score <= 9) return 2;
-  return 3; // > 9.0
+  return 3;
 }
 
 function buildScoreBadge(score) {
@@ -432,11 +453,13 @@ function buildMedia(cfg, item) {
     wrap.appendChild(img);
   } else {
     const placeholder = document.createElement('div');
-    placeholder.className = 'media-placeholder';
+    placeholder.className = cfg.placeholderClass
+      ? `media-placeholder ${cfg.placeholderClass}`
+      : 'media-placeholder';
 
     const text = document.createElement('div');
     text.className = 'placeholder-text';
-    text.textContent = item.title || cfg.label;
+    text.textContent = cfg.placeholderText ? cfg.placeholderText(item) : cfg.label;
 
     placeholder.appendChild(text);
     wrap.appendChild(placeholder);
@@ -479,7 +502,6 @@ function renderCategory(key) {
     const card = document.createElement('div');
     card.className = 'card';
 
-    // Media area (poster or placeholder)
     card.appendChild(buildMedia(cfg, item));
 
     const content = document.createElement('div');
@@ -487,7 +509,7 @@ function renderCategory(key) {
 
     const titleEl = document.createElement('div');
     titleEl.className = 'card-title';
-    titleEl.textContent = cfg.makeTitle ? cfg.makeTitle(item) : (item.year ? `${item.title} (${item.year})` : item.title);
+    titleEl.textContent = cfg.makeTitle ? cfg.makeTitle(item) : item.title;
     content.appendChild(titleEl);
 
     const details = cfg.renderDetails ? cfg.renderDetails(item) : [];
@@ -536,7 +558,6 @@ function init() {
     sectionElements[id] = getEl(id);
   });
 
-  // Category navigation
   const categoryButtons = document.querySelectorAll('.category-button');
   categoryButtons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -545,7 +566,6 @@ function init() {
     });
   });
 
-  // Sort buttons
   const sortButtons = document.querySelectorAll('.sort-button');
   sortButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -564,10 +584,8 @@ function init() {
     });
   });
 
-  // Wire filters/back
   Object.keys(CATEGORY).forEach(wireCategoryFilters);
 
-  // Initial route
   handleHashChange();
   window.addEventListener('hashchange', handleHashChange);
 }
