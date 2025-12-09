@@ -230,8 +230,8 @@ function formatScore(score) {
 */
 function getStarCount(score) {
   if (!Number.isFinite(score)) return 0;
-  if (score <= 5) return 0;
-  if (score <= 7) return 1;
+  if (score <= 7) return 0;
+  if (score <= 8) return 1;
   if (score <= 9) return 2;
   return 3;
 }
