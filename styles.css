@@ -35,46 +35,64 @@ main {
 }
 
 /* --------------------------------
-   HOME — Make it feel like a hero
+   HOME — Full-height hero + fix glow cutoff
 --------------------------------- */
 
 #home {
   position: relative;
   overflow: hidden;
 
-  /* Center content visually */
-  min-height: calc(100vh - 140px);
+  /* Fill the viewport reliably on mobile + desktop */
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
   text-align: center;
-  padding: 20px 0 40px;
+
+  /* Give breathing room for main padding context */
+  padding: clamp(18px, 4vh, 44px) 0 clamp(28px, 6vh, 64px);
 }
 
-/* Ambient background glow */
+/* Full-height ambient glow layer */
 #home::before{
   content: "";
   position: absolute;
-  inset: -20% -10% auto -10%;
-  height: 70%;
+  inset: -5% 0; /* slightly overdraw to avoid any edge clipping */
+
   background:
-    radial-gradient(600px 300px at 50% 40%, rgba(255,213,74,0.10), transparent 60%),
-    radial-gradient(700px 420px at 20% 0%, rgba(120,160,255,0.10), transparent 60%);
+    radial-gradient(900px 520px at 50% 10%, rgba(255,213,74,0.12), transparent 60%),
+    radial-gradient(1000px 620px at 50% 90%, rgba(255,213,74,0.10), transparent 65%),
+    radial-gradient(900px 520px at 12% 0%, rgba(120,160,255,0.10), transparent 60%),
+    radial-gradient(900px 520px at 88% 100%, rgba(120,160,255,0.08), transparent 60%);
+
   pointer-events: none;
-  filter: blur(10px);
+  filter: blur(14px);
+  opacity: 1;
 }
 
+/* Subtle vignette/soft depth */
 #home::after{
   content: "";
   position: absolute;
-  inset: auto -10% -30% -10%;
-  height: 55%;
+  inset: 0;
+
   background:
-    radial-gradient(700px 420px at 50% 40%, rgba(255,213,74,0.06), transparent 60%);
+    linear-gradient(180deg, rgba(0,0,0,0.10), transparent 35%, transparent 65%, rgba(0,0,0,0.18)),
+    radial-gradient(900px 500px at 50% 50%, transparent 60%, rgba(0,0,0,0.22));
+
   pointer-events: none;
-  filter: blur(14px);
+}
+
+/* Ensure content sits above glow layers */
+#home h1,
+#home .categories {
+  position: relative;
+  z-index: 1;
 }
 
 #home h1 {
@@ -82,15 +100,10 @@ main {
   font-weight: 900;
   letter-spacing: -0.8px;
   margin: 0 0 22px;
-  position: relative;
-  z-index: 1;
 }
 
-/* Bigger home category buttons */
+/* Home category grid */
 .categories {
-  position: relative;
-  z-index: 1;
-
   display: grid;
   grid-template-columns: repeat(2, minmax(0,1fr));
   gap: 18px;
@@ -136,7 +149,7 @@ main {
   letter-spacing: 0.1px;
 }
 
-/* Home-only extra "featured" feel without affecting other UI */
+/* Home-only "featured" feel */
 #home .category-button{
   background:
     linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
@@ -152,6 +165,7 @@ main {
     0 0 18px rgba(255,213,74,0.08);
 }
 
+/* Slightly bigger buttons on larger screens */
 @media (min-width: 720px) {
   .category-button {
     padding: 26px 22px;
