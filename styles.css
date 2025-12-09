@@ -8,6 +8,10 @@
   --border: rgba(255, 255, 255, 0.06);
   --shadow: 0 10px 30px rgba(0,0,0,0.35);
   --select-bg: #0f1422;
+
+  /* Old main padding moved here so we can reuse safely */
+  --page-pad-top: 28px;
+  --page-pad-bottom: 60px;
 }
 
 * { box-sizing: border-box; }
@@ -20,10 +24,24 @@ html, body {
   color: var(--text);
 }
 
+/* Prevent any accidental horizontal scroll from glow overdraw */
+body {
+  overflow-x: hidden;
+}
+
+/* ------------------------------
+   Layout container
+-------------------------------- */
+
+/*
+  We remove vertical padding from main to avoid:
+  100vh(home) + main padding => unwanted scrollbar.
+  We'll add the padding back to all non-home sections instead.
+*/
 main {
   width: min(1200px, 92vw);
   margin: 0 auto;
-  padding: 28px 0 60px;
+  padding: 0;
 }
 
 .section {
@@ -34,18 +52,31 @@ main {
   display: none !important;
 }
 
+/* Re-apply the old main padding to all sections except home */
+.section:not(#home) {
+  padding-top: var(--page-pad-top);
+  padding-bottom: var(--page-pad-bottom);
+}
+
 /* --------------------------------
-   HOME — Full-height hero + fix glow cutoff
+   HOME — full-bleed hero
 --------------------------------- */
 
+/*
+  Full-bleed trick:
+  Make #home span the entire viewport width even though it's inside main.
+*/
 #home {
   position: relative;
-  overflow: hidden;
 
-  /* Fill the viewport reliably on mobile + desktop */
-  min-height: 100vh;
-  min-height: 100svh;
-  min-height: 100dvh;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+
+  /* Fill the viewport without needing scroll */
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
 
   display: flex;
   flex-direction: column;
@@ -54,41 +85,51 @@ main {
 
   text-align: center;
 
-  /* Give breathing room for main padding context */
+  /* Safe clipping for oversized glow without scrollbars */
+  overflow: hidden;
+  overflow: clip;
+
   padding: clamp(18px, 4vh, 44px) 0 clamp(28px, 6vh, 64px);
 }
 
-/* Full-height ambient glow layer */
+/* Single full-bleed ambient layer */
 #home::before{
   content: "";
   position: absolute;
-  inset: -5% 0; /* slightly overdraw to avoid any edge clipping */
+
+  /*
+    Overdraw generously so blur never looks "boxed".
+    This is why your glow looked like a centered square earlier.
+  */
+  inset: -18vh -18vw;
 
   background:
-    radial-gradient(900px 520px at 50% 10%, rgba(255,213,74,0.12), transparent 60%),
-    radial-gradient(1000px 620px at 50% 90%, rgba(255,213,74,0.10), transparent 65%),
-    radial-gradient(900px 520px at 12% 0%, rgba(120,160,255,0.10), transparent 60%),
-    radial-gradient(900px 520px at 88% 100%, rgba(120,160,255,0.08), transparent 60%);
+    radial-gradient(900px 520px at 50% 8%, rgba(255,213,74,0.14), transparent 62%),
+    radial-gradient(1000px 620px at 50% 92%, rgba(255,213,74,0.12), transparent 65%),
+    radial-gradient(900px 520px at 10% 10%, rgba(120,160,255,0.10), transparent 60%),
+    radial-gradient(900px 520px at 90% 90%, rgba(120,160,255,0.08), transparent 60%),
+    radial-gradient(700px 400px at 20% 85%, rgba(255,213,74,0.06), transparent 60%),
+    radial-gradient(700px 400px at 80% 15%, rgba(255,213,74,0.06), transparent 60%);
 
   pointer-events: none;
-  filter: blur(14px);
+  filter: blur(16px);
   opacity: 1;
 }
 
-/* Subtle vignette/soft depth */
+/* Soft depth/vignette */
 #home::after{
   content: "";
   position: absolute;
   inset: 0;
 
   background:
-    linear-gradient(180deg, rgba(0,0,0,0.10), transparent 35%, transparent 65%, rgba(0,0,0,0.18)),
-    radial-gradient(900px 500px at 50% 50%, transparent 60%, rgba(0,0,0,0.22));
+    linear-gradient(180deg, rgba(0,0,0,0.12), transparent 32%, transparent 68%, rgba(0,0,0,0.20)),
+    radial-gradient(1200px 700px at 50% 50%, transparent 60%, rgba(0,0,0,0.24));
 
   pointer-events: none;
 }
 
-/* Ensure content sits above glow layers */
+/* Ensure content sits above glow */
 #home h1,
 #home .categories {
   position: relative;
@@ -108,9 +149,9 @@ main {
   grid-template-columns: repeat(2, minmax(0,1fr));
   gap: 18px;
 
-  width: min(980px, 100%);
+  width: min(980px, 92vw);
   margin: 0 auto;
-  padding: 0 4px;
+  padding: 0 6px;
 }
 
 @media (min-width: 720px) {
@@ -149,7 +190,7 @@ main {
   letter-spacing: 0.1px;
 }
 
-/* Home-only "featured" feel */
+/* Home-only featured feel */
 #home .category-button{
   background:
     linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
@@ -165,7 +206,6 @@ main {
     0 0 18px rgba(255,213,74,0.08);
 }
 
-/* Slightly bigger buttons on larger screens */
 @media (min-width: 720px) {
   .category-button {
     padding: 26px 22px;
@@ -181,7 +221,9 @@ main {
   }
 }
 
-/* --- Section header controls --- */
+/* --------------------------------
+   Section header controls
+--------------------------------- */
 
 .section-header {
   display: flex;
@@ -362,7 +404,9 @@ select option {
   border-bottom-color: rgba(255, 213, 74, 0.9);
 }
 
-/* --- Cards grid --- */
+/* --------------------------------
+   Cards grid
+--------------------------------- */
 
 .cards-container {
   display: grid;
@@ -382,7 +426,7 @@ select option {
   }
 }
 
-/* --- Loading text inside containers --- */
+/* Loading text inside containers */
 
 .loading-text {
   display: block;
@@ -404,7 +448,9 @@ select option {
   box-shadow: var(--shadow);
 }
 
-/* --- Card --- */
+/* --------------------------------
+   Card
+--------------------------------- */
 
 .card {
   background: linear-gradient(180deg, var(--panel), var(--panel-2));
@@ -474,7 +520,9 @@ select option {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='160' viewBox='0 0 240 160'><rect width='240' height='160' fill='none'/><rect x='28' y='34' width='184' height='92' rx='14' ry='14' fill='none' stroke='%23ffffff' stroke-width='10'/><rect x='44' y='50' width='152' height='60' rx='10' ry='10' fill='%23ffffff'/></svg>");
 }
 
-/* --- Circular score badge (top-left) --- */
+/* --------------------------------
+   Circular score badge (top-left)
+--------------------------------- */
 
 .score-badge {
   position: absolute;
@@ -531,7 +579,9 @@ select option {
     0 0 16px rgba(255, 215, 0, 0.22);
 }
 
-/* --- Card content --- */
+/* --------------------------------
+   Card content
+--------------------------------- */
 
 .card-content {
   padding: 12px 12px 14px;
@@ -550,7 +600,7 @@ select option {
   color: var(--muted);
 }
 
-/* --- Styled "Rated" pill --- */
+/* Styled "Rated" pill */
 .rated-pill {
   display: inline-flex;
   align-items: center;
@@ -584,7 +634,9 @@ select option {
   border-color: rgba(255, 213, 74, 0.45);
 }
 
-/* --- Animations --- */
+/* --------------------------------
+   Animations
+--------------------------------- */
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(3px); }
