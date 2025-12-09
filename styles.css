@@ -309,7 +309,10 @@ select option {
 /* --- Loading text inside containers --- */
 
 .loading-text {
+  display: block;          /* ✅ mobile safety */
+  width: 100%;             /* ✅ mobile safety */
   grid-column: 1 / -1;
+
   padding: 18px 14px;
 
   border-radius: 12px;
