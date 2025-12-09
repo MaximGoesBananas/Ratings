@@ -34,20 +34,70 @@ main {
   display: none !important;
 }
 
-/* --- Home --- */
+/* --------------------------------
+   HOME — Make it feel like a hero
+--------------------------------- */
+
+#home {
+  position: relative;
+  overflow: hidden;
+
+  /* Center content visually */
+  min-height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  padding: 20px 0 40px;
+}
+
+/* Ambient background glow */
+#home::before{
+  content: "";
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 70%;
+  background:
+    radial-gradient(600px 300px at 50% 40%, rgba(255,213,74,0.10), transparent 60%),
+    radial-gradient(700px 420px at 20% 0%, rgba(120,160,255,0.10), transparent 60%);
+  pointer-events: none;
+  filter: blur(10px);
+}
+
+#home::after{
+  content: "";
+  position: absolute;
+  inset: auto -10% -30% -10%;
+  height: 55%;
+  background:
+    radial-gradient(700px 420px at 50% 40%, rgba(255,213,74,0.06), transparent 60%);
+  pointer-events: none;
+  filter: blur(14px);
+}
 
 #home h1 {
-  font-size: clamp(1.9rem, 3.2vw, 2.6rem);
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  margin: 8px 0 22px;
+  font-size: clamp(2.2rem, 4vw, 3.1rem);
+  font-weight: 900;
+  letter-spacing: -0.8px;
+  margin: 0 0 22px;
+  position: relative;
+  z-index: 1;
 }
 
 /* Bigger home category buttons */
 .categories {
+  position: relative;
+  z-index: 1;
+
   display: grid;
   grid-template-columns: repeat(2, minmax(0,1fr));
   gap: 18px;
+
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding: 0 4px;
 }
 
 @media (min-width: 720px) {
@@ -59,11 +109,12 @@ main {
 .category-button {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
 
-  padding: 20px 18px;
-  border-radius: 16px;
-  min-height: 76px;
+  padding: 22px 20px;
+  border-radius: 18px;
+  min-height: 84px;
 
   background: linear-gradient(180deg, var(--panel), var(--panel-2));
   border: 1px solid var(--border);
@@ -71,37 +122,48 @@ main {
   cursor: pointer;
 
   box-shadow: var(--shadow);
-  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease, box-shadow 120ms ease;
 }
 
 .category-button i {
-  font-size: 1.5rem;
-  opacity: 0.95;
+  font-size: 1.6rem;
+  opacity: 0.98;
 }
 
 .category-button span {
-  font-weight: 600;
-  font-size: 1.1rem;
+  font-weight: 700;
+  font-size: 1.12rem;
+  letter-spacing: 0.1px;
 }
 
-.category-button:hover {
-  transform: translateY(-1px);
-  border-color: rgba(255, 255, 255, 0.12);
+/* Home-only extra "featured" feel without affecting other UI */
+#home .category-button{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
+    linear-gradient(180deg, var(--panel), var(--panel-2));
+  border-color: rgba(255,255,255,0.08);
 }
 
-/* Even roomier on desktop */
+#home .category-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 213, 74, 0.22);
+  box-shadow:
+    0 12px 34px rgba(0,0,0,0.45),
+    0 0 18px rgba(255,213,74,0.08);
+}
+
 @media (min-width: 720px) {
   .category-button {
-    padding: 24px 22px;
-    min-height: 92px;
+    padding: 26px 22px;
+    min-height: 98px;
   }
 
   .category-button i {
-    font-size: 1.7rem;
+    font-size: 1.75rem;
   }
 
   .category-button span {
-    font-size: 1.15rem;
+    font-size: 1.18rem;
   }
 }
 
@@ -309,8 +371,8 @@ select option {
 /* --- Loading text inside containers --- */
 
 .loading-text {
-  display: block;          /* ✅ mobile safety */
-  width: 100%;             /* ✅ mobile safety */
+  display: block;
+  width: 100%;
   grid-column: 1 / -1;
 
   padding: 18px 14px;
