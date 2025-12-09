@@ -34,77 +34,6 @@ main {
   display: none !important;
 }
 
-/* -------------------------
-   Global Loader
--------------------------- */
-
-.global-loader {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background:
-    radial-gradient(900px 500px at 10% 0%, rgba(255,213,74,0.08), transparent 50%),
-    linear-gradient(180deg, #0c0f18, #0a0c14);
-
-  color: var(--text);
-  transition: opacity 180ms ease, visibility 180ms ease;
-}
-
-.global-loader.is-hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.global-loader-inner {
-  text-align: center;
-  padding: 26px 24px;
-  border-radius: 18px;
-
-  background: linear-gradient(180deg, var(--panel), var(--panel-2));
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-
-  width: min(360px, 86vw);
-}
-
-.spinner {
-  width: 34px;
-  height: 34px;
-  margin: 0 auto 14px;
-
-  border-radius: 50%;
-  border: 3px solid rgba(255,255,255,0.12);
-  border-top-color: rgba(255,213,74,0.85);
-
-  animation: spin 0.9s linear infinite;
-}
-
-.global-loader-title {
-  font-weight: 800;
-  font-size: 1.05rem;
-  letter-spacing: 0.2px;
-}
-
-.global-loader-sub {
-  margin-top: 6px;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .spinner { animation: none; }
-}
-
 /* --- Home --- */
 
 #home h1 {
@@ -377,6 +306,25 @@ select option {
   }
 }
 
+/* --- Loading text inside containers --- */
+
+.loading-text {
+  grid-column: 1 / -1;
+  padding: 18px 14px;
+
+  border-radius: 12px;
+  border: 1px solid var(--border);
+
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  color: var(--muted);
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.15px;
+
+  box-shadow: var(--shadow);
+}
+
 /* --- Card --- */
 
 .card {
@@ -412,7 +360,7 @@ select option {
     linear-gradient(180deg, #181d2b, #0f1320);
 }
 
-/* Compact, product-style ratio */
+/* Compact product-style ratio */
 .media-placeholder.compact {
   aspect-ratio: 16 / 9;
 }
@@ -430,7 +378,6 @@ select option {
   inset: 0;
 
   opacity: 0.12;
-  filter: blur(0.2px);
 
   background-repeat: no-repeat;
   background-position: 88% 70%;
@@ -438,12 +385,12 @@ select option {
   pointer-events: none;
 }
 
-/* Mouse watermark (simple SVG silhouette) */
+/* Mouse watermark */
 .media-placeholder.product-mice::after {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='160' viewBox='0 0 240 160'><rect width='240' height='160' fill='none'/><path d='M120 18c-34 0-62 24-62 64v8c0 36 28 62 62 62s62-26 62-62v-8c0-40-28-64-62-64zm0 18c24 0 44 18 44 46v8c0 26-20 44-44 44s-44-18-44-44v-8c0-28 20-46 44-46z' fill='%23ffffff'/><rect x='116' y='40' width='8' height='28' rx='4' fill='%23ffffff'/></svg>");
 }
 
-/* Mousepad watermark (simple rounded rectangle) */
+/* Mousepad watermark */
 .media-placeholder.product-mousepads::after {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='160' viewBox='0 0 240 160'><rect width='240' height='160' fill='none'/><rect x='28' y='34' width='184' height='92' rx='14' ry='14' fill='none' stroke='%23ffffff' stroke-width='10'/><rect x='44' y='50' width='152' height='60' rx='10' ry='10' fill='%23ffffff'/></svg>");
 }
