@@ -4,13 +4,14 @@
  * Supports:
  * - Movies
  * - Games (merged Simple + Complex)
- * - Mice
- * - Mousepads
+ * - Mice (LIST VIEW)
+ * - Mousepads (LIST VIEW)
  *
  * Features:
  * - Row-aware "Rated" links to Google Sheet (best-effort mapping)
  * - Product-style placeholders for Mice/Mousepads with watermark
  * - Simple per-section loading text (now mobile-safe)
+ * - List view for mice and mousepads
  */
 
 const PUBLISHED_BASE =
@@ -62,6 +63,7 @@ const CATEGORY = {
     sortDefault: 'latest',
     searchKeys: ['title', 'person'],
     hasImages: true,
+    isListView: false,
     placeholderClasses: '',
     makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
     renderDetails: item => item.person ? [item.person] : [],
@@ -89,6 +91,7 @@ const CATEGORY = {
     sortDefault: 'latest',
     searchKeys: ['title', 'person'],
     hasImages: true,
+    isListView: false,
     placeholderClasses: '',
     makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
     renderDetails: item => item.person ? [item.person] : [],
@@ -116,6 +119,7 @@ const CATEGORY = {
     sortDefault: 'latest',
     searchKeys: ['brand', 'name', 'title'],
     hasImages: false,
+    isListView: true,
     placeholderClasses: 'compact product product-mice',
     makeTitle: item => item.title,
     renderDetails: item => item.year ? [String(item.year)] : [],
@@ -150,6 +154,7 @@ const CATEGORY = {
     sortDefault: 'latest',
     searchKeys: ['brand', 'name', 'title'],
     hasImages: false,
+    isListView: true,
     placeholderClasses: 'compact product product-mousepads',
     makeTitle: item => item.title,
     renderDetails: item => item.year ? [String(item.year)] : [],
@@ -460,7 +465,7 @@ function applySort(list, sortKey) {
 }
 
 /* ---------------------------
-   Render
+   Render - Cards (Movies/Games)
 ---------------------------- */
 function buildMedia(cfg, item) {
   const wrap = document.createElement('div');
@@ -489,6 +494,56 @@ function buildMedia(cfg, item) {
   return wrap;
 }
 
+/* ---------------------------
+   Render - List Items (Mice/Mousepads)
+---------------------------- */
+function buildListItem(cfg, item) {
+  const listItem = document.createElement('div');
+  listItem.className = 'list-item';
+
+  // Left section with title and details
+  const infoSection = document.createElement('div');
+  infoSection.className = 'list-item-info';
+
+  const title = document.createElement('div');
+  title.className = 'list-item-title';
+  title.textContent = cfg.makeTitle ? cfg.makeTitle(item) : item.title;
+  infoSection.appendChild(title);
+
+  const details = cfg.renderDetails ? cfg.renderDetails(item) : [];
+  details.filter(Boolean).forEach(line => {
+    const d = document.createElement('div');
+    d.className = 'list-item-details';
+    d.textContent = line;
+    infoSection.appendChild(d);
+  });
+
+  listItem.appendChild(infoSection);
+
+  // Right section with score and rated link
+  const metaSection = document.createElement('div');
+  metaSection.className = 'list-item-meta';
+
+  const scoreBadge = buildScoreBadge(item.score || 0);
+  scoreBadge.classList.add('list-score-badge');
+  metaSection.appendChild(scoreBadge);
+
+  const dateLink = document.createElement('a');
+  dateLink.className = 'rated-pill';
+  dateLink.textContent = item.scoreDate ? `Rated: ${item.scoreDate}` : 'Rated: —';
+  dateLink.href = buildRowLink(item._gid, item._row);
+  dateLink.target = '_blank';
+  dateLink.rel = 'noopener noreferrer';
+  metaSection.appendChild(dateLink);
+
+  listItem.appendChild(metaSection);
+
+  return listItem;
+}
+
+/* ---------------------------
+   Main Render Function
+---------------------------- */
 function renderCategory(key) {
   const cfg = CATEGORY[key];
   const st = state[key];
@@ -523,39 +578,48 @@ function renderCategory(key) {
     return;
   }
 
-  filtered.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'card';
-
-    card.appendChild(buildMedia(cfg, item));
-
-    const content = document.createElement('div');
-    content.className = 'card-content';
-
-    const titleEl = document.createElement('div');
-    titleEl.className = 'card-title';
-    titleEl.textContent = cfg.makeTitle ? cfg.makeTitle(item) : item.title;
-    content.appendChild(titleEl);
-
-    const details = cfg.renderDetails ? cfg.renderDetails(item) : [];
-    details.filter(Boolean).forEach(line => {
-      const d = document.createElement('div');
-      d.className = 'card-details';
-      d.textContent = line;
-      content.appendChild(d);
+  // Check if this is a list view (mice/mousepads)
+  if (cfg.isListView) {
+    // Render as list
+    filtered.forEach(item => {
+      container.appendChild(buildListItem(cfg, item));
     });
+  } else {
+    // Render as cards (movies/games)
+    filtered.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card';
 
-    const dateLink = document.createElement('a');
-    dateLink.className = 'rated-pill';
-    dateLink.textContent = item.scoreDate ? `Rated: ${item.scoreDate}` : 'Rated: —';
-    dateLink.href = buildRowLink(item._gid, item._row);
-    dateLink.target = '_blank';
-    dateLink.rel = 'noopener noreferrer';
-    content.appendChild(dateLink);
+      card.appendChild(buildMedia(cfg, item));
 
-    card.appendChild(content);
-    container.appendChild(card);
-  });
+      const content = document.createElement('div');
+      content.className = 'card-content';
+
+      const titleEl = document.createElement('div');
+      titleEl.className = 'card-title';
+      titleEl.textContent = cfg.makeTitle ? cfg.makeTitle(item) : item.title;
+      content.appendChild(titleEl);
+
+      const details = cfg.renderDetails ? cfg.renderDetails(item) : [];
+      details.filter(Boolean).forEach(line => {
+        const d = document.createElement('div');
+        d.className = 'card-details';
+        d.textContent = line;
+        content.appendChild(d);
+      });
+
+      const dateLink = document.createElement('a');
+      dateLink.className = 'rated-pill';
+      dateLink.textContent = item.scoreDate ? `Rated: ${item.scoreDate}` : 'Rated: —';
+      dateLink.href = buildRowLink(item._gid, item._row);
+      dateLink.target = '_blank';
+      dateLink.rel = 'noopener noreferrer';
+      content.appendChild(dateLink);
+
+      card.appendChild(content);
+      container.appendChild(card);
+    });
+  }
 }
 
 /* ---------------------------

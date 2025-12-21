@@ -405,7 +405,7 @@ select option {
 }
 
 /* --------------------------------
-   Cards grid
+   Cards grid (Movies/Games)
 --------------------------------- */
 
 .cards-container {
@@ -449,7 +449,7 @@ select option {
 }
 
 /* --------------------------------
-   Card
+   Card (Movies/Games)
 --------------------------------- */
 
 .card {
@@ -635,6 +635,90 @@ select option {
 }
 
 /* --------------------------------
+   List View (Mice/Mousepads)
+--------------------------------- */
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding: 14px 16px;
+  border-radius: 12px;
+
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+
+  transition: border-color 120ms ease, transform 120ms ease;
+}
+
+.list-item:hover {
+  border-color: rgba(255, 255, 255, 0.10);
+  transform: translateX(2px);
+}
+
+.list-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.list-item-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  color: var(--text);
+  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.list-item-details {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.list-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Score badge in list view */
+.list-score-badge {
+  position: static;
+  flex-shrink: 0;
+}
+
+/* Responsive adjustments for list view */
+@media (max-width: 680px) {
+  .list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .list-item-meta {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .list-item-title {
+    white-space: normal;
+  }
+}
+
+/* --------------------------------
    Animations
 --------------------------------- */
 
@@ -648,4 +732,3 @@ select option {
 @keyframes in{to{opacity:1;transform:none}}
 #home::before{animation:bgMove 10s ease-in-out infinite alternate}
 @keyframes bgMove{to{transform:translate3d(2vw,-2vh,0) scale(1.03)}}
-
