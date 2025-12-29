@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="University of York could not be voted on - Error">
+    <title>Voting Error - University of York</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .error-container {
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .error-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #ff6b6b;
+        }
+
+        .error-code {
+            font-size: 18px;
+            color: #95a5a6;
+            margin-bottom: 25px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .error-message {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #ecf0f1;
+        }
+
+        .team-name {
+            background: rgba(255, 107, 107, 0.2);
+            padding: 10px 15px;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 15px 0;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
+        .details {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid #ff6b6b;
+            padding: 15px;
+            margin-top: 25px;
+            text-align: left;
+            font-size: 14px;
+            color: #bdc3c7;
+        }
+
+        .details strong {
+            color: #ecf0f1;
+        }
+
+        .warning {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 6px;
+            font-size: 14px;
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <h1>Voting Failed</h1>
+        <div class="error-code">ERROR CODE: VOTE_INVALID_403</div>
+
+        <div class="error-message">
+            The team you attempted to vote for could not be processed.
+        </div>
+
+        <div class="team-name">University of York</div>
+
+        <div class="details">
+            <strong>Reason:</strong> Suspicious voting activity detected<br><br>
+            <strong>Status:</strong> Vote rejected by tournament organizers<br><br>
+            <strong>Action Taken:</strong> This voting link has been flagged and reported to Steam security for verification purposes.
+        </div>
+
+        <div class="warning">
+            ⚠️ This voting session has been logged. If you believe this is an error, please contact official CS2 tournament support.
+        </div>
+    </div>
+</body>
+</html>
