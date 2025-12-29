@@ -69,7 +69,7 @@ const CATEGORY = {
     renderDetails: item => item.person ? [item.person] : [],
     mapRow: row => ({
       title: row['Title']?.trim() || '',
-      score: parseFloat(row['Score'] || 0) || 0,
+      score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
       year: (row['Year'] || '').toString().trim(),
       person: row['Director']?.trim() || '',
       scoreDate: row['Score Date']?.trim() || '',
@@ -97,7 +97,7 @@ const CATEGORY = {
     renderDetails: item => item.person ? [item.person] : [],
     mapRow: row => ({
       title: row['Title']?.trim() || '',
-      score: parseFloat(row['Score'] || 0) || 0,
+      score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
       year: (row['Year'] || '').toString().trim(),
       person: row['Developers']?.trim() || '',
       scoreDate: row['Score Date']?.trim() || '',
@@ -132,7 +132,7 @@ const CATEGORY = {
         title,
         brand,
         name,
-        score: parseFloat(row['Score'] || 0) || 0,
+        score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
         year: (row['Release'] || '').toString().trim(),
         scoreDate: row['Score Date']?.trim() || '',
         posterUrl: '',
@@ -167,7 +167,7 @@ const CATEGORY = {
         title,
         brand,
         name,
-        score: parseFloat(row['Score'] || 0) || 0,
+        score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
         year: (row['Release'] || '').toString().trim(),
         scoreDate: row['Score Date']?.trim() || '',
         posterUrl: '',
@@ -561,6 +561,9 @@ function renderCategory(key) {
   const searchTerm = normalize(searchEl?.value).trim();
 
   let filtered = (st.data || []).filter(item => {
+    // Only show items that have a score
+    if (item.score === null || item.score === undefined) return false;
+
     const yearMatch = selectedYear ? item.year === selectedYear : true;
     const scoreMatch = (item.score ?? 0) >= minScore && (item.score ?? 0) <= maxScore;
     const searchMatch = matchesSearch(item, searchTerm, cfg.searchKeys);
