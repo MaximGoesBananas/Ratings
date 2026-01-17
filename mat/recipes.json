@@ -1639,7 +1639,7 @@
     "id": "kyckling-med-ris",
     "name": "Kyckling med ris",
     "category": "kyckling",
-    "time": 35,
+    "time": 90,
     "servings": 4,
     "estimatedCost": 70,
     "image": "images/kyckling-med-ris.jpg",
@@ -1686,11 +1686,11 @@
       }
     ],
     "steps": [
-      "Krydda kycklingklubborna med paprikapulver, vitlökspulver, salt och peppar.",
-      "Bryn i smör i stekpanna, lägg över i ugnsform.",
-      "Tillaga i 200°C ugn ca 25-30 min.",
-      "Koka riset.",
-      "Gör sås: häll grädde och fond i stekpannan, tillsätt soja. Koka ihop.",
+      "Lägg frysta kycklingklubbor i en ugnsform.",
+      "Krydda med paprikapulver, vitlökspulver, salt och peppar.",
+      "Tillaga i 200°C ugn i ca 75-80 min tills genomstekta (innertemp 74°C).",
+      "Koka riset under de sista 20 minuterna.",
+      "Gör sås: häll grädde och fond i en kastrull, tillsätt soja och skyspad från formen. Koka ihop.",
       "Servera kycklingen med ris och sås."
     ]
   },
