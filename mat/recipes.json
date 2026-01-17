@@ -62,7 +62,7 @@
     "time": 10,
     "servings": 4,
     "estimatedCost": 55,
-    "image": "https://images.unsplash.com/photo-1612871689353-ccd3e8e24375?w=400&h=400&fit=crop",
+    "image": "https://images.unsplash.com/photo-1504544750208-dc0358e63f7f?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Grillkorv", "amount": "8 st", "estimatedPrice": 35},
       {"item": "Korvbröd", "amount": "8 st", "estimatedPrice": 15},
@@ -654,7 +654,7 @@
     "time": 45,
     "servings": 4,
     "estimatedCost": 85,
-    "image": "https://images.unsplash.com/photo-1608039829572-a82850273053?w=400&h=400&fit=crop",
+    "image": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Kycklingvingar", "amount": "1 kg", "estimatedPrice": 50},
       {"item": "Smör", "amount": "50 g", "estimatedPrice": 8},
