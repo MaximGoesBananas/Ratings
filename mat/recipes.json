@@ -6,7 +6,7 @@
     "time": 25,
     "servings": 4,
     "estimatedCost": 65,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_226190/cf_259/korv_stroganoff.jpg",
+    "image": "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Falukorv", "amount": "400 g", "estimatedPrice": 30},
       {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
@@ -34,7 +34,7 @@
     "time": 35,
     "servings": 4,
     "estimatedCost": 85,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_143657/cf_259/kottfarssas.jpg",
+    "image": "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Nötfärs", "amount": "500 g", "estimatedPrice": 50},
       {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
@@ -62,7 +62,7 @@
     "time": 10,
     "servings": 4,
     "estimatedCost": 55,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_107751/cf_259/grillkorv_med_brod_och_tillbehor.jpg",
+    "image": "https://images.unsplash.com/photo-1612871689353-ccd3e8e24375?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Grillkorv", "amount": "8 st", "estimatedPrice": 35},
       {"item": "Korvbröd", "amount": "8 st", "estimatedPrice": 15},
@@ -83,7 +83,7 @@
     "time": 30,
     "servings": 4,
     "estimatedCost": 95,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_235036/cf_259/klassisk_cheeseburgare.jpg",
+    "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Nötfärs", "amount": "500 g", "estimatedPrice": 50},
       {"item": "Hamburgerbröd", "amount": "4 st", "estimatedPrice": 15},
@@ -110,7 +110,7 @@
     "time": 90,
     "servings": 4,
     "estimatedCost": 350,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_201837/cf_259/beef_wellington.jpg",
+    "image": "https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Oxfilé", "amount": "600 g", "estimatedPrice": 200},
       {"item": "Champinjoner", "amount": "300 g", "estimatedPrice": 25},
@@ -138,7 +138,7 @@
     "time": 45,
     "servings": 4,
     "estimatedCost": 90,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_90283/cf_259/chili_con_carne.jpg",
+    "image": "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Nötfärs", "amount": "400 g", "estimatedPrice": 40},
       {"item": "Kidneybönor", "amount": "400 g", "estimatedPrice": 12},
@@ -167,7 +167,7 @@
     "time": 40,
     "servings": 4,
     "estimatedCost": 85,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_227071/cf_259/kottbullar_med_graddsas.jpg",
+    "image": "https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Blandfärs", "amount": "500 g", "estimatedPrice": 45},
       {"item": "Ströbröd", "amount": "1 dl", "estimatedPrice": 5},
@@ -194,7 +194,7 @@
     "time": 30,
     "servings": 4,
     "estimatedCost": 70,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_107797/cf_259/klassisk_pyttipanna.jpg",
+    "image": "https://images.unsplash.com/photo-1482049016gy649-10949485ec2d?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Potatis", "amount": "600 g", "estimatedPrice": 10},
       {"item": "Falukorv", "amount": "300 g", "estimatedPrice": 25},
@@ -220,7 +220,7 @@
     "time": 75,
     "servings": 4,
     "estimatedCost": 110,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_217610/cf_259/lasagne.jpg",
+    "image": "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Nötfärs", "amount": "500 g", "estimatedPrice": 50},
       {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
@@ -247,7 +247,7 @@
     "time": 30,
     "servings": 4,
     "estimatedCost": 120,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_99668/cf_259/tacos_med_kottfars.jpg",
+    "image": "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Nötfärs", "amount": "400 g", "estimatedPrice": 40},
       {"item": "Tacokrydda", "amount": "1 påse", "estimatedPrice": 10},
@@ -273,7 +273,7 @@
     "time": 25,
     "servings": 4,
     "estimatedCost": 75,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_231016/cf_259/carbonara.jpg",
+    "image": "https://images.unsplash.com/photo-1612874742237-6526221588e3?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Spaghetti", "amount": "400 g", "estimatedPrice": 12},
       {"item": "Pancetta eller bacon", "amount": "150 g", "estimatedPrice": 25},
@@ -299,7 +299,7 @@
     "time": 45,
     "servings": 4,
     "estimatedCost": 80,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_224009/cf_259/gyoza_med_flask.jpg",
+    "image": "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Fläskfärs", "amount": "300 g", "estimatedPrice": 30},
       {"item": "Vitkål", "amount": "150 g", "estimatedPrice": 5},
@@ -330,7 +330,7 @@
     "time": 25,
     "servings": 4,
     "estimatedCost": 95,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_102451/cf_259/nachofat_med_kottfars_och_ost.jpg",
+    "image": "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Nachochips", "amount": "200 g", "estimatedPrice": 20},
       {"item": "Nötfärs", "amount": "400 g", "estimatedPrice": 40},
@@ -357,7 +357,7 @@
     "time": 50,
     "servings": 4,
     "estimatedCost": 100,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_103174/cf_259/enchiladas_med_kottfars.jpg",
+    "image": "https://images.unsplash.com/photo-1534352956036-cd81e27dd615?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Nötfärs", "amount": "400 g", "estimatedPrice": 40},
       {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
@@ -383,7 +383,7 @@
     "time": 180,
     "servings": 4,
     "estimatedCost": 160,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_155761/cf_259/klibbiga_spare_ribs.jpg",
+    "image": "https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Fläskrevben", "amount": "1,2 kg", "estimatedPrice": 100},
       {"item": "BBQ-sås", "amount": "3 dl", "estimatedPrice": 20},
@@ -410,7 +410,7 @@
     "time": 35,
     "servings": 4,
     "estimatedCost": 95,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_196451/cf_259/wienerschnitzel.jpg",
+    "image": "https://images.unsplash.com/photo-1599921841143-819065a55cc6?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Fläskkotlett", "amount": "4 st", "estimatedPrice": 50},
       {"item": "Vetemjöl", "amount": "1 dl", "estimatedPrice": 3},
@@ -435,7 +435,7 @@
     "time": 120,
     "servings": 4,
     "estimatedCost": 130,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_110688/cf_259/gulaschsoppa.jpg",
+    "image": "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Högrev", "amount": "600 g", "estimatedPrice": 75},
       {"item": "Gul lök", "amount": "2 st", "estimatedPrice": 6},
@@ -463,7 +463,7 @@
     "time": 300,
     "servings": 4,
     "estimatedCost": 120,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_158451/cf_259/pulled_pork.jpg",
+    "image": "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Fläskkarré", "amount": "1 kg", "estimatedPrice": 60},
       {"item": "BBQ-sås", "amount": "3 dl", "estimatedPrice": 20},
@@ -491,7 +491,7 @@
     "time": 20,
     "servings": 4,
     "estimatedCost": 100,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_159688/cf_259/club_sandwich.jpg",
+    "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Toastbröd", "amount": "12 skivor", "estimatedPrice": 15},
       {"item": "Kyckling eller kalkon", "amount": "200 g", "estimatedPrice": 40},
@@ -517,7 +517,7 @@
     "time": 40,
     "servings": 4,
     "estimatedCost": 120,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_206654/cf_259/helstekt_flaskfile.jpg",
+    "image": "https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Fläskfilé", "amount": "600 g", "estimatedPrice": 70},
       {"item": "Potatis", "amount": "600 g", "estimatedPrice": 10},
@@ -544,7 +544,7 @@
     "time": 45,
     "servings": 4,
     "estimatedCost": 280,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_230867/cf_259/oxfile_med_rodvinssas_och_hasselbackspotatis.jpg",
+    "image": "https://images.unsplash.com/photo-1558030006-450675393462?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Oxfilé", "amount": "600 g", "estimatedPrice": 200},
       {"item": "Potatis", "amount": "800 g", "estimatedPrice": 12},
@@ -573,7 +573,7 @@
     "time": 35,
     "servings": 4,
     "estimatedCost": 180,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_233009/cf_259/ryggbiff_med_bearnaisesas.jpg",
+    "image": "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Ryggbiff", "amount": "4 st à 200g", "estimatedPrice": 120},
       {"item": "Potatis", "amount": "800 g", "estimatedPrice": 12},
@@ -598,7 +598,7 @@
     "time": 30,
     "servings": 4,
     "estimatedCost": 95,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_224254/cf_259/pad_thai.jpg",
+    "image": "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Kycklingfilé", "amount": "400 g", "estimatedPrice": 45},
       {"item": "Risnudlar", "amount": "200 g", "estimatedPrice": 15},
@@ -626,7 +626,7 @@
     "time": 25,
     "servings": 4,
     "estimatedCost": 75,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_119095/cf_259/stekt_ris_med_kyckling.jpg",
+    "image": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Kallkokat ris", "amount": "6 dl", "estimatedPrice": 8},
       {"item": "Kycklingfilé", "amount": "300 g", "estimatedPrice": 35},
@@ -654,7 +654,7 @@
     "time": 45,
     "servings": 4,
     "estimatedCost": 85,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_141629/cf_259/buffalo_chicken_wings.jpg",
+    "image": "https://images.unsplash.com/photo-1608039829572-a82850273053?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Kycklingvingar", "amount": "1 kg", "estimatedPrice": 50},
       {"item": "Smör", "amount": "50 g", "estimatedPrice": 8},
@@ -679,7 +679,7 @@
     "time": 30,
     "servings": 4,
     "estimatedCost": 90,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_169139/cf_259/kung_pao_kyckling.jpg",
+    "image": "https://images.unsplash.com/photo-1525755662778-989d0524087e?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Kycklingfilé", "amount": "500 g", "estimatedPrice": 50},
       {"item": "Jordnötter", "amount": "100 g", "estimatedPrice": 15},
@@ -709,7 +709,7 @@
     "time": 40,
     "servings": 4,
     "estimatedCost": 95,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_150668/cf_259/chicken_tikka_masala.jpg",
+    "image": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Kycklingfilé", "amount": "500 g", "estimatedPrice": 50},
       {"item": "Yoghurt", "amount": "2 dl", "estimatedPrice": 10},
@@ -738,7 +738,7 @@
     "time": 30,
     "servings": 4,
     "estimatedCost": 110,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_106761/cf_259/kycklingfajitas.jpg",
+    "image": "https://images.unsplash.com/photo-1611250188496-e966043a0629?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Kycklingfilé", "amount": "500 g", "estimatedPrice": 50},
       {"item": "Paprika (blandade färger)", "amount": "2 st", "estimatedPrice": 15},
@@ -766,7 +766,7 @@
     "time": 35,
     "servings": 4,
     "estimatedCost": 70,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_202929/cf_259/ugnsstekt_kyckling_med_ris.jpg",
+    "image": "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Kycklingklubbor", "amount": "8 st", "estimatedPrice": 40},
       {"item": "Ris", "amount": "4 port", "estimatedPrice": 7},
@@ -793,7 +793,7 @@
     "time": 30,
     "servings": 4,
     "estimatedCost": 110,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_174426/cf_259/laxsoppa.jpg",
+    "image": "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Laxfilé", "amount": "400 g", "estimatedPrice": 60},
       {"item": "Potatis", "amount": "400 g", "estimatedPrice": 8},
@@ -820,7 +820,7 @@
     "time": 40,
     "servings": 4,
     "estimatedCost": 100,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_168587/cf_259/fish_and_chips.jpg",
+    "image": "https://images.unsplash.com/photo-1579208030886-b1a5ed917d5f?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Torskfilé", "amount": "600 g", "estimatedPrice": 55},
       {"item": "Vetemjöl", "amount": "2 dl", "estimatedPrice": 5},
@@ -848,7 +848,7 @@
     "time": 30,
     "servings": 4,
     "estimatedCost": 120,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_186287/cf_259/laxburgare.jpg",
+    "image": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Laxfilé", "amount": "500 g", "estimatedPrice": 70},
       {"item": "Ströbröd", "amount": "0,5 dl", "estimatedPrice": 3},
@@ -876,7 +876,7 @@
     "time": 45,
     "servings": 4,
     "estimatedCost": 95,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_107767/cf_259/fiskgratang.jpg",
+    "image": "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Torsk eller sejfilé", "amount": "600 g", "estimatedPrice": 50},
       {"item": "Räkor", "amount": "150 g", "estimatedPrice": 25},
@@ -903,7 +903,7 @@
     "time": 25,
     "servings": 4,
     "estimatedCost": 70,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_231089/cf_259/fiskpinnar_med_potatismos.jpg",
+    "image": "https://images.unsplash.com/photo-1576777647209-e8733d7b851d?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Fiskpinnar", "amount": "16 st", "estimatedPrice": 35},
       {"item": "Potatis", "amount": "800 g", "estimatedPrice": 12},
@@ -927,7 +927,7 @@
     "time": 25,
     "servings": 4,
     "estimatedCost": 75,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_233055/cf_259/margheritapizza.jpg",
+    "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Färdig pizzadeg", "amount": "500 g", "estimatedPrice": 20},
       {"item": "Passerade tomater", "amount": "2 dl", "estimatedPrice": 8},
@@ -954,7 +954,7 @@
     "time": 15,
     "servings": 4,
     "estimatedCost": 65,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_95628/cf_259/grekisk_sallad.jpg",
+    "image": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Gurka", "amount": "1 st", "estimatedPrice": 10},
       {"item": "Tomater", "amount": "4 st", "estimatedPrice": 15},
@@ -981,7 +981,7 @@
     "time": 30,
     "servings": 4,
     "estimatedCost": 55,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_202876/cf_259/mac_and_cheese.jpg",
+    "image": "https://images.unsplash.com/photo-1543339494-b4cd4f7ba686?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Makaroner", "amount": "400 g", "estimatedPrice": 10},
       {"item": "Cheddarost", "amount": "300 g", "estimatedPrice": 25},
@@ -1008,7 +1008,7 @@
     "time": 40,
     "servings": 4,
     "estimatedCost": 80,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_227096/cf_259/svamprisotto.jpg",
+    "image": "https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Arborio-ris", "amount": "300 g", "estimatedPrice": 20},
       {"item": "Blandade svampar", "amount": "300 g", "estimatedPrice": 30},
@@ -1038,7 +1038,7 @@
     "time": 10,
     "servings": 4,
     "estimatedCost": 40,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_105632/cf_259/varm_macka_med_skinka_och_ost.jpg",
+    "image": "https://images.unsplash.com/photo-1528736235302-52922df5c122?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Toastbröd", "amount": "8 skivor", "estimatedPrice": 12},
       {"item": "Skivad ost", "amount": "8 skivor", "estimatedPrice": 15},
@@ -1062,7 +1062,7 @@
     "time": 20,
     "servings": 4,
     "estimatedCost": 85,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_134459/cf_259/halloumiburgare.jpg",
+    "image": "https://images.unsplash.com/photo-1520072959219-c595dc870360?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Halloumi", "amount": "2 förp (400g)", "estimatedPrice": 50},
       {"item": "Hamburgerbröd", "amount": "4 st", "estimatedPrice": 15},
@@ -1090,7 +1090,7 @@
     "time": 25,
     "servings": 4,
     "estimatedCost": 35,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_107764/cf_259/pannkakor.jpg",
+    "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Vetemjöl", "amount": "3 dl", "estimatedPrice": 5},
       {"item": "Mjölk", "amount": "6 dl", "estimatedPrice": 8},
@@ -1117,7 +1117,7 @@
     "time": 15,
     "servings": 4,
     "estimatedCost": 45,
-    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_200287/cf_259/fransk_omelett.jpg",
+    "image": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Ägg", "amount": "8 st", "estimatedPrice": 24},
       {"item": "Mjölk", "amount": "1 dl", "estimatedPrice": 2},
