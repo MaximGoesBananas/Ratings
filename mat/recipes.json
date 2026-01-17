@@ -110,7 +110,7 @@
     "time": 90,
     "servings": 4,
     "estimatedCost": 350,
-    "image": "https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=400&fit=crop",
+    "image": "https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Oxfilé", "amount": "600 g", "estimatedPrice": 200},
       {"item": "Champinjoner", "amount": "300 g", "estimatedPrice": 25},
@@ -194,7 +194,7 @@
     "time": 30,
     "servings": 4,
     "estimatedCost": 70,
-    "image": "https://images.unsplash.com/photo-1482049016gy649-10949485ec2d?w=400&h=400&fit=crop",
+    "image": "https://images.unsplash.com/photo-1598679253544-2c97992403ea?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Potatis", "amount": "600 g", "estimatedPrice": 10},
       {"item": "Falukorv", "amount": "300 g", "estimatedPrice": 25},
@@ -793,7 +793,7 @@
     "time": 30,
     "servings": 4,
     "estimatedCost": 110,
-    "image": "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=400&fit=crop",
+    "image": "https://images.unsplash.com/photo-1594756202469-9ff9799b2e4e?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Laxfilé", "amount": "400 g", "estimatedPrice": 60},
       {"item": "Potatis", "amount": "400 g", "estimatedPrice": 8},
@@ -848,7 +848,7 @@
     "time": 30,
     "servings": 4,
     "estimatedCost": 120,
-    "image": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&h=400&fit=crop",
+    "image": "https://images.unsplash.com/photo-1551782450-17144efb9c50?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Laxfilé", "amount": "500 g", "estimatedPrice": 70},
       {"item": "Ströbröd", "amount": "0,5 dl", "estimatedPrice": 3},
@@ -903,7 +903,7 @@
     "time": 25,
     "servings": 4,
     "estimatedCost": 70,
-    "image": "https://images.unsplash.com/photo-1576777647209-e8733d7b851d?w=400&h=400&fit=crop",
+    "image": "https://images.unsplash.com/photo-1580217593608-61931cefc821?w=400&h=400&fit=crop",
     "ingredients": [
       {"item": "Fiskpinnar", "amount": "16 st", "estimatedPrice": 35},
       {"item": "Potatis", "amount": "800 g", "estimatedPrice": 12},
