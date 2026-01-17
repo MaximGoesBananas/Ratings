@@ -1,0 +1,1139 @@
+[
+  {
+    "id": "korv-stroganoff",
+    "name": "Korv Stroganoff med ris",
+    "category": "kött",
+    "time": 25,
+    "servings": 4,
+    "estimatedCost": 65,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_226190/cf_259/korv_stroganoff.jpg",
+    "ingredients": [
+      {"item": "Falukorv", "amount": "400 g", "estimatedPrice": 30},
+      {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Tomatpuré", "amount": "2 msk", "estimatedPrice": 5},
+      {"item": "Vatten", "amount": "2 dl", "estimatedPrice": 0},
+      {"item": "Crème fraiche", "amount": "2 dl", "estimatedPrice": 15},
+      {"item": "Dijonsenap", "amount": "1 msk", "estimatedPrice": 3},
+      {"item": "Soja", "amount": "1 msk", "estimatedPrice": 2},
+      {"item": "Ris", "amount": "4 port", "estimatedPrice": 7}
+    ],
+    "steps": [
+      "Koka upp riset enligt förpackningen.",
+      "Skär falukorven i strimlor och lök i tunna skivor.",
+      "Fräs korv och lök i smör i en stekpanna tills löken mjuknat.",
+      "Tillsätt tomatpuré och rör om. Häll i vattnet.",
+      "Låt koka ihop några minuter.",
+      "Rör ner crème fraiche, senap och soja. Smaka av med salt och peppar.",
+      "Servera med det nykokta riset."
+    ]
+  },
+  {
+    "id": "pasta-kottfarssas",
+    "name": "Pasta med köttfärssås",
+    "category": "kött",
+    "time": 35,
+    "servings": 4,
+    "estimatedCost": 85,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_143657/cf_259/kottfarssas.jpg",
+    "ingredients": [
+      {"item": "Nötfärs", "amount": "500 g", "estimatedPrice": 50},
+      {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Vitlök", "amount": "2 klyftor", "estimatedPrice": 2},
+      {"item": "Krossade tomater", "amount": "400 g", "estimatedPrice": 10},
+      {"item": "Tomatpuré", "amount": "2 msk", "estimatedPrice": 5},
+      {"item": "Köttbuljong", "amount": "1 dl", "estimatedPrice": 3},
+      {"item": "Oregano", "amount": "1 tsk", "estimatedPrice": 2},
+      {"item": "Pasta", "amount": "400 g", "estimatedPrice": 10}
+    ],
+    "steps": [
+      "Hacka lök och vitlök fint.",
+      "Bryn köttfärsen i en stekpanna med lite olja. Krydda med salt och peppar.",
+      "Tillsätt lök och vitlök, fräs tills löken mjuknat.",
+      "Häll i krossade tomater, tomatpuré, buljong och oregano.",
+      "Låt såsen sjuda i ca 20 minuter.",
+      "Koka pastan enligt förpackningen.",
+      "Servera såsen över pastan med riven parmesan."
+    ]
+  },
+  {
+    "id": "korv-med-brod",
+    "name": "Korv med bröd",
+    "category": "kött",
+    "time": 10,
+    "servings": 4,
+    "estimatedCost": 55,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_107751/cf_259/grillkorv_med_brod_och_tillbehor.jpg",
+    "ingredients": [
+      {"item": "Grillkorv", "amount": "8 st", "estimatedPrice": 35},
+      {"item": "Korvbröd", "amount": "8 st", "estimatedPrice": 15},
+      {"item": "Senap", "amount": "efter smak", "estimatedPrice": 3},
+      {"item": "Ketchup", "amount": "efter smak", "estimatedPrice": 2}
+    ],
+    "steps": [
+      "Grilla eller stek korvarna tills de fått fin färg.",
+      "Värm korvbröden i ugn eller mikro.",
+      "Lägg korvarna i bröden.",
+      "Toppa med senap, ketchup och valfria tillbehör."
+    ]
+  },
+  {
+    "id": "hamburgare",
+    "name": "Hamburgare",
+    "category": "kött",
+    "time": 30,
+    "servings": 4,
+    "estimatedCost": 95,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_235036/cf_259/klassisk_cheeseburgare.jpg",
+    "ingredients": [
+      {"item": "Nötfärs", "amount": "500 g", "estimatedPrice": 50},
+      {"item": "Hamburgerbröd", "amount": "4 st", "estimatedPrice": 15},
+      {"item": "Cheddarost", "amount": "4 skivor", "estimatedPrice": 10},
+      {"item": "Sallad", "amount": "4 blad", "estimatedPrice": 5},
+      {"item": "Tomat", "amount": "1 st", "estimatedPrice": 5},
+      {"item": "Rödlök", "amount": "1/2 st", "estimatedPrice": 2},
+      {"item": "Ketchup & senap", "amount": "efter smak", "estimatedPrice": 3},
+      {"item": "Saltgurka", "amount": "4 skivor", "estimatedPrice": 5}
+    ],
+    "steps": [
+      "Forma köttfärsen till 4 biffar. Krydda med salt och peppar.",
+      "Stek biffarna på hög värme ca 3-4 min per sida.",
+      "Lägg på osten sista minuten så den smälter.",
+      "Rosta bröden lätt i samma panna.",
+      "Montera burgarna: brödbotten, sallad, biff med ost, tomat, lök, gurka och såser.",
+      "Lägg på brödlocket och servera."
+    ]
+  },
+  {
+    "id": "beef-wellington",
+    "name": "Beef Wellington",
+    "category": "kött",
+    "time": 90,
+    "servings": 4,
+    "estimatedCost": 350,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_201837/cf_259/beef_wellington.jpg",
+    "ingredients": [
+      {"item": "Oxfilé", "amount": "600 g", "estimatedPrice": 200},
+      {"item": "Champinjoner", "amount": "300 g", "estimatedPrice": 25},
+      {"item": "Smördeg", "amount": "1 paket", "estimatedPrice": 30},
+      {"item": "Parmaskinka", "amount": "100 g", "estimatedPrice": 45},
+      {"item": "Äggula", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Dijonsenap", "amount": "2 msk", "estimatedPrice": 5},
+      {"item": "Timjan", "amount": "1 tsk", "estimatedPrice": 2},
+      {"item": "Smör", "amount": "2 msk", "estimatedPrice": 5}
+    ],
+    "steps": [
+      "Bryn oxfilén runt om i het panna. Pensla med senap och låt svalna.",
+      "Finhacka champinjonerna och fräs i smör tills all vätska kokat bort. Krydda med timjan, salt och peppar.",
+      "Lägg ut plastfilm, bred ut parmaskinka och sedan svampen. Rulla in köttet tätt.",
+      "Kyl i 30 min.",
+      "Kavla ut smördegen och rulla in den kylda rullen. Pensla med äggula.",
+      "Grädda i 200°C ugn ca 25-30 min tills innertempen är 52°C för medium rare.",
+      "Vila 10 min innan du skär i skivor."
+    ]
+  },
+  {
+    "id": "chili-con-carne",
+    "name": "Chili Con Carne med ris",
+    "category": "kött",
+    "time": 45,
+    "servings": 4,
+    "estimatedCost": 90,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_90283/cf_259/chili_con_carne.jpg",
+    "ingredients": [
+      {"item": "Nötfärs", "amount": "400 g", "estimatedPrice": 40},
+      {"item": "Kidneybönor", "amount": "400 g", "estimatedPrice": 12},
+      {"item": "Krossade tomater", "amount": "400 g", "estimatedPrice": 10},
+      {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Vitlök", "amount": "2 klyftor", "estimatedPrice": 2},
+      {"item": "Chilipulver", "amount": "1 msk", "estimatedPrice": 3},
+      {"item": "Spiskummin", "amount": "1 tsk", "estimatedPrice": 2},
+      {"item": "Ris", "amount": "4 port", "estimatedPrice": 7},
+      {"item": "Gräddfil", "amount": "2 dl", "estimatedPrice": 11}
+    ],
+    "steps": [
+      "Hacka lök och vitlök fint.",
+      "Bryn köttfärsen i en gryta. Tillsätt lök och vitlök.",
+      "Krydda med chilipulver och spiskummin.",
+      "Häll i krossade tomater och avrunna bönor.",
+      "Låt sjuda i ca 30 minuter. Smaka av med salt och peppar.",
+      "Koka riset enligt förpackningen.",
+      "Servera chilin med ris och en klick gräddfil."
+    ]
+  },
+  {
+    "id": "kottbullar",
+    "name": "Köttbullar med potatis och lingon",
+    "category": "kött",
+    "time": 40,
+    "servings": 4,
+    "estimatedCost": 85,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_227071/cf_259/kottbullar_med_graddsas.jpg",
+    "ingredients": [
+      {"item": "Blandfärs", "amount": "500 g", "estimatedPrice": 45},
+      {"item": "Ströbröd", "amount": "1 dl", "estimatedPrice": 5},
+      {"item": "Mjölk", "amount": "0,5 dl", "estimatedPrice": 2},
+      {"item": "Ägg", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Potatis", "amount": "800 g", "estimatedPrice": 12},
+      {"item": "Grädde", "amount": "2 dl", "estimatedPrice": 10},
+      {"item": "Lingonsylt", "amount": "efter smak", "estimatedPrice": 5}
+    ],
+    "steps": [
+      "Blötlägg ströbrödet i mjölk. Riv löken fint.",
+      "Blanda färs, ströbröd, ägg, lök, salt och peppar.",
+      "Forma små köttbullar och stek i smör tills de är genomstekta.",
+      "Koka potatisen.",
+      "Gör gräddsås: häll grädde i stekpannan och låt koka ihop med skyn. Smaka av.",
+      "Servera köttbullarna med potatis, gräddsås och lingonsylt."
+    ]
+  },
+  {
+    "id": "pyttipanna",
+    "name": "Pyttipanna",
+    "category": "kött",
+    "time": 30,
+    "servings": 4,
+    "estimatedCost": 70,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_107797/cf_259/klassisk_pyttipanna.jpg",
+    "ingredients": [
+      {"item": "Potatis", "amount": "600 g", "estimatedPrice": 10},
+      {"item": "Falukorv", "amount": "300 g", "estimatedPrice": 25},
+      {"item": "Gul lök", "amount": "2 st", "estimatedPrice": 6},
+      {"item": "Ägg", "amount": "4 st", "estimatedPrice": 12},
+      {"item": "Smör", "amount": "3 msk", "estimatedPrice": 5},
+      {"item": "Rödbetor", "amount": "200 g", "estimatedPrice": 8},
+      {"item": "Saltgurka", "amount": "4 st", "estimatedPrice": 4}
+    ],
+    "steps": [
+      "Tärna potatis, korv och lök i små kuber.",
+      "Stek potatisen i smör på medelvärme tills den är gyllene och genomstekt.",
+      "Tillsätt korv och lök, stek ytterligare 5-10 minuter.",
+      "Krydda med salt och peppar.",
+      "Stek ägg i separat panna.",
+      "Servera pyttipannan med stekt ägg, rödbetor och saltgurka."
+    ]
+  },
+  {
+    "id": "lasagne",
+    "name": "Lasagne",
+    "category": "kött",
+    "time": 75,
+    "servings": 4,
+    "estimatedCost": 110,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_217610/cf_259/lasagne.jpg",
+    "ingredients": [
+      {"item": "Nötfärs", "amount": "500 g", "estimatedPrice": 50},
+      {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Vitlök", "amount": "2 klyftor", "estimatedPrice": 2},
+      {"item": "Krossade tomater", "amount": "400 g", "estimatedPrice": 10},
+      {"item": "Tomatpuré", "amount": "2 msk", "estimatedPrice": 5},
+      {"item": "Lasagneplattor", "amount": "250 g", "estimatedPrice": 15},
+      {"item": "Mjölk", "amount": "5 dl", "estimatedPrice": 8},
+      {"item": "Smör & mjöl", "amount": "2 msk vardera", "estimatedPrice": 5},
+      {"item": "Riven ost", "amount": "150 g", "estimatedPrice": 12}
+    ],
+    "steps": [
+      "Gör köttfärssås: bryn färsen, tillsätt hackad lök och vitlök, tomater och tomatpuré. Låt sjuda 20 min.",
+      "Gör béchamelsås: smält smör, vispa i mjöl, tillsätt mjölk lite i taget under omrörning. Koka ihop till tjock sås.",
+      "Varva i ugnsform: köttfärssås, lasagneplattor, béchamelsås. Upprepa och avsluta med béchamelsås.",
+      "Strö över ost.",
+      "Grädda i 200°C ca 40-45 min tills lasagnen är gyllene och bubblar."
+    ]
+  },
+  {
+    "id": "tacos",
+    "name": "Tacos",
+    "category": "kött",
+    "time": 30,
+    "servings": 4,
+    "estimatedCost": 120,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_99668/cf_259/tacos_med_kottfars.jpg",
+    "ingredients": [
+      {"item": "Nötfärs", "amount": "400 g", "estimatedPrice": 40},
+      {"item": "Tacokrydda", "amount": "1 påse", "estimatedPrice": 10},
+      {"item": "Tacoskal", "amount": "12 st", "estimatedPrice": 20},
+      {"item": "Isbergssallad", "amount": "1/2 st", "estimatedPrice": 10},
+      {"item": "Tomat", "amount": "2 st", "estimatedPrice": 10},
+      {"item": "Riven ost", "amount": "150 g", "estimatedPrice": 12},
+      {"item": "Gräddfil", "amount": "2 dl", "estimatedPrice": 11},
+      {"item": "Salsa", "amount": "1 burk", "estimatedPrice": 7}
+    ],
+    "steps": [
+      "Bryn köttfärsen och tillsätt tacokrydda och vatten enligt förpackningen.",
+      "Strimla salladen och tärna tomaterna.",
+      "Värm tacoskalen i ugn.",
+      "Duka fram alla tillbehör i skålar.",
+      "Låt alla bygga sina egna tacos vid bordet."
+    ]
+  },
+  {
+    "id": "pasta-carbonara",
+    "name": "Pasta Carbonara",
+    "category": "kött",
+    "time": 25,
+    "servings": 4,
+    "estimatedCost": 75,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_231016/cf_259/carbonara.jpg",
+    "ingredients": [
+      {"item": "Spaghetti", "amount": "400 g", "estimatedPrice": 12},
+      {"item": "Pancetta eller bacon", "amount": "150 g", "estimatedPrice": 25},
+      {"item": "Äggula", "amount": "4 st", "estimatedPrice": 8},
+      {"item": "Parmesan", "amount": "100 g", "estimatedPrice": 25},
+      {"item": "Vitlök", "amount": "1 klyfta", "estimatedPrice": 1},
+      {"item": "Svartpeppar", "amount": "efter smak", "estimatedPrice": 2},
+      {"item": "Olivolja", "amount": "1 msk", "estimatedPrice": 2}
+    ],
+    "steps": [
+      "Koka pastan al dente enligt förpackningen. Spara 1 dl pastavatten.",
+      "Stek pancettan knaprig. Tillsätt krossad vitlök sista minuten.",
+      "Vispa ihop äggulor och riven parmesan.",
+      "Blanda den varma pastan med pancettan (pannan av värmen!).",
+      "Häll i äggblandningen och rör snabbt. Tillsätt pastavatten för rätt konsistens.",
+      "Servera genast med extra parmesan och svartpeppar."
+    ]
+  },
+  {
+    "id": "gyoza-dumplings",
+    "name": "Gyoza Dumplings med ris",
+    "category": "kött",
+    "time": 45,
+    "servings": 4,
+    "estimatedCost": 80,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_224009/cf_259/gyoza_med_flask.jpg",
+    "ingredients": [
+      {"item": "Fläskfärs", "amount": "300 g", "estimatedPrice": 30},
+      {"item": "Vitkål", "amount": "150 g", "estimatedPrice": 5},
+      {"item": "Salladslök", "amount": "3 st", "estimatedPrice": 5},
+      {"item": "Ingefära", "amount": "1 msk riven", "estimatedPrice": 3},
+      {"item": "Vitlök", "amount": "2 klyftor", "estimatedPrice": 2},
+      {"item": "Soja", "amount": "2 msk", "estimatedPrice": 2},
+      {"item": "Sesamolja", "amount": "1 msk", "estimatedPrice": 3},
+      {"item": "Gyozadeg", "amount": "1 paket", "estimatedPrice": 20},
+      {"item": "Ris", "amount": "4 port", "estimatedPrice": 7},
+      {"item": "Risvinäger", "amount": "2 msk", "estimatedPrice": 3}
+    ],
+    "steps": [
+      "Finhacka vitkål, salladslök, vitlök och ingefära.",
+      "Blanda färs med grönsaker, soja och sesamolja.",
+      "Lägg en tesked fyllning på varje degplatta. Fukta kanterna och vik ihop till halvmånar.",
+      "Stek gyozan i olja tills undersidan är gyllene.",
+      "Häll i 1 dl vatten och lägg på lock. Låt ångas i 5 min.",
+      "Koka riset.",
+      "Gör dippsås av soja, risvinäger och lite sesamolja.",
+      "Servera gyozan med ris och dippsås."
+    ]
+  },
+  {
+    "id": "nachos",
+    "name": "Nachos med köttfärs",
+    "category": "kött",
+    "time": 25,
+    "servings": 4,
+    "estimatedCost": 95,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_102451/cf_259/nachofat_med_kottfars_och_ost.jpg",
+    "ingredients": [
+      {"item": "Nachochips", "amount": "200 g", "estimatedPrice": 20},
+      {"item": "Nötfärs", "amount": "400 g", "estimatedPrice": 40},
+      {"item": "Tacokrydda", "amount": "1 påse", "estimatedPrice": 10},
+      {"item": "Riven ost", "amount": "200 g", "estimatedPrice": 15},
+      {"item": "Jalapeño", "amount": "1/2 burk", "estimatedPrice": 5},
+      {"item": "Gräddfil", "amount": "2 dl", "estimatedPrice": 11},
+      {"item": "Guacamole", "amount": "200 g", "estimatedPrice": 25},
+      {"item": "Salsa", "amount": "1 burk", "estimatedPrice": 7}
+    ],
+    "steps": [
+      "Bryn köttfärsen och krydda med tacokrydda enligt förpackningen.",
+      "Lägg ut nachochipsen på en ugnsplåt.",
+      "Fördela köttfärsen över chipsen och strö över osten.",
+      "Gratinera i 225°C ugn ca 5-7 min tills osten smält.",
+      "Toppa med jalapeño, gräddfil, guacamole och salsa.",
+      "Servera direkt."
+    ]
+  },
+  {
+    "id": "enchiladas",
+    "name": "Enchiladas",
+    "category": "kött",
+    "time": 50,
+    "servings": 4,
+    "estimatedCost": 100,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_103174/cf_259/enchiladas_med_kottfars.jpg",
+    "ingredients": [
+      {"item": "Nötfärs", "amount": "400 g", "estimatedPrice": 40},
+      {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Tacokrydda", "amount": "1 påse", "estimatedPrice": 10},
+      {"item": "Tortillabröd", "amount": "8 st", "estimatedPrice": 15},
+      {"item": "Tacosås", "amount": "400 ml", "estimatedPrice": 12},
+      {"item": "Riven ost", "amount": "200 g", "estimatedPrice": 15},
+      {"item": "Gräddfil", "amount": "2 dl", "estimatedPrice": 11}
+    ],
+    "steps": [
+      "Bryn köttfärsen med hackad lök. Krydda med tacokrydda.",
+      "Fördela fyllningen på tortillabröden och rulla ihop.",
+      "Lägg rullarna i en smord ugnsform med skarven nedåt.",
+      "Häll över tacosåsen och strö över osten.",
+      "Gratinera i 200°C ca 20-25 min.",
+      "Servera med gräddfil och eventuellt extra tillbehör."
+    ]
+  },
+  {
+    "id": "bbq-ribs",
+    "name": "BBQ ribs med coleslaw",
+    "category": "kött",
+    "time": 180,
+    "servings": 4,
+    "estimatedCost": 160,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_155761/cf_259/klibbiga_spare_ribs.jpg",
+    "ingredients": [
+      {"item": "Fläskrevben", "amount": "1,2 kg", "estimatedPrice": 100},
+      {"item": "BBQ-sås", "amount": "3 dl", "estimatedPrice": 20},
+      {"item": "Vitkål", "amount": "300 g", "estimatedPrice": 8},
+      {"item": "Morot", "amount": "2 st", "estimatedPrice": 4},
+      {"item": "Majonnäs", "amount": "1,5 dl", "estimatedPrice": 10},
+      {"item": "Äppelcidervinäger", "amount": "2 msk", "estimatedPrice": 3},
+      {"item": "Honung", "amount": "1 msk", "estimatedPrice": 3},
+      {"item": "Salt & peppar", "amount": "efter smak", "estimatedPrice": 2}
+    ],
+    "steps": [
+      "Gnid in revbenen med salt, peppar och valfri dry rub.",
+      "Lägg revbenen i ugnsform täckt med folie. Tillaga i 150°C i 2-2,5 timmar.",
+      "Ta bort folien, pensla med BBQ-sås och höj värmen till 200°C.",
+      "Grilla ytterligare 15-20 min, pensla med mer sås.",
+      "Gör coleslaw: strimla vitkål och riv morötter. Blanda med majonnäs, vinäger, honung, salt och peppar.",
+      "Servera revbenen med coleslaw."
+    ]
+  },
+  {
+    "id": "schnitzel",
+    "name": "Schnitzel med pommes",
+    "category": "kött",
+    "time": 35,
+    "servings": 4,
+    "estimatedCost": 95,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_196451/cf_259/wienerschnitzel.jpg",
+    "ingredients": [
+      {"item": "Fläskkotlett", "amount": "4 st", "estimatedPrice": 50},
+      {"item": "Vetemjöl", "amount": "1 dl", "estimatedPrice": 3},
+      {"item": "Ägg", "amount": "2 st", "estimatedPrice": 6},
+      {"item": "Ströbröd", "amount": "2 dl", "estimatedPrice": 6},
+      {"item": "Frysta pommes frites", "amount": "600 g", "estimatedPrice": 20},
+      {"item": "Smör & olja", "amount": "för stekning", "estimatedPrice": 8},
+      {"item": "Citron", "amount": "1 st", "estimatedPrice": 4}
+    ],
+    "steps": [
+      "Banka ut kotletterna mellan plastfilm till ca 5 mm tjocklek.",
+      "Vänd kotletterna först i mjöl, sedan i uppvispat ägg, sist i ströbröd.",
+      "Stek pommes fritesen i ugn enligt förpackningen.",
+      "Stek schnitzlarna i rikligt med smör och olja på medelvärme, ca 3-4 min per sida.",
+      "Servera med pommes frites och citronklyftor."
+    ]
+  },
+  {
+    "id": "gulasch",
+    "name": "Gulasch med bröd",
+    "category": "kött",
+    "time": 120,
+    "servings": 4,
+    "estimatedCost": 130,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_110688/cf_259/gulaschsoppa.jpg",
+    "ingredients": [
+      {"item": "Högrev", "amount": "600 g", "estimatedPrice": 75},
+      {"item": "Gul lök", "amount": "2 st", "estimatedPrice": 6},
+      {"item": "Paprika", "amount": "2 st", "estimatedPrice": 15},
+      {"item": "Paprikapulver", "amount": "2 msk", "estimatedPrice": 5},
+      {"item": "Krossade tomater", "amount": "400 g", "estimatedPrice": 10},
+      {"item": "Nötbuljong", "amount": "5 dl", "estimatedPrice": 5},
+      {"item": "Gräddfil", "amount": "1 dl", "estimatedPrice": 6},
+      {"item": "Bröd", "amount": "4 skivor", "estimatedPrice": 8}
+    ],
+    "steps": [
+      "Skär köttet i ca 3 cm stora tärningar.",
+      "Bryn köttet i omgångar i en gryta.",
+      "Fräs hackad lök och paprika i samma gryta.",
+      "Tillsätt köttet, paprikapulver, tomater och buljong.",
+      "Låt sjuda under lock i ca 1,5-2 timmar tills köttet är mört.",
+      "Smaka av med salt och peppar.",
+      "Servera med en klick gräddfil och gott bröd."
+    ]
+  },
+  {
+    "id": "pulled-pork",
+    "name": "Pulled pork med bröd och coleslaw",
+    "category": "kött",
+    "time": 300,
+    "servings": 4,
+    "estimatedCost": 120,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_158451/cf_259/pulled_pork.jpg",
+    "ingredients": [
+      {"item": "Fläskkarré", "amount": "1 kg", "estimatedPrice": 60},
+      {"item": "BBQ-sås", "amount": "3 dl", "estimatedPrice": 20},
+      {"item": "Hamburgerbröd", "amount": "4 st", "estimatedPrice": 15},
+      {"item": "Vitkål", "amount": "200 g", "estimatedPrice": 6},
+      {"item": "Morot", "amount": "1 st", "estimatedPrice": 2},
+      {"item": "Majonnäs", "amount": "1 dl", "estimatedPrice": 7},
+      {"item": "Äppelcidervinäger", "amount": "1 msk", "estimatedPrice": 2},
+      {"item": "Paprikapulver", "amount": "1 msk", "estimatedPrice": 2},
+      {"item": "Brunt socker", "amount": "1 msk", "estimatedPrice": 2}
+    ],
+    "steps": [
+      "Gnid in fläsken med paprikapulver, brunt socker, salt och peppar.",
+      "Lägg i ugnsform med 1 dl vatten, täck med folie.",
+      "Tillaga i 125°C i ca 4-5 timmar tills köttet är mört.",
+      "Riv isär köttet med två gafflar. Blanda med BBQ-sås.",
+      "Gör coleslaw: strimla kål och riv morot. Blanda med majonnäs och vinäger.",
+      "Servera pulled pork i bröd med coleslaw ovanpå."
+    ]
+  },
+  {
+    "id": "club-sandwich",
+    "name": "Club sandwich",
+    "category": "kött",
+    "time": 20,
+    "servings": 4,
+    "estimatedCost": 100,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_159688/cf_259/club_sandwich.jpg",
+    "ingredients": [
+      {"item": "Toastbröd", "amount": "12 skivor", "estimatedPrice": 15},
+      {"item": "Kyckling eller kalkon", "amount": "200 g", "estimatedPrice": 40},
+      {"item": "Bacon", "amount": "8 skivor", "estimatedPrice": 25},
+      {"item": "Sallad", "amount": "8 blad", "estimatedPrice": 8},
+      {"item": "Tomat", "amount": "2 st", "estimatedPrice": 8},
+      {"item": "Majonnäs", "amount": "4 msk", "estimatedPrice": 4}
+    ],
+    "steps": [
+      "Rosta brödskivorna.",
+      "Stek baconet knaprigt.",
+      "Skiva kyckling/kalkon och tomat.",
+      "Bred majonnäs på brödskivorna.",
+      "Bygg sandwichen i tre lager: bröd, sallad, kyckling, bröd, bacon, tomat, bröd.",
+      "Skär diagonalt och sätt fast med tandpetare.",
+      "Servera med pommes eller sallad."
+    ]
+  },
+  {
+    "id": "flaskfile",
+    "name": "Fläskfilé med potatissallad",
+    "category": "kött",
+    "time": 40,
+    "servings": 4,
+    "estimatedCost": 120,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_206654/cf_259/helstekt_flaskfile.jpg",
+    "ingredients": [
+      {"item": "Fläskfilé", "amount": "600 g", "estimatedPrice": 70},
+      {"item": "Potatis", "amount": "600 g", "estimatedPrice": 10},
+      {"item": "Rödlök", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Kapris", "amount": "2 msk", "estimatedPrice": 8},
+      {"item": "Majonnäs", "amount": "1 dl", "estimatedPrice": 7},
+      {"item": "Crème fraiche", "amount": "1 dl", "estimatedPrice": 8},
+      {"item": "Dill", "amount": "1/2 kruka", "estimatedPrice": 10},
+      {"item": "Dijonsenap", "amount": "1 msk", "estimatedPrice": 4}
+    ],
+    "steps": [
+      "Ta ut fläskfilén i rumstemperatur 30 min innan tillagning.",
+      "Koka potatisen, låt svalna och tärna.",
+      "Bryn fläskfilén runt om i het panna. Stek färdigt i 175°C ugn till 62°C innertemp.",
+      "Låt vila 5-10 min.",
+      "Gör potatissallad: blanda potatis med hackad rödlök, kapris, majonnäs, crème fraiche, senap och dill.",
+      "Skiva fläskfilén och servera med potatissalladen."
+    ]
+  },
+  {
+    "id": "oxfile",
+    "name": "Oxfilé med potatis",
+    "category": "kött",
+    "time": 45,
+    "servings": 4,
+    "estimatedCost": 280,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_230867/cf_259/oxfile_med_rodvinssas_och_hasselbackspotatis.jpg",
+    "ingredients": [
+      {"item": "Oxfilé", "amount": "600 g", "estimatedPrice": 200},
+      {"item": "Potatis", "amount": "800 g", "estimatedPrice": 12},
+      {"item": "Smör", "amount": "50 g", "estimatedPrice": 8},
+      {"item": "Grädde", "amount": "2 dl", "estimatedPrice": 10},
+      {"item": "Rödvin", "amount": "1 dl", "estimatedPrice": 20},
+      {"item": "Fond", "amount": "2 dl", "estimatedPrice": 15},
+      {"item": "Timjan", "amount": "några kvistar", "estimatedPrice": 5},
+      {"item": "Haricots verts", "amount": "200 g", "estimatedPrice": 10}
+    ],
+    "steps": [
+      "Ta ut oxfilén i rumstemperatur 1 timme innan tillagning.",
+      "Koka eller ugnsgrädda potatisen.",
+      "Salta och peppra köttet. Bryn i het panna med smör.",
+      "Stek färdigt i 125°C ugn till önskad innertemperatur (52°C för medium rare).",
+      "Vila köttet under folie.",
+      "Gör sås i stekpannan: rödvin, fond och grädde. Koka ihop.",
+      "Koka haricots verts.",
+      "Skiva köttet och servera med potatis, grönsaker och sås."
+    ]
+  },
+  {
+    "id": "ryggbiff",
+    "name": "Ryggbiff med potatis",
+    "category": "kött",
+    "time": 35,
+    "servings": 4,
+    "estimatedCost": 180,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_233009/cf_259/ryggbiff_med_bearnaisesas.jpg",
+    "ingredients": [
+      {"item": "Ryggbiff", "amount": "4 st à 200g", "estimatedPrice": 120},
+      {"item": "Potatis", "amount": "800 g", "estimatedPrice": 12},
+      {"item": "Bearnaisesås", "amount": "2 dl", "estimatedPrice": 25},
+      {"item": "Smör", "amount": "2 msk", "estimatedPrice": 5},
+      {"item": "Sallad", "amount": "100 g", "estimatedPrice": 10},
+      {"item": "Tomat", "amount": "2 st", "estimatedPrice": 8}
+    ],
+    "steps": [
+      "Ta ut biffarna i rumstemperatur 30 min innan.",
+      "Koka eller ugnsgrädda potatisen.",
+      "Salta och peppra biffarna.",
+      "Stek i het panna med smör, ca 3 min per sida för medium.",
+      "Vila under folie i 5 min.",
+      "Servera med potatis, bearnaisesås och en enkel sallad."
+    ]
+  },
+  {
+    "id": "kyckling-pad-thai",
+    "name": "Kyckling Pad Thai med ris",
+    "category": "kyckling",
+    "time": 30,
+    "servings": 4,
+    "estimatedCost": 95,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_224254/cf_259/pad_thai.jpg",
+    "ingredients": [
+      {"item": "Kycklingfilé", "amount": "400 g", "estimatedPrice": 45},
+      {"item": "Risnudlar", "amount": "200 g", "estimatedPrice": 15},
+      {"item": "Ägg", "amount": "2 st", "estimatedPrice": 6},
+      {"item": "Böngroddar", "amount": "150 g", "estimatedPrice": 10},
+      {"item": "Salladslök", "amount": "4 st", "estimatedPrice": 6},
+      {"item": "Jordnötter", "amount": "50 g", "estimatedPrice": 8},
+      {"item": "Fisksås", "amount": "3 msk", "estimatedPrice": 3},
+      {"item": "Soja", "amount": "2 msk", "estimatedPrice": 2},
+      {"item": "Lime", "amount": "1 st", "estimatedPrice": 3}
+    ],
+    "steps": [
+      "Blötlägg risnudlarna enligt förpackningen.",
+      "Skär kycklingen i strimlor och stek i het wok.",
+      "Skjut kycklingen åt sidan, stek äggen lätt äggröra.",
+      "Tillsätt nudlar, fisksås och soja. Woka ihop.",
+      "Blanda i böngroddar och salladslök.",
+      "Servera med hackade jordnötter och limeklyftor."
+    ]
+  },
+  {
+    "id": "stekt-ris-kyckling",
+    "name": "Friterat ris med kyckling, ägg och grönsaker",
+    "category": "kyckling",
+    "time": 25,
+    "servings": 4,
+    "estimatedCost": 75,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_119095/cf_259/stekt_ris_med_kyckling.jpg",
+    "ingredients": [
+      {"item": "Kallkokat ris", "amount": "6 dl", "estimatedPrice": 8},
+      {"item": "Kycklingfilé", "amount": "300 g", "estimatedPrice": 35},
+      {"item": "Ägg", "amount": "2 st", "estimatedPrice": 6},
+      {"item": "Frysta ärtor & majs", "amount": "2 dl", "estimatedPrice": 8},
+      {"item": "Morot", "amount": "1 st", "estimatedPrice": 2},
+      {"item": "Soja", "amount": "3 msk", "estimatedPrice": 3},
+      {"item": "Sesamolja", "amount": "1 msk", "estimatedPrice": 3},
+      {"item": "Vitlök", "amount": "2 klyftor", "estimatedPrice": 2},
+      {"item": "Salladslök", "amount": "3 st", "estimatedPrice": 5}
+    ],
+    "steps": [
+      "Skär kycklingen i små tärningar och stek i het wok.",
+      "Ta upp kycklingen. Stek tärnad morot, ärtor och majs.",
+      "Skjut grönsakerna åt sidan och vispa in äggen.",
+      "Tillsätt ris, kyckling och pressad vitlök.",
+      "Häll i soja och sesamolja, woka ihop ordentligt.",
+      "Strö över hackad salladslök och servera."
+    ]
+  },
+  {
+    "id": "buffalo-wings",
+    "name": "Buffalo chicken wings",
+    "category": "kyckling",
+    "time": 45,
+    "servings": 4,
+    "estimatedCost": 85,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_141629/cf_259/buffalo_chicken_wings.jpg",
+    "ingredients": [
+      {"item": "Kycklingvingar", "amount": "1 kg", "estimatedPrice": 50},
+      {"item": "Smör", "amount": "50 g", "estimatedPrice": 8},
+      {"item": "Chilisås (sriracha eller Frank's)", "amount": "1 dl", "estimatedPrice": 15},
+      {"item": "Vitlökspulver", "amount": "1 tsk", "estimatedPrice": 2},
+      {"item": "Vetemjöl", "amount": "1 dl", "estimatedPrice": 3},
+      {"item": "Olja", "amount": "för fritering", "estimatedPrice": 10}
+    ],
+    "steps": [
+      "Dela vingarna i trumpinnar och vingdelar om de inte redan är det.",
+      "Torka av och vänd i mjöl kryddat med salt och vitlökspulver.",
+      "Fritera i 180°C olja tills genomstekta och gyllene, ca 10-12 min.",
+      "Smält smör och blanda med chilisås.",
+      "Vänd de varma vingarna i buffalo-såsen.",
+      "Servera med selleristavar och blåmögelostdipp."
+    ]
+  },
+  {
+    "id": "kung-pao-chicken",
+    "name": "Kung Pao Chicken med ris",
+    "category": "kyckling",
+    "time": 30,
+    "servings": 4,
+    "estimatedCost": 90,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_169139/cf_259/kung_pao_kyckling.jpg",
+    "ingredients": [
+      {"item": "Kycklingfilé", "amount": "500 g", "estimatedPrice": 50},
+      {"item": "Jordnötter", "amount": "100 g", "estimatedPrice": 15},
+      {"item": "Torkade chilifrukt", "amount": "5-8 st", "estimatedPrice": 5},
+      {"item": "Paprika", "amount": "1 st", "estimatedPrice": 8},
+      {"item": "Salladslök", "amount": "4 st", "estimatedPrice": 6},
+      {"item": "Soja", "amount": "3 msk", "estimatedPrice": 3},
+      {"item": "Risvinäger", "amount": "2 msk", "estimatedPrice": 3},
+      {"item": "Sesamolja", "amount": "1 msk", "estimatedPrice": 3},
+      {"item": "Ris", "amount": "4 port", "estimatedPrice": 7}
+    ],
+    "steps": [
+      "Koka riset.",
+      "Tärna kycklingen och marinera i 1 msk soja och majsstärkelse.",
+      "Stek kycklingen i het wok, ta upp.",
+      "Fräs torkad chili och jordnötter kort.",
+      "Tillsätt tärnad paprika och salladslök.",
+      "Blanda soja, vinäger, socker och sesamolja till sås.",
+      "Häll tillbaka kycklingen, slå i såsen. Woka ihop.",
+      "Servera med ris."
+    ]
+  },
+  {
+    "id": "tikka-masala",
+    "name": "Tikka Masala med ris",
+    "category": "kyckling",
+    "time": 40,
+    "servings": 4,
+    "estimatedCost": 95,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_150668/cf_259/chicken_tikka_masala.jpg",
+    "ingredients": [
+      {"item": "Kycklingfilé", "amount": "500 g", "estimatedPrice": 50},
+      {"item": "Yoghurt", "amount": "2 dl", "estimatedPrice": 10},
+      {"item": "Tikka masala-krydda", "amount": "2 msk", "estimatedPrice": 8},
+      {"item": "Krossade tomater", "amount": "400 g", "estimatedPrice": 10},
+      {"item": "Grädde", "amount": "2 dl", "estimatedPrice": 10},
+      {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Vitlök", "amount": "3 klyftor", "estimatedPrice": 3},
+      {"item": "Ingefära", "amount": "1 msk riven", "estimatedPrice": 3},
+      {"item": "Ris", "amount": "4 port", "estimatedPrice": 7}
+    ],
+    "steps": [
+      "Marinera kycklingbitar i yoghurt och hälften av kryddan i 30 min (eller över natten).",
+      "Stek kycklingen i het panna tills gyllene.",
+      "Fräs hackad lök, vitlök och ingefära.",
+      "Tillsätt resterande krydda, krossade tomater och grädde.",
+      "Lägg i kycklingen och låt sjuda i 15-20 min.",
+      "Koka riset.",
+      "Servera med ris och naanbröd."
+    ]
+  },
+  {
+    "id": "fajitas",
+    "name": "Fajitas",
+    "category": "kyckling",
+    "time": 30,
+    "servings": 4,
+    "estimatedCost": 110,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_106761/cf_259/kycklingfajitas.jpg",
+    "ingredients": [
+      {"item": "Kycklingfilé", "amount": "500 g", "estimatedPrice": 50},
+      {"item": "Paprika (blandade färger)", "amount": "2 st", "estimatedPrice": 15},
+      {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Fajita-krydda", "amount": "1 påse", "estimatedPrice": 10},
+      {"item": "Tortillabröd", "amount": "8 st", "estimatedPrice": 15},
+      {"item": "Gräddfil", "amount": "2 dl", "estimatedPrice": 11},
+      {"item": "Guacamole", "amount": "150 g", "estimatedPrice": 20},
+      {"item": "Riven ost", "amount": "100 g", "estimatedPrice": 8}
+    ],
+    "steps": [
+      "Skär kycklingen i strimlor och krydda med fajita-krydda.",
+      "Skär paprika och lök i strimlor.",
+      "Stek kycklingen på hög värme. Ta upp.",
+      "Stek paprika och lök.",
+      "Blanda ihop kyckling och grönsaker.",
+      "Värm tortillabröden.",
+      "Servera allt i skålar så gästerna fyller sina egna fajitas."
+    ]
+  },
+  {
+    "id": "kyckling-med-ris",
+    "name": "Kyckling med ris",
+    "category": "kyckling",
+    "time": 35,
+    "servings": 4,
+    "estimatedCost": 70,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_202929/cf_259/ugnsstekt_kyckling_med_ris.jpg",
+    "ingredients": [
+      {"item": "Kycklingklubbor", "amount": "8 st", "estimatedPrice": 40},
+      {"item": "Ris", "amount": "4 port", "estimatedPrice": 7},
+      {"item": "Grädde", "amount": "2 dl", "estimatedPrice": 10},
+      {"item": "Kycklingfond", "amount": "1 dl", "estimatedPrice": 5},
+      {"item": "Soja", "amount": "2 msk", "estimatedPrice": 2},
+      {"item": "Paprikapulver", "amount": "1 tsk", "estimatedPrice": 2},
+      {"item": "Vitlökspulver", "amount": "1 tsk", "estimatedPrice": 2},
+      {"item": "Smör", "amount": "2 msk", "estimatedPrice": 4}
+    ],
+    "steps": [
+      "Krydda kycklingklubborna med paprikapulver, vitlökspulver, salt och peppar.",
+      "Bryn i smör i stekpanna, lägg över i ugnsform.",
+      "Tillaga i 200°C ugn ca 25-30 min.",
+      "Koka riset.",
+      "Gör sås: häll grädde och fond i stekpannan, tillsätt soja. Koka ihop.",
+      "Servera kycklingen med ris och sås."
+    ]
+  },
+  {
+    "id": "laxsoppa",
+    "name": "Laxsoppa",
+    "category": "fisk",
+    "time": 30,
+    "servings": 4,
+    "estimatedCost": 110,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_174426/cf_259/laxsoppa.jpg",
+    "ingredients": [
+      {"item": "Laxfilé", "amount": "400 g", "estimatedPrice": 60},
+      {"item": "Potatis", "amount": "400 g", "estimatedPrice": 8},
+      {"item": "Morot", "amount": "2 st", "estimatedPrice": 4},
+      {"item": "Purjolök", "amount": "1 st", "estimatedPrice": 10},
+      {"item": "Fiskbuljong", "amount": "8 dl", "estimatedPrice": 8},
+      {"item": "Grädde", "amount": "2 dl", "estimatedPrice": 10},
+      {"item": "Dill", "amount": "1/2 kruka", "estimatedPrice": 10}
+    ],
+    "steps": [
+      "Tärna potatis och morot. Skiva purjolöken.",
+      "Koka upp buljongen och lägg i potatis och morot.",
+      "Koka ca 10 min, tillsätt purjolök.",
+      "Skär laxen i bitar och lägg i soppan.",
+      "Sjud ca 5 min tills laxen är klar.",
+      "Rör ner grädden och värm upp.",
+      "Toppa med hackad dill och servera med bröd."
+    ]
+  },
+  {
+    "id": "fish-and-chips",
+    "name": "Fish and chips",
+    "category": "fisk",
+    "time": 40,
+    "servings": 4,
+    "estimatedCost": 100,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_168587/cf_259/fish_and_chips.jpg",
+    "ingredients": [
+      {"item": "Torskfilé", "amount": "600 g", "estimatedPrice": 55},
+      {"item": "Vetemjöl", "amount": "2 dl", "estimatedPrice": 5},
+      {"item": "Öl", "amount": "2,5 dl", "estimatedPrice": 10},
+      {"item": "Bakpulver", "amount": "1 tsk", "estimatedPrice": 2},
+      {"item": "Potatis (fast)", "amount": "800 g", "estimatedPrice": 12},
+      {"item": "Olja för fritering", "amount": "1 liter", "estimatedPrice": 20},
+      {"item": "Remouladsås", "amount": "2 dl", "estimatedPrice": 15},
+      {"item": "Citron", "amount": "1 st", "estimatedPrice": 4}
+    ],
+    "steps": [
+      "Skär potatisen i pommes frites. Skölj och torka.",
+      "Fritera pommes fritesen i 160°C tills mjuka men inte bruna. Ta upp.",
+      "Vispa ihop mjöl, öl, bakpulver och salt till en smet.",
+      "Doppa fiskbitarna i smeten.",
+      "Fritera fisken i 180°C tills gyllene, ca 5-6 min.",
+      "Fritera pommes fritesen igen i 190°C tills krispiga.",
+      "Servera med remouladsås och citron."
+    ]
+  },
+  {
+    "id": "laxburgare",
+    "name": "Laxburgare",
+    "category": "fisk",
+    "time": 30,
+    "servings": 4,
+    "estimatedCost": 120,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_186287/cf_259/laxburgare.jpg",
+    "ingredients": [
+      {"item": "Laxfilé", "amount": "500 g", "estimatedPrice": 70},
+      {"item": "Ströbröd", "amount": "0,5 dl", "estimatedPrice": 3},
+      {"item": "Ägg", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Dill", "amount": "2 msk hackad", "estimatedPrice": 5},
+      {"item": "Hamburgerbröd", "amount": "4 st", "estimatedPrice": 15},
+      {"item": "Sallad", "amount": "4 blad", "estimatedPrice": 5},
+      {"item": "Majonnäs", "amount": "4 msk", "estimatedPrice": 4},
+      {"item": "Citron", "amount": "1/2 st", "estimatedPrice": 2}
+    ],
+    "steps": [
+      "Finhacka laxen med kniv (eller kör kort i matberedare).",
+      "Blanda lax med ströbröd, ägg och dill. Krydda med salt och peppar.",
+      "Forma till 4 burgare.",
+      "Stek i smör på medelvärme ca 4 min per sida.",
+      "Blanda majonnäs med citronsaft.",
+      "Rosta bröden lätt.",
+      "Montera burgarna med sallad och citronsås."
+    ]
+  },
+  {
+    "id": "fiskgratang",
+    "name": "Fiskgratäng med ris eller potatis",
+    "category": "fisk",
+    "time": 45,
+    "servings": 4,
+    "estimatedCost": 95,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_107767/cf_259/fiskgratang.jpg",
+    "ingredients": [
+      {"item": "Torsk eller sejfilé", "amount": "600 g", "estimatedPrice": 50},
+      {"item": "Räkor", "amount": "150 g", "estimatedPrice": 25},
+      {"item": "Grädde", "amount": "3 dl", "estimatedPrice": 15},
+      {"item": "Riven ost", "amount": "150 g", "estimatedPrice": 12},
+      {"item": "Dill", "amount": "1/2 kruka", "estimatedPrice": 10},
+      {"item": "Citron", "amount": "1/2 st", "estimatedPrice": 2},
+      {"item": "Ris eller potatis", "amount": "4 port", "estimatedPrice": 10}
+    ],
+    "steps": [
+      "Lägg fiskfiléerna i en smord ugnsform.",
+      "Fördela räkorna över fisken.",
+      "Blanda grädde med citronsaft, hackad dill, salt och peppar.",
+      "Häll över fisken och strö på osten.",
+      "Gratinera i 200°C ca 25-30 min.",
+      "Koka ris eller potatis som tillbehör.",
+      "Servera gratängen med kokt ris eller potatis."
+    ]
+  },
+  {
+    "id": "fiskpinnar",
+    "name": "Fiskpinnar med mos och ärtor",
+    "category": "fisk",
+    "time": 25,
+    "servings": 4,
+    "estimatedCost": 70,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_231089/cf_259/fiskpinnar_med_potatismos.jpg",
+    "ingredients": [
+      {"item": "Fiskpinnar", "amount": "16 st", "estimatedPrice": 35},
+      {"item": "Potatis", "amount": "800 g", "estimatedPrice": 12},
+      {"item": "Mjölk", "amount": "1 dl", "estimatedPrice": 2},
+      {"item": "Smör", "amount": "50 g", "estimatedPrice": 8},
+      {"item": "Frysta ärtor", "amount": "300 g", "estimatedPrice": 10},
+      {"item": "Ketchup", "amount": "efter smak", "estimatedPrice": 3}
+    ],
+    "steps": [
+      "Skala och koka potatisen mjuk.",
+      "Tillaga fiskpinnarna i ugn enligt förpackningen.",
+      "Mosa potatisen med mjölk och smör. Krydda med salt.",
+      "Koka ärtorna i lättsaltat vatten.",
+      "Servera fiskpinnarna med potatismos, ärtor och ketchup."
+    ]
+  },
+  {
+    "id": "pizza-pinsa",
+    "name": "Pizza Pinsa",
+    "category": "vegetariskt",
+    "time": 25,
+    "servings": 4,
+    "estimatedCost": 75,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_233055/cf_259/margheritapizza.jpg",
+    "ingredients": [
+      {"item": "Färdig pizzadeg", "amount": "500 g", "estimatedPrice": 20},
+      {"item": "Passerade tomater", "amount": "2 dl", "estimatedPrice": 8},
+      {"item": "Mozzarella", "amount": "250 g", "estimatedPrice": 25},
+      {"item": "Oregano", "amount": "1 tsk", "estimatedPrice": 2},
+      {"item": "Olivolja", "amount": "2 msk", "estimatedPrice": 5},
+      {"item": "Basilika", "amount": "1/2 kruka", "estimatedPrice": 10},
+      {"item": "Salt", "amount": "1/2 tsk", "estimatedPrice": 1}
+    ],
+    "steps": [
+      "Sätt ugnen på 250°C (eller max).",
+      "Kavla ut degen till oval form på bakplåtspapper.",
+      "Bred ut tomaterna, krydda med salt och oregano.",
+      "Riv eller skiva mozzarellan och fördela över pizzan.",
+      "Ringla över olivolja.",
+      "Grädda i ca 10-12 min tills botten är knaprig och osten bubblar.",
+      "Toppa med färsk basilika och servera."
+    ]
+  },
+  {
+    "id": "grekisk-sallad",
+    "name": "Grekisk sallad",
+    "category": "vegetariskt",
+    "time": 15,
+    "servings": 4,
+    "estimatedCost": 65,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_95628/cf_259/grekisk_sallad.jpg",
+    "ingredients": [
+      {"item": "Gurka", "amount": "1 st", "estimatedPrice": 10},
+      {"item": "Tomater", "amount": "4 st", "estimatedPrice": 15},
+      {"item": "Rödlök", "amount": "1/2 st", "estimatedPrice": 2},
+      {"item": "Fetaost", "amount": "200 g", "estimatedPrice": 25},
+      {"item": "Kalamataoliver", "amount": "100 g", "estimatedPrice": 15},
+      {"item": "Olivolja", "amount": "4 msk", "estimatedPrice": 8},
+      {"item": "Oregano", "amount": "1 tsk", "estimatedPrice": 2}
+    ],
+    "steps": [
+      "Skär gurka och tomater i stora bitar.",
+      "Skiva rödlöken tunt.",
+      "Lägg gurka, tomat och lök i en skål.",
+      "Lägg fetaosten i ett stort block ovanpå.",
+      "Strö över oliver.",
+      "Ringla över olivolja och krydda med oregano, salt och peppar.",
+      "Servera med gott bröd."
+    ]
+  },
+  {
+    "id": "mac-and-cheese",
+    "name": "Mac and cheese",
+    "category": "vegetariskt",
+    "time": 30,
+    "servings": 4,
+    "estimatedCost": 55,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_202876/cf_259/mac_and_cheese.jpg",
+    "ingredients": [
+      {"item": "Makaroner", "amount": "400 g", "estimatedPrice": 10},
+      {"item": "Cheddarost", "amount": "300 g", "estimatedPrice": 25},
+      {"item": "Mjölk", "amount": "4 dl", "estimatedPrice": 5},
+      {"item": "Smör", "amount": "3 msk", "estimatedPrice": 5},
+      {"item": "Vetemjöl", "amount": "3 msk", "estimatedPrice": 2},
+      {"item": "Dijonsenap", "amount": "1 tsk", "estimatedPrice": 2},
+      {"item": "Paprikapulver", "amount": "1/2 tsk", "estimatedPrice": 1}
+    ],
+    "steps": [
+      "Koka pastan al dente.",
+      "Smält smöret i en kastrull, vispa i mjölet.",
+      "Tillsätt mjölken lite i taget under omrörning.",
+      "Koka ihop till en tjock sås.",
+      "Rör ner riven ost, senap och paprikapulver. Smaka av.",
+      "Blanda såsen med pastan.",
+      "Servera direkt eller gratinera i ugn med extra ost på toppen."
+    ]
+  },
+  {
+    "id": "risotto-svamp",
+    "name": "Risotto med svamp",
+    "category": "vegetariskt",
+    "time": 40,
+    "servings": 4,
+    "estimatedCost": 80,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_227096/cf_259/svamprisotto.jpg",
+    "ingredients": [
+      {"item": "Arborio-ris", "amount": "300 g", "estimatedPrice": 20},
+      {"item": "Blandade svampar", "amount": "300 g", "estimatedPrice": 30},
+      {"item": "Grönsaksbuljong", "amount": "1 liter", "estimatedPrice": 8},
+      {"item": "Vitt vin", "amount": "1 dl", "estimatedPrice": 10},
+      {"item": "Parmesan", "amount": "75 g", "estimatedPrice": 15},
+      {"item": "Gul lök", "amount": "1 st", "estimatedPrice": 3},
+      {"item": "Vitlök", "amount": "2 klyftor", "estimatedPrice": 2},
+      {"item": "Smör", "amount": "3 msk", "estimatedPrice": 5},
+      {"item": "Persilja", "amount": "2 msk", "estimatedPrice": 5}
+    ],
+    "steps": [
+      "Värm buljongen och håll den varm.",
+      "Fräs hackad lök och vitlök i smör.",
+      "Tillsätt riset och fräs tills det blir glasigt.",
+      "Häll i vinet och rör tills det absorberats.",
+      "Tillsätt buljong en slev i taget, rör hela tiden.",
+      "Stek svampen separat i smör med salt och peppar.",
+      "När riset är krämigt (ca 18-20 min), rör ner svamp, parmesan och smör.",
+      "Toppa med persilja och servera genast."
+    ]
+  },
+  {
+    "id": "toast-ost-skinka",
+    "name": "Toast med ost och skinka",
+    "category": "vegetariskt",
+    "time": 10,
+    "servings": 4,
+    "estimatedCost": 40,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_105632/cf_259/varm_macka_med_skinka_och_ost.jpg",
+    "ingredients": [
+      {"item": "Toastbröd", "amount": "8 skivor", "estimatedPrice": 12},
+      {"item": "Skivad ost", "amount": "8 skivor", "estimatedPrice": 15},
+      {"item": "Skinka", "amount": "8 skivor", "estimatedPrice": 15},
+      {"item": "Smör", "amount": "för stekning", "estimatedPrice": 3}
+    ],
+    "steps": [
+      "Smörja brödskivorna på ena sidan.",
+      "Lägg en brödskiva med smörsidan ner i stekpannan.",
+      "Lägg på ost, skinka och mer ost.",
+      "Lägg på den andra brödskivan med smörsidan upp.",
+      "Stek på medelvärme tills undersidan är gyllene.",
+      "Vänd och stek andra sidan.",
+      "Skär diagonalt och servera."
+    ]
+  },
+  {
+    "id": "halloumiburgare",
+    "name": "Halloumiburgare",
+    "category": "vegetariskt",
+    "time": 20,
+    "servings": 4,
+    "estimatedCost": 85,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_134459/cf_259/halloumiburgare.jpg",
+    "ingredients": [
+      {"item": "Halloumi", "amount": "2 förp (400g)", "estimatedPrice": 50},
+      {"item": "Hamburgerbröd", "amount": "4 st", "estimatedPrice": 15},
+      {"item": "Sallad", "amount": "4 blad", "estimatedPrice": 5},
+      {"item": "Tomat", "amount": "1 st", "estimatedPrice": 5},
+      {"item": "Rödlök", "amount": "1/2 st", "estimatedPrice": 2},
+      {"item": "Hummus", "amount": "1 dl", "estimatedPrice": 10},
+      {"item": "Sriracha", "amount": "efter smak", "estimatedPrice": 3}
+    ],
+    "steps": [
+      "Skär halloumin i tjocka skivor.",
+      "Stek halloumin i torr panna tills gyllene på båda sidor.",
+      "Skiva tomat och rödlök.",
+      "Rosta bröden lätt.",
+      "Bred hummus på brödbotten.",
+      "Lägg på sallad, halloumi, tomat och lök.",
+      "Ringla över sriracha om önskat.",
+      "Lägg på locket och servera."
+    ]
+  },
+  {
+    "id": "pannkakor",
+    "name": "Pannkakor med sylt",
+    "category": "vegetariskt",
+    "time": 25,
+    "servings": 4,
+    "estimatedCost": 35,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_107764/cf_259/pannkakor.jpg",
+    "ingredients": [
+      {"item": "Vetemjöl", "amount": "3 dl", "estimatedPrice": 5},
+      {"item": "Mjölk", "amount": "6 dl", "estimatedPrice": 8},
+      {"item": "Ägg", "amount": "3 st", "estimatedPrice": 9},
+      {"item": "Salt", "amount": "1/2 tsk", "estimatedPrice": 1},
+      {"item": "Smör", "amount": "för stekning", "estimatedPrice": 5},
+      {"item": "Jordgubbssylt", "amount": "2 dl", "estimatedPrice": 10},
+      {"item": "Vispad grädde", "amount": "2 dl", "estimatedPrice": 8}
+    ],
+    "steps": [
+      "Vispa ihop mjöl, hälften av mjölken och salt till slät smet.",
+      "Tillsätt resten av mjölken och äggen. Vispa slätt.",
+      "Låt smeten vila 10 min.",
+      "Smält lite smör i en stekpanna.",
+      "Häll i lagom med smet och stek tills ovansidan stelnat.",
+      "Vänd och stek andra sidan gyllene.",
+      "Servera pannkakorna med sylt och grädde."
+    ]
+  },
+  {
+    "id": "omelett",
+    "name": "Omelett",
+    "category": "vegetariskt",
+    "time": 15,
+    "servings": 4,
+    "estimatedCost": 45,
+    "image": "https://assets.icanet.se/e_sharpen:80,q_auto,dpr_1.25,w_718,h_718,c_lfill/imagevaultfiles/id_200287/cf_259/fransk_omelett.jpg",
+    "ingredients": [
+      {"item": "Ägg", "amount": "8 st", "estimatedPrice": 24},
+      {"item": "Mjölk", "amount": "1 dl", "estimatedPrice": 2},
+      {"item": "Smör", "amount": "3 msk", "estimatedPrice": 5},
+      {"item": "Riven ost", "amount": "100 g", "estimatedPrice": 8},
+      {"item": "Skinka (valfritt)", "amount": "100 g", "estimatedPrice": 12},
+      {"item": "Persilja", "amount": "2 msk", "estimatedPrice": 3}
+    ],
+    "steps": [
+      "Vispa ägg och mjölk. Krydda med salt och peppar.",
+      "Smält smör i en stekpanna på medelvärme.",
+      "Häll i äggsmeten.",
+      "Rör försiktigt med en slickepott så att rå äggblandning rinner ut till kanterna.",
+      "När omeletten nästan stelnat, lägg på fyllning på ena halvan.",
+      "Vik ihop omeletten och servera genast.",
+      "Toppa med persilja."
+    ]
+  }
+]
