@@ -522,9 +522,12 @@ select option {
 
 /* --------------------------------
    Score badge (top-left)
-   Clean circular badge. A warm yellow fills from the bottom of the circle
-   in proportion to the score, so a 10/10 is a fully gold disc and a 5/10
-   is half gold, half dark glass. The number stays centred and readable.
+   Rectangle pill. Background and glow shift by score tier:
+     9.5–10  tier-peak    bright yellow + strong glow
+     9.0–9.4 tier-high    bright yellow + soft glow
+     8.0–8.9 tier-yellow  bright yellow, no glow
+     5.0–7.9 tier-muted   desaturated yellow, no glow
+     1.0–4.9 tier-gray    neutral gray, no glow
 --------------------------------- */
 
 .score-badge {
@@ -538,12 +541,11 @@ select option {
 
   border-radius: 8px;
 
-  background: linear-gradient(180deg, #fde047 0%, #facc15 50%, #f59e0b 100%);
   border: 1.5px solid rgba(0, 0, 0, 0.18);
 
   box-shadow:
     0 4px 14px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.30);
+    inset 0 1px 0 rgba(255, 255, 255, 0.20);
 
   display: flex;
   align-items: center;
@@ -565,15 +567,48 @@ select option {
   line-height: 1;
   letter-spacing: -0.3px;
   font-size: 1.15rem;
-  color: #1a1208;
   font-variant-numeric: tabular-nums;
+  color: #1a1208;
 }
 
-.score-badge.is-high {
+/* Bright yellow with a powerful glow. */
+.score-badge.tier-peak {
+  background: linear-gradient(180deg, #fde047 0%, #facc15 50%, #f59e0b 100%);
   box-shadow:
     0 4px 14px rgba(0, 0, 0, 0.45),
-    0 0 14px rgba(250, 204, 21, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    0 0 22px rgba(250, 204, 21, 0.80),
+    0 0 36px rgba(250, 204, 21, 0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.30);
+}
+
+/* Bright yellow with a soft glow. */
+.score-badge.tier-high {
+  background: linear-gradient(180deg, #fde047 0%, #facc15 50%, #f59e0b 100%);
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.45),
+    0 0 12px rgba(250, 204, 21, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.30);
+}
+
+/* Bright yellow, no glow. */
+.score-badge.tier-yellow {
+  background: linear-gradient(180deg, #fde047 0%, #facc15 50%, #f59e0b 100%);
+}
+
+/* Desaturated yellow — readable but no longer "gold". */
+.score-badge.tier-muted {
+  background: linear-gradient(180deg, #c8b271 0%, #b09957 50%, #8c7a3d 100%);
+  color: #1a1208;
+}
+
+/* Neutral gray for low scores. Light text reads better here. */
+.score-badge.tier-gray {
+  background: linear-gradient(180deg, #6b6b6b 0%, #525252 50%, #3a3a3a 100%);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.score-badge.tier-gray .score-value {
+  color: #f3f3f3;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
 }
 
 /* --------------------------------

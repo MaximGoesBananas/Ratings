@@ -206,12 +206,7 @@ function formatScore(score) {
 
 function buildScoreBadge(score) {
   const badge = document.createElement('div');
-  badge.className = 'score-badge';
-
-  const fillPct = clamp(score, 0, 10) * 10;
-  badge.style.setProperty('--fill-pct', `${fillPct}%`);
-
-  if (score >= 9.0) badge.classList.add('is-high');
+  badge.className = 'score-badge ' + scoreTierClass(score);
 
   const value = document.createElement('span');
   value.className = 'score-value';
@@ -219,6 +214,15 @@ function buildScoreBadge(score) {
   badge.appendChild(value);
 
   return badge;
+}
+
+function scoreTierClass(score) {
+  if (!Number.isFinite(score)) return 'tier-gray';
+  if (score >= 9.5) return 'tier-peak';
+  if (score >= 9.0) return 'tier-high';
+  if (score >= 8.0) return 'tier-yellow';
+  if (score >= 5.0) return 'tier-muted';
+  return 'tier-gray';
 }
 
 function normalize(s) {
