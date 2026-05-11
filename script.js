@@ -227,13 +227,14 @@ function formatScore(score) {
   return Number.isInteger(score) ? String(score) : score.toFixed(1);
 }
 
-/* Heat gradient — cool gray at low scores through warm yellow into orange and red.
-   Mirrors black-body radiation: the higher the score, the hotter the number glows. */
+/* Heat colour for the number glow — mirrors the bar's blue→red gradient so the
+   halo around the number matches the colour at the fill level inside the bar. */
 function heatColor(score) {
   const t = clamp((score - 1) / 9, 0, 1);
-  if (t < 0.4)  return lerpColorHex('#6b7280', '#facc15', t / 0.4);
-  if (t < 0.75) return lerpColorHex('#facc15', '#f97316', (t - 0.4) / 0.35);
-  return lerpColorHex('#f97316', '#ef4444', (t - 0.75) / 0.25);
+  if (t < 0.28) return lerpColorHex('#2563eb', '#06b6d4', t / 0.28);
+  if (t < 0.55) return lerpColorHex('#06b6d4', '#facc15', (t - 0.28) / 0.27);
+  if (t < 0.78) return lerpColorHex('#facc15', '#f97316', (t - 0.55) / 0.23);
+  return lerpColorHex('#f97316', '#ef4444', (t - 0.78) / 0.22);
 }
 
 function buildScoreBadge(score) {
@@ -244,7 +245,6 @@ function buildScoreBadge(score) {
   const intensity = clamp((score - 1) / 9, 0, 1);
   const fillPct = clamp(score, 0, 10) * 10;
 
-  badge.style.setProperty('--fill-color', heat);
   badge.style.setProperty('--fill-pct', `${fillPct}%`);
   badge.style.setProperty('--heat-color', heat);
   badge.style.setProperty('--heat-blur', `${intensity * 14}px`);

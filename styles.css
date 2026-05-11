@@ -522,17 +522,20 @@ select option {
 
 /* --------------------------------
    Score capsule (top-left)
-   Vertical pill meter — fill height represents score on a 1–10 scale.
-   The number glows on a heat gradient so the score "radiates" power.
+   Vertical pill meter — fill height represents the score on a 1–10 scale.
+   The inside of the bar carries a fixed blue→red temperature gradient, so
+   the colour at the fill level encodes "where on the scale" the score sits.
 --------------------------------- */
 
 .score-badge {
+  --pill-h: 160px;
+
   position: absolute;
   top: 10px;
   left: 10px;
 
   width: 40px;
-  height: 160px;
+  height: var(--pill-h);
   padding: 10px 4px 6px;
 
   display: flex;
@@ -552,7 +555,9 @@ select option {
   transition: box-shadow 120ms ease, transform 120ms ease;
 }
 
-/* Fill — rises from the bottom proportional to the score. */
+/* Fill — rises from the bottom and reveals the temperature gradient inside.
+   The gradient is sized to the full pill height and anchored at the bottom,
+   so the colour at any Y position represents that position's score. */
 .score-badge::before {
   content: '';
   position: absolute;
@@ -560,30 +565,37 @@ select option {
   right: 0;
   bottom: 0;
   height: var(--fill-pct, 0%);
-  background: var(--fill-color, #fbbf24);
-  opacity: 0.78;
+  background-image: linear-gradient(
+    to top,
+    #2563eb 0%,
+    #06b6d4 28%,
+    #facc15 55%,
+    #f97316 78%,
+    #ef4444 100%
+  );
+  background-size: 100% var(--pill-h);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  opacity: 0.88;
   pointer-events: none;
-  transition: height 240ms ease, background 240ms ease;
+  transition: height 240ms ease;
   z-index: 0;
 }
 
-/* Tick marks — divide the bar into 10 segments so the eye can read the level. */
+/* Tick marks — alternating short/long, kept clear of the rounded capsule ends.
+   Drawn as inline SVG so the line lengths really differ instead of just opacity. */
 .score-badge::after {
   content: '';
   position: absolute;
-  left: 7px;
-  right: 7px;
-  top: 34px;
-  bottom: 6px;
+  left: 0;
+  right: 0;
+  top: 36px;
+  bottom: 20px;
   pointer-events: none;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent calc(10% - 1px),
-    rgba(255, 255, 255, 0.22) calc(10% - 1px),
-    rgba(255, 255, 255, 0.22) 10%
-  );
-  z-index: 1;
+  z-index: 2;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><g stroke='%23ffffff' stroke-opacity='0.45' stroke-width='1' stroke-linecap='round'><line x1='14' y1='20' x2='86' y2='20'/><line x1='14' y1='40' x2='86' y2='40'/><line x1='14' y1='60' x2='86' y2='60'/><line x1='14' y1='80' x2='86' y2='80'/></g><g stroke='%23ffffff' stroke-opacity='0.22' stroke-width='1' stroke-linecap='round'><line x1='34' y1='10' x2='66' y2='10'/><line x1='34' y1='30' x2='66' y2='30'/><line x1='34' y1='50' x2='66' y2='50'/><line x1='34' y1='70' x2='66' y2='70'/><line x1='34' y1='90' x2='66' y2='90'/></g></svg>");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 
 .score-badge:hover {
@@ -592,7 +604,7 @@ select option {
 
 .score-value {
   position: relative;
-  z-index: 2;
+  z-index: 3;
 
   font-weight: 900;
   line-height: 1;
@@ -730,19 +742,19 @@ select option {
 
 /* Score badge in list view — compact override */
 .list-score-badge {
+  --pill-h: 80px;
+
   position: static;
   flex-shrink: 0;
 
   width: 32px;
-  height: 80px;
+  height: var(--pill-h);
   padding: 6px 3px 4px;
 }
 
 .list-score-badge::after {
   top: 24px;
-  bottom: 5px;
-  left: 5px;
-  right: 5px;
+  bottom: 10px;
 }
 
 .list-score-badge .score-value { font-size: 0.85rem; }
