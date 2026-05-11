@@ -595,17 +595,21 @@ select option {
   background: linear-gradient(180deg, #fde047 0%, #facc15 50%, #f59e0b 100%);
 }
 
-/* Softer yellow — still reads as yellow, just less saturated than the gold tiers. */
+/* Softer yellow — still reads as yellow, just less saturated than the gold tiers.
+   10% smaller box than the bright tiers. */
 .score-badge.tier-muted {
+  min-width: 45px;
+  height: 32px;
+  padding: 0 9px;
   background: linear-gradient(180deg, #f0d878 0%, #d9b760 50%, #b89240 100%);
 }
 
 /* "Gray" tier — uses the warm tan tone the muted tier had before, so the
-   lowest scores still feel part of the same color family. 10% smaller box. */
+   lowest scores still feel part of the same color family. 15% smaller box. */
 .score-badge.tier-gray {
-  min-width: 45px;
-  height: 32px;
-  padding: 0 9px;
+  min-width: 42px;
+  height: 31px;
+  padding: 0 8px;
   background: linear-gradient(180deg, #c8b271 0%, #b09957 50%, #8c7a3d 100%);
 }
 
