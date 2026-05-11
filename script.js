@@ -227,42 +227,29 @@ function formatScore(score) {
   return Number.isInteger(score) ? String(score) : score.toFixed(1);
 }
 
-/* Star tiers:
-   1–5: 0
-   6–7: 1
-   8–9: 2
-   9.01–10: 3
-*/
-function getStarCount(score) {
-  if (!Number.isFinite(score)) return 0;
-  if (score <= 6.99) return 0;
-  if (score <= 7.99) return 1;
-  if (score <= 8.99) return 2;
-  return 3;
+/* Heat gradient — cool gray at low scores through warm yellow into orange and red.
+   Mirrors black-body radiation: the higher the score, the hotter the number glows. */
+function heatColor(score) {
+  const t = clamp((score - 1) / 9, 0, 1);
+  if (t < 0.4)  return lerpColorHex('#6b7280', '#facc15', t / 0.4);
+  if (t < 0.75) return lerpColorHex('#facc15', '#f97316', (t - 0.4) / 0.35);
+  return lerpColorHex('#f97316', '#ef4444', (t - 0.75) / 0.25);
 }
 
 function buildScoreBadge(score) {
   const badge = document.createElement('div');
   badge.className = 'score-badge';
 
-  const t = clamp((score - 1) / 9, 0, 1);
-  const lowColor = '#9b9b9b';
-  const highColor = '#ffd54a';
-  const fillColor = lerpColorHex(lowColor, highColor, t);
+  const heat = heatColor(score);
+  const intensity = clamp((score - 1) / 9, 0, 1);
   const fillPct = clamp(score, 0, 10) * 10;
 
-  badge.style.setProperty('--fill-color', fillColor);
+  badge.style.setProperty('--fill-color', heat);
   badge.style.setProperty('--fill-pct', `${fillPct}%`);
+  badge.style.setProperty('--heat-color', heat);
+  badge.style.setProperty('--heat-blur', `${intensity * 14}px`);
 
   if (score >= 9.0) badge.classList.add('is-high');
-
-  const starCount = getStarCount(score);
-  if (starCount > 0) {
-    const stars = document.createElement('span');
-    stars.className = 'score-stars';
-    stars.textContent = '★'.repeat(starCount);
-    badge.appendChild(stars);
-  }
 
   const value = document.createElement('span');
   value.className = 'score-value';
