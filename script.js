@@ -256,11 +256,6 @@ function buildScoreBadge(score) {
 
   if (score >= 9.0) badge.classList.add('is-high');
 
-  const value = document.createElement('span');
-  value.className = 'score-value';
-  value.textContent = formatScore(score);
-  badge.appendChild(value);
-
   const starCount = getStarCount(score);
   if (starCount > 0) {
     const stars = document.createElement('span');
@@ -268,6 +263,11 @@ function buildScoreBadge(score) {
     stars.textContent = '★'.repeat(starCount);
     badge.appendChild(stars);
   }
+
+  const value = document.createElement('span');
+  value.className = 'score-value';
+  value.textContent = formatScore(score);
+  badge.appendChild(value);
 
   return badge;
 }
