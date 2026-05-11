@@ -199,55 +199,17 @@ function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
 }
 
-function lerp(a, b, t) {
-  return a + (b - a) * t;
-}
-
-function lerpColorHex(hexA, hexB, t) {
-  const a = hexA.replace('#', '');
-  const b = hexB.replace('#', '');
-
-  const ar = parseInt(a.substring(0, 2), 16);
-  const ag = parseInt(a.substring(2, 4), 16);
-  const ab = parseInt(a.substring(4, 6), 16);
-
-  const br = parseInt(b.substring(0, 2), 16);
-  const bg = parseInt(b.substring(2, 4), 16);
-  const bb = parseInt(b.substring(4, 6), 16);
-
-  const rr = Math.round(lerp(ar, br, t));
-  const rg = Math.round(lerp(ag, bg, t));
-  const rb = Math.round(lerp(ab, bb, t));
-
-  return `#${rr.toString(16).padStart(2, '0')}${rg.toString(16).padStart(2, '0')}${rb.toString(16).padStart(2, '0')}`;
-}
-
 function formatScore(score) {
   if (!Number.isFinite(score)) return '0';
   return Number.isInteger(score) ? String(score) : score.toFixed(1);
-}
-
-/* Heat colour for the number glow — mirrors the bar's blue→red gradient so the
-   halo around the number matches the colour at the fill level inside the bar. */
-function heatColor(score) {
-  const t = clamp((score - 1) / 9, 0, 1);
-  if (t < 0.28) return lerpColorHex('#2563eb', '#06b6d4', t / 0.28);
-  if (t < 0.55) return lerpColorHex('#06b6d4', '#facc15', (t - 0.28) / 0.27);
-  if (t < 0.78) return lerpColorHex('#facc15', '#f97316', (t - 0.55) / 0.23);
-  return lerpColorHex('#f97316', '#ef4444', (t - 0.78) / 0.22);
 }
 
 function buildScoreBadge(score) {
   const badge = document.createElement('div');
   badge.className = 'score-badge';
 
-  const heat = heatColor(score);
-  const intensity = clamp((score - 1) / 9, 0, 1);
   const fillPct = clamp(score, 0, 10) * 10;
-
   badge.style.setProperty('--fill-pct', `${fillPct}%`);
-  badge.style.setProperty('--heat-color', heat);
-  badge.style.setProperty('--heat-blur', `${intensity * 14}px`);
 
   if (score >= 9.0) badge.classList.add('is-high');
 

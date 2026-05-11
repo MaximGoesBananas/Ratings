@@ -521,43 +521,39 @@ select option {
 }
 
 /* --------------------------------
-   Score capsule (top-left)
-   Vertical pill meter — fill height represents the score on a 1–10 scale.
-   The inside of the bar carries a fixed blue→red temperature gradient, so
-   the colour at the fill level encodes "where on the scale" the score sits.
+   Score badge (top-left)
+   Clean circular badge. A warm yellow fills from the bottom of the circle
+   in proportion to the score, so a 10/10 is a fully gold disc and a 5/10
+   is half gold, half dark glass. The number stays centred and readable.
 --------------------------------- */
 
 .score-badge {
-  --pill-h: 160px;
-
   position: absolute;
   top: 10px;
   left: 10px;
 
-  width: 40px;
-  height: var(--pill-h);
-  padding: 10px 4px 6px;
+  width: 50px;
+  height: 50px;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  border-radius: 50%;
 
-  border-radius: 999px;
-
-  background: rgba(0, 0, 0, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(0, 0, 0, 0.58);
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
   backdrop-filter: blur(6px);
 
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.38);
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   overflow: hidden;
-  transition: box-shadow 120ms ease, transform 120ms ease;
+  transition: box-shadow 140ms ease, transform 140ms ease;
 }
 
-/* Fill — rises from the bottom and reveals the temperature gradient inside.
-   The gradient is sized to the full pill height and anchored at the bottom,
-   so the colour at any Y position represents that position's score. */
+/* Yellow fill — rises from the bottom in proportion to the score. */
 .score-badge::before {
   content: '';
   position: absolute;
@@ -565,37 +561,10 @@ select option {
   right: 0;
   bottom: 0;
   height: var(--fill-pct, 0%);
-  background-image: linear-gradient(
-    to top,
-    #2563eb 0%,
-    #06b6d4 28%,
-    #facc15 55%,
-    #f97316 78%,
-    #ef4444 100%
-  );
-  background-size: 100% var(--pill-h);
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  opacity: 0.88;
+  background: linear-gradient(to top, #d97706 0%, #f59e0b 40%, #facc15 80%, #fde047 100%);
   pointer-events: none;
-  transition: height 240ms ease;
+  transition: height 280ms ease;
   z-index: 0;
-}
-
-/* Tick marks — alternating short/long, kept clear of the rounded capsule ends.
-   Drawn as inline SVG so the line lengths really differ instead of just opacity. */
-.score-badge::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 36px;
-  bottom: 20px;
-  pointer-events: none;
-  z-index: 2;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><g stroke='%23ffffff' stroke-opacity='0.45' stroke-width='1' stroke-linecap='round'><line x1='14' y1='20' x2='86' y2='20'/><line x1='14' y1='40' x2='86' y2='40'/><line x1='14' y1='60' x2='86' y2='60'/><line x1='14' y1='80' x2='86' y2='80'/></g><g stroke='%23ffffff' stroke-opacity='0.22' stroke-width='1' stroke-linecap='round'><line x1='34' y1='10' x2='66' y2='10'/><line x1='34' y1='30' x2='66' y2='30'/><line x1='34' y1='50' x2='66' y2='50'/><line x1='34' y1='70' x2='66' y2='70'/><line x1='34' y1='90' x2='66' y2='90'/></g></svg>");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
 }
 
 .score-badge:hover {
@@ -604,25 +573,25 @@ select option {
 
 .score-value {
   position: relative;
-  z-index: 3;
+  z-index: 1;
 
-  font-weight: 900;
+  font-weight: 800;
   line-height: 1;
   letter-spacing: -0.4px;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: #fff;
   font-variant-numeric: tabular-nums;
 
   text-shadow:
-    0 0 var(--heat-blur, 0px) var(--heat-color, transparent),
-    0 0 calc(var(--heat-blur, 0px) * 2) var(--heat-color, transparent),
-    0 1px 2px rgba(0, 0, 0, 0.85);
+    0 1px 2px rgba(0, 0, 0, 0.85),
+    0 0 6px rgba(0, 0, 0, 0.4);
 }
 
 .score-badge.is-high {
   box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.38),
-    0 0 18px rgba(248, 113, 113, 0.45);
+    0 4px 14px rgba(0, 0, 0, 0.45),
+    0 0 14px rgba(250, 204, 21, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 /* --------------------------------
@@ -742,19 +711,11 @@ select option {
 
 /* Score badge in list view — compact override */
 .list-score-badge {
-  --pill-h: 80px;
-
   position: static;
   flex-shrink: 0;
 
-  width: 32px;
-  height: var(--pill-h);
-  padding: 6px 3px 4px;
-}
-
-.list-score-badge::after {
-  top: 24px;
-  bottom: 10px;
+  width: 38px;
+  height: 38px;
 }
 
 .list-score-badge .score-value { font-size: 0.85rem; }
