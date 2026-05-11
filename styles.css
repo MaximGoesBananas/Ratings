@@ -537,9 +537,8 @@ select option {
 
   border-radius: 50%;
 
-  background: rgba(0, 0, 0, 0.58);
-  border: 1.5px solid rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, #3f3a2b 0%, #2a2517 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
 
   box-shadow:
     0 4px 14px rgba(0, 0, 0, 0.45),
