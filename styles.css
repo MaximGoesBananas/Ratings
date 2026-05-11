@@ -577,8 +577,8 @@ select option {
 
   font-weight: 800;
   line-height: 1;
-  letter-spacing: -0.4px;
-  font-size: 1.05rem;
+  letter-spacing: -0.5px;
+  font-size: 1.35rem;
   color: #fff;
   font-variant-numeric: tabular-nums;
 
@@ -718,7 +718,7 @@ select option {
   height: 38px;
 }
 
-.list-score-badge .score-value { font-size: 0.85rem; }
+.list-score-badge .score-value { font-size: 1rem; }
 
 /* Responsive adjustments for list view */
 @media (max-width: 680px) {
