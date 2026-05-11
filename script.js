@@ -246,21 +246,20 @@ function buildScoreBadge(score) {
   badge.className = 'score-badge';
 
   const t = clamp((score - 1) / 9, 0, 1);
-
   const lowColor = '#9b9b9b';
   const highColor = '#ffd54a';
-  const scoreColor = lerpColorHex(lowColor, highColor, t);
+  const fillColor = lerpColorHex(lowColor, highColor, t);
+  const fillPct = clamp(score, 0, 10) * 10;
 
-  const numberSize = lerp(0.85, 1.35, Math.pow(t, 0.9));
-  const starSize = lerp(0.75, 1.05, Math.pow(t, 0.9));
-  const badgeSize = lerp(38, 58, Math.pow(t, 0.85));
-
-  badge.style.setProperty('--score-color', scoreColor);
-  badge.style.setProperty('--score-size', `${numberSize}rem`);
-  badge.style.setProperty('--star-size', `${starSize}rem`);
-  badge.style.setProperty('--badge-size', `${badgeSize}px`);
+  badge.style.setProperty('--fill-color', fillColor);
+  badge.style.setProperty('--fill-pct', `${fillPct}%`);
 
   if (score >= 9.0) badge.classList.add('is-high');
+
+  const value = document.createElement('span');
+  value.className = 'score-value';
+  value.textContent = formatScore(score);
+  badge.appendChild(value);
 
   const starCount = getStarCount(score);
   if (starCount > 0) {
@@ -269,12 +268,6 @@ function buildScoreBadge(score) {
     stars.textContent = '★'.repeat(starCount);
     badge.appendChild(stars);
   }
-
-  const value = document.createElement('span');
-  value.className = 'score-value';
-  value.textContent = formatScore(score);
-
-  badge.appendChild(value);
 
   return badge;
 }

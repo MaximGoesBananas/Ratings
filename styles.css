@@ -521,7 +521,8 @@ select option {
 }
 
 /* --------------------------------
-   Circular score badge (top-left)
+   Score capsule (top-left)
+   Horizontal pill meter — fill width represents score on a 1–10 scale.
 --------------------------------- */
 
 .score-badge {
@@ -529,54 +530,70 @@ select option {
   top: 10px;
   left: 10px;
 
-  width: var(--badge-size, 46px);
-  height: var(--badge-size, 46px);
-  border-radius: 50%;
+  height: 26px;
+  padding: 0 12px;
+  min-width: 64px;
 
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 7px;
 
-  gap: 2px;
+  border-radius: 999px;
 
-  background: rgba(0, 0, 0, 0.58);
+  background: rgba(0, 0, 0, 0.62);
   border: 1px solid rgba(255, 255, 255, 0.10);
   backdrop-filter: blur(6px);
 
-  box-shadow:
-    0 6px 18px rgba(0,0,0,0.38),
-    0 0 10px rgba(255, 215, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.38);
 
-  transition: transform 120ms ease, opacity 120ms ease;
+  overflow: hidden;
+  transition: box-shadow 120ms ease, transform 120ms ease;
+}
+
+.score-badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: var(--fill-pct, 0%);
+  background: var(--fill-color, #ffd54a);
+  opacity: 0.72;
+  pointer-events: none;
+  transition: width 200ms ease, background 200ms ease;
 }
 
 .score-badge:hover {
   transform: translateY(-1px);
 }
 
-.score-stars {
-  line-height: 1;
-  font-size: var(--star-size, 0.9rem);
-  color: var(--score-color, #bdbdbd);
-  text-shadow: 0 0 6px rgba(255, 215, 0, 0.25);
-}
-
 .score-value {
+  position: relative;
+  z-index: 1;
+
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.3px;
-
-  font-size: var(--score-size, 1.05rem);
-  color: var(--score-color, #bdbdbd);
-
+  font-size: 0.95rem;
+  color: #fff;
   font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+.score-stars {
+  position: relative;
+  z-index: 1;
+
+  line-height: 1;
+  font-size: 0.78rem;
+  color: #fff;
+  text-shadow:
+    0 0 6px rgba(255, 215, 0, 0.45),
+    0 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .score-badge.is-high {
   box-shadow:
-    0 6px 18px rgba(0,0,0,0.38),
-    0 0 16px rgba(255, 215, 0, 0.22);
+    0 6px 18px rgba(0, 0, 0, 0.38),
+    0 0 16px rgba(255, 215, 0, 0.28);
 }
 
 /* --------------------------------
