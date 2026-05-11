@@ -201,7 +201,7 @@ function clamp(n, min, max) {
 
 function formatScore(score) {
   if (!Number.isFinite(score)) return '0';
-  return Number.isInteger(score) ? String(score) : score.toFixed(1);
+  return score.toFixed(1);
 }
 
 function buildScoreBadge(score) {
