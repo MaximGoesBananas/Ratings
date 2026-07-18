@@ -1,0 +1,642 @@
+const PUBLISHED_BASE =
+  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmO1htUVAzTQHYcE73oHxvcKUmg5c4ZD6CdskMSA3wj3LkGhUbt1kpFqffbHNhERJ7_ksgfYEm_q2L/pub';
+
+function buildPublishedCsvUrl(gid) {
+  return `${PUBLISHED_BASE}?gid=${gid}&single=true&output=csv`;
+}
+
+// Published sheet tabs
+const MOVIES_GID = '1920189918';
+const SIMPLE_GAMES_GID = '1303529120';
+const COMPLEX_GAMES_GID = '1556084448';
+const MICE_GID = '1727287959';
+const MOUSEPADS_GID = '929203458';
+const MOUSE_ASSET_VERSION = '1.0.0';
+
+// Editable sheet deep links
+const SHEET_ID = '1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4';
+const SHEET_EDIT_BASE = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
+
+// Published CSV data begins at sheet row 2, after the header.
+function buildRowLink(gid, rowNumber) {
+  if (!gid || !rowNumber) return `${SHEET_EDIT_BASE}#gid=${gid}`;
+  return `${SHEET_EDIT_BASE}#gid=${gid}&range=A${rowNumber}`;
+}
+
+function getMovieRecommendationLevel(row) {
+  const recommendationHeader = Object.keys(row).find(header => {
+    const normalizedHeader = header.toLowerCase();
+    return normalizedHeader.includes('wow')
+      && normalizedHeader.includes('factor');
+  });
+
+  if (!recommendationHeader) return null;
+
+  const level = Number.parseInt(row[recommendationHeader], 10);
+  return [1, 2, 3].includes(level) ? level : null;
+}
+
+/* ---------------------------
+   Categories
+---------------------------- */
+const CATEGORY = {
+  movies: {
+    label: 'Movies',
+    gids: [MOVIES_GID],
+    dom: {
+      container: 'moviesContainer',
+      minScore: 'minScoreFilter',
+      maxScore: 'maxScoreFilter',
+      year: 'yearFilter',
+      search: 'searchFilter',
+      back: 'backToHomeMovies',
+    },
+    sortDefault: 'latest',
+    searchKeys: ['title', 'person'],
+    hasImages: true,
+    isListView: false,
+    placeholderClasses: '',
+    makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
+    renderDetails: item => item.person ? [item.person] : [],
+    mapRow: row => ({
+      title: row['Title']?.trim() || '',
+      score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
+      year: (row['Year'] || '').toString().trim(),
+      person: row['Director']?.trim() || '',
+      scoreDate: row['Score Date']?.trim() || '',
+      posterUrl: row['PosterURL']?.trim() || '',
+      recommendationLevel: getMovieRecommendationLevel(row),
+    }),
+  },
+
+  games: {
+    label: 'Games',
+    gids: [SIMPLE_GAMES_GID, COMPLEX_GAMES_GID],
+    dom: {
+      container: 'gamesContainer',
+      minScore: 'gamesMinScoreFilter',
+      maxScore: 'gamesMaxScoreFilter',
+      year: 'gamesYearFilter',
+      search: 'gamesSearchFilter',
+      back: 'backToHomeGames',
+    },
+    sortDefault: 'latest',
+    searchKeys: ['title', 'person'],
+    hasImages: true,
+    isListView: false,
+    placeholderClasses: '',
+    makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
+    renderDetails: item => item.person ? [item.person] : [],
+    mapRow: row => ({
+      title: row['Title']?.trim() || '',
+      score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
+      year: (row['Year'] || '').toString().trim(),
+      person: row['Developers']?.trim() || '',
+      scoreDate: row['Score Date']?.trim() || '',
+      posterUrl: row['PosterURL']?.trim() || '',
+    }),
+  },
+
+  mice: {
+    label: 'Mice',
+    gids: [MICE_GID],
+    dom: {
+      container: 'miceContainer',
+      minScore: 'miceMinScoreFilter',
+      maxScore: 'miceMaxScoreFilter',
+      year: 'miceYearFilter',
+      search: 'miceSearchFilter',
+      back: 'backToHomeMice',
+    },
+    sortDefault: 'latest',
+    searchKeys: ['brand', 'name', 'title'],
+    hasImages: true,
+    isListView: false,
+    cardClasses: 'mouse-card',
+    placeholderClasses: 'product product-mice',
+    makeTitle: item => item.title,
+    renderDetails: item => item.year ? [String(item.year)] : [],
+    mapRow: row => {
+      const brand = row['Brand']?.trim() || '';
+      const name = row['Model']?.trim() || '';
+      const title = `${brand} ${name}`.trim();
+
+      return {
+        title,
+        brand,
+        name,
+        score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
+        year: (row['Release'] || '').toString().trim(),
+        scoreDate: row['Score Date']?.trim() || '',
+        posterUrl: buildMouseAssetUrl(brand, name),
+      };
+    },
+  },
+
+  mousepads: {
+    label: 'Mousepads',
+    gids: [MOUSEPADS_GID],
+    dom: {
+      container: 'mousepadsContainer',
+      minScore: 'mousepadsMinScoreFilter',
+      maxScore: 'mousepadsMaxScoreFilter',
+      year: 'mousepadsYearFilter',
+      search: 'mousepadsSearchFilter',
+      back: 'backToHomeMousepads',
+    },
+    sortDefault: 'latest',
+    searchKeys: ['brand', 'name', 'title'],
+    hasImages: false,
+    isListView: true,
+    placeholderClasses: 'compact product product-mousepads',
+    makeTitle: item => item.title,
+    renderDetails: item => item.year ? [String(item.year)] : [],
+    mapRow: row => {
+      const brand = row['Brand']?.trim() || '';
+      const name = row['Product']?.trim() || '';
+      const title = `${brand} ${name}`.trim();
+
+      return {
+        title,
+        brand,
+        name,
+        score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
+        year: (row['Release'] || '').toString().trim(),
+        scoreDate: row['Score Date']?.trim() || '',
+        posterUrl: '',
+      };
+    },
+  },
+};
+
+/* ---------------------------
+   State
+---------------------------- */
+const state = {
+  movies: { data: null, sort: CATEGORY.movies.sortDefault },
+  games: { data: null, sort: CATEGORY.games.sortDefault },
+  mice: { data: null, sort: CATEGORY.mice.sortDefault },
+  mousepads: { data: null, sort: CATEGORY.mousepads.sortDefault },
+};
+
+/* ---------------------------
+   Sections
+---------------------------- */
+const sections = ['home', 'movies', 'games', 'mice', 'mousepads'];
+const sectionElements = {};
+
+/* ---------------------------
+   Helpers
+---------------------------- */
+function clamp(n, min, max) {
+  return Math.max(min, Math.min(max, n));
+}
+
+function formatScore(score) {
+  if (!Number.isFinite(score)) return '0';
+  return score.toFixed(1);
+}
+
+function buildScoreBadge(score) {
+  const badge = document.createElement('div');
+  badge.className = 'score-badge ' + scoreTierClass(score);
+
+  const value = document.createElement('span');
+  value.className = 'score-value';
+  value.textContent = formatScore(score);
+  badge.appendChild(value);
+
+  return badge;
+}
+
+function scoreTierClass(score) {
+  if (!Number.isFinite(score)) return 'tier-gray';
+  if (score >= 9.5) return 'tier-peak';
+  if (score >= 9.0) return 'tier-high';
+  if (score >= 8.0) return 'tier-yellow';
+  if (score >= 5.0) return 'tier-muted';
+  return 'tier-gray';
+}
+
+function normalize(s) {
+  return (s || '').toString().toLowerCase();
+}
+
+function buildMouseAssetUrl(brand, model) {
+  const name = `${brand.trim()} - ${model.trim()}`
+    .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\.+$/, '');
+
+  return `assets/mice/${encodeURIComponent(name)}.webp?v=${MOUSE_ASSET_VERSION}`;
+}
+
+function getEl(id) {
+  return document.getElementById(id);
+}
+
+function getScoreBounds(minEl, maxEl) {
+  const minVal = parseFloat(minEl?.value);
+  const maxVal = parseFloat(maxEl?.value);
+
+  let minScore = Number.isFinite(minVal) ? minVal : -Infinity;
+  let maxScore = Number.isFinite(maxVal) ? maxVal : Infinity;
+
+  if (minScore > maxScore) {
+    const tmp = minScore;
+    minScore = maxScore;
+    maxScore = tmp;
+  }
+
+  return { minScore, maxScore };
+}
+
+function matchesSearch(item, term, keys) {
+  if (!term) return true;
+  return (keys || []).some(k => normalize(item[k]).includes(term));
+}
+
+/* ---------------------------
+   Navigation
+---------------------------- */
+function showSection(id) {
+  sections.forEach(sec => {
+    const el = sectionElements[sec];
+    if (el) el.classList.toggle('hidden', sec !== id);
+  });
+
+  if (id !== 'home') {
+    window.location.hash = `#${id}`;
+  } else {
+    history.replaceState(null, '', window.location.pathname);
+  }
+
+  if (CATEGORY[id] && state[id].data === null) {
+    fetchCategory(id);
+  }
+}
+
+function handleHashChange() {
+  const hash = window.location.hash.replace('#', '');
+  if (sections.includes(hash) && hash !== '') {
+    showSection(hash);
+  } else {
+    showSection('home');
+  }
+}
+
+/* ---------------------------
+   Data loading
+---------------------------- */
+function parseCsvWithMap(text, mapRow, gid) {
+  const parsed = Papa.parse(text.trim(), { header: true, skipEmptyLines: true }).data;
+
+  return parsed.map((row, index) => {
+    const item = mapRow(row) || {};
+    item._row = index + 2; // header row is 1
+    item._gid = gid;
+    return item;
+  }).filter(x => x.title);
+}
+
+async function fetchCategory(key) {
+  const cfg = CATEGORY[key];
+  const st = state[key];
+  const container = getEl(cfg.dom.container);
+
+  if (container) {
+    container.innerHTML = `<div class="loading-text">Loading entries...</div>`;
+  }
+
+  // Yield once so the loading state is visible before network work begins.
+  await new Promise(resolve => requestAnimationFrame(() => resolve()));
+
+  try {
+    const texts = await Promise.all(
+      cfg.gids.map(gid => fetch(buildPublishedCsvUrl(gid)).then(r => r.text()))
+    );
+
+    const merged = texts.flatMap((t, i) => {
+      const gid = cfg.gids[i];
+      return parseCsvWithMap(t, cfg.mapRow, gid);
+    });
+
+    st.data = merged;
+
+    populateYearFilter(key);
+    renderCategory(key);
+  } catch (err) {
+    console.error(`${cfg.label} CSV error:`, err);
+    st.data = [];
+
+    if (container) {
+      container.innerHTML = `
+        <div class="card">
+          <div class="card-content">
+            <div class="card-title">Could not load ${cfg.label}</div>
+            <div class="card-details">Check publishing and gid values.</div>
+          </div>
+        </div>
+      `;
+    }
+  }
+}
+
+function populateYearFilter(key) {
+  const cfg = CATEGORY[key];
+  const st = state[key];
+  const yearEl = getEl(cfg.dom.year);
+
+  if (!yearEl) return;
+
+  yearEl.innerHTML = '<option value="">All</option>';
+
+  const years = Array.from(new Set((st.data || []).map(x => x.year).filter(Boolean)));
+  years.sort((a, b) => b.localeCompare(a));
+
+  years.forEach(y => {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    yearEl.appendChild(opt);
+  });
+}
+
+/* ---------------------------
+   Sorting
+---------------------------- */
+function applySort(list, sortKey) {
+  if (sortKey === 'latest') {
+    list.sort((a, b) => {
+      const ya = parseInt(a.year, 10) || 0;
+      const yb = parseInt(b.year, 10) || 0;
+      const dy = yb - ya;
+      if (dy !== 0) return dy;
+
+      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
+      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
+      const dd = db - da;
+      if (dd !== 0) return dd;
+
+      const ds = (b.score || 0) - (a.score || 0);
+      if (ds !== 0) return ds;
+
+      return (a.title || '').localeCompare(b.title || '');
+    });
+  }
+
+  if (sortKey === 'score') {
+    list.sort((a, b) => {
+      const ds = (b.score || 0) - (a.score || 0);
+      if (ds !== 0) return ds;
+
+      const ya = parseInt(a.year, 10) || 0;
+      const yb = parseInt(b.year, 10) || 0;
+      const dy = yb - ya;
+      if (dy !== 0) return dy;
+
+      return (a.title || '').localeCompare(b.title || '');
+    });
+  }
+
+  if (sortKey === 'date') {
+    list.sort((a, b) => {
+      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
+      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
+      return db - da;
+    });
+  }
+}
+
+/* ---------------------------
+   Media cards
+---------------------------- */
+function buildMedia(cfg, item) {
+  const wrap = document.createElement('div');
+  wrap.className = 'media-wrap';
+
+  if (cfg.hasImages && item.posterUrl) {
+    const img = document.createElement('img');
+    img.src = item.posterUrl;
+    img.alt = item.title || '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.onerror = () => {
+      img.src = '';
+      img.style.backgroundColor = '#3a3a3a';
+    };
+    wrap.appendChild(img);
+  } else {
+    const placeholder = document.createElement('div');
+    placeholder.className = cfg.placeholderClasses
+      ? `media-placeholder ${cfg.placeholderClasses}`
+      : 'media-placeholder';
+
+    wrap.appendChild(placeholder);
+  }
+
+  const badgeRow = document.createElement('div');
+  badgeRow.className = 'media-badge-row';
+  badgeRow.appendChild(buildScoreBadge(item.score || 0));
+
+  if ([2, 3].includes(item.recommendationLevel)) {
+    badgeRow.classList.add('media-badge-row-pick');
+    const isTopPick = item.recommendationLevel === 3;
+    const pickBadge = document.createElement('span');
+    pickBadge.className = `pick-badge ${isTopPick ? 'pick-badge-top' : 'pick-badge-strong'}`;
+    pickBadge.textContent = isTopPick ? 'TOP PICK' : 'STRONG PICK';
+    badgeRow.appendChild(pickBadge);
+  }
+
+  wrap.appendChild(badgeRow);
+  return wrap;
+}
+
+/* ---------------------------
+   List items
+---------------------------- */
+function buildListItem(cfg, item) {
+  const listItem = document.createElement('div');
+  listItem.className = 'list-item';
+
+  const infoSection = document.createElement('div');
+  infoSection.className = 'list-item-info';
+
+  const title = document.createElement('div');
+  title.className = 'list-item-title';
+  title.textContent = cfg.makeTitle ? cfg.makeTitle(item) : item.title;
+  infoSection.appendChild(title);
+
+  const details = cfg.renderDetails ? cfg.renderDetails(item) : [];
+  details.filter(Boolean).forEach(line => {
+    const d = document.createElement('div');
+    d.className = 'list-item-details';
+    d.textContent = line;
+    infoSection.appendChild(d);
+  });
+
+  listItem.appendChild(infoSection);
+
+  const metaSection = document.createElement('div');
+  metaSection.className = 'list-item-meta';
+
+  const scoreBadge = buildScoreBadge(item.score || 0);
+  scoreBadge.classList.add('list-score-badge');
+  metaSection.appendChild(scoreBadge);
+
+  const dateLink = document.createElement('a');
+  dateLink.className = 'rated-pill';
+  dateLink.textContent = item.scoreDate ? `Rated: ${item.scoreDate}` : 'Rated: —';
+  dateLink.href = buildRowLink(item._gid, item._row);
+  dateLink.target = '_blank';
+  dateLink.rel = 'noopener noreferrer';
+  metaSection.appendChild(dateLink);
+
+  listItem.appendChild(metaSection);
+
+  return listItem;
+}
+
+/* ---------------------------
+   Main Render Function
+---------------------------- */
+function renderCategory(key) {
+  const cfg = CATEGORY[key];
+  const st = state[key];
+
+  if (!st.data) return;
+
+  const container = getEl(cfg.dom.container);
+  const minEl = getEl(cfg.dom.minScore);
+  const maxEl = getEl(cfg.dom.maxScore);
+  const yearEl = getEl(cfg.dom.year);
+  const searchEl = getEl(cfg.dom.search);
+
+  const selectedYear = yearEl?.value || '';
+  const { minScore, maxScore } = getScoreBounds(minEl, maxEl);
+  const searchTerm = normalize(searchEl?.value).trim();
+
+  let filtered = (st.data || []).filter(item => {
+    // Only show items that have a score
+    if (item.score === null || item.score === undefined) return false;
+
+    const yearMatch = selectedYear ? item.year === selectedYear : true;
+    const scoreMatch = (item.score ?? 0) >= minScore && (item.score ?? 0) <= maxScore;
+    const searchMatch = matchesSearch(item, searchTerm, cfg.searchKeys);
+    return yearMatch && scoreMatch && searchMatch;
+  });
+
+  applySort(filtered, st.sort);
+
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="loading-text">No entries match your filters.</div>`;
+    return;
+  }
+
+  if (cfg.isListView) {
+    filtered.forEach(item => {
+      container.appendChild(buildListItem(cfg, item));
+    });
+  } else {
+    filtered.forEach(item => {
+      const card = document.createElement('div');
+      card.className = cfg.cardClasses ? `card ${cfg.cardClasses}` : 'card';
+
+      card.appendChild(buildMedia(cfg, item));
+
+      const content = document.createElement('div');
+      content.className = 'card-content';
+
+      const titleEl = document.createElement('div');
+      titleEl.className = 'card-title';
+      titleEl.textContent = cfg.makeTitle ? cfg.makeTitle(item) : item.title;
+      content.appendChild(titleEl);
+
+      const details = cfg.renderDetails ? cfg.renderDetails(item) : [];
+      details.filter(Boolean).forEach(line => {
+        const d = document.createElement('div');
+        d.className = 'card-details';
+        d.textContent = line;
+        content.appendChild(d);
+      });
+
+      const dateLink = document.createElement('a');
+      dateLink.className = 'rated-pill';
+      dateLink.textContent = item.scoreDate ? `Rated: ${item.scoreDate}` : 'Rated: —';
+      dateLink.href = buildRowLink(item._gid, item._row);
+      dateLink.target = '_blank';
+      dateLink.rel = 'noopener noreferrer';
+      content.appendChild(dateLink);
+
+      card.appendChild(content);
+      container.appendChild(card);
+    });
+  }
+}
+
+/* ---------------------------
+   Events
+---------------------------- */
+function wireCategoryFilters(key) {
+  const cfg = CATEGORY[key];
+
+  const minEl = getEl(cfg.dom.minScore);
+  const maxEl = getEl(cfg.dom.maxScore);
+  const yearEl = getEl(cfg.dom.year);
+  const searchEl = getEl(cfg.dom.search);
+  const backEl = getEl(cfg.dom.back);
+
+  minEl?.addEventListener('change', () => renderCategory(key));
+  maxEl?.addEventListener('change', () => renderCategory(key));
+  yearEl?.addEventListener('change', () => renderCategory(key));
+  searchEl?.addEventListener('input', () => renderCategory(key));
+
+  backEl?.addEventListener('click', () => showSection('home'));
+}
+
+/* ---------------------------
+   Init
+---------------------------- */
+function init() {
+  sections.forEach(id => {
+    sectionElements[id] = getEl(id);
+  });
+
+  const categoryButtons = document.querySelectorAll('.category-button');
+  categoryButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-section');
+      showSection(target);
+    });
+  });
+
+  const sortButtons = document.querySelectorAll('.sort-button');
+  sortButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const target = button.getAttribute('data-target');
+      const sortValue = button.getAttribute('data-sort');
+
+      if (!target || !state[target]) return;
+
+      document.querySelectorAll(`.sort-button[data-target="${target}"]`)
+        .forEach(b => b.classList.remove('active'));
+
+      button.classList.add('active');
+
+      state[target].sort = sortValue;
+      renderCategory(target);
+    });
+  });
+
+  Object.keys(CATEGORY).forEach(wireCategoryFilters);
+
+  handleHashChange();
+  window.addEventListener('hashchange', handleHashChange);
+}
+
+document.addEventListener('DOMContentLoaded', init);
