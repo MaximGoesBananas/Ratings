@@ -12,6 +12,7 @@ const COMPLEX_GAMES_GID = '1556084448';
 const MICE_GID = '1727287959';
 const MOUSEPADS_GID = '929203458';
 const MOUSE_ASSET_VERSION = '1.0.0';
+const MOUSEPAD_ASSET_VERSION = '1.0.0';
 
 // Editable sheet deep links
 const SHEET_ID = '1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4';
@@ -146,8 +147,9 @@ const CATEGORY = {
     },
     sortDefault: 'latest',
     searchKeys: ['brand', 'name', 'title'],
-    hasImages: false,
-    isListView: true,
+    hasImages: true,
+    isListView: false,
+    cardClasses: 'mousepad-card',
     placeholderClasses: 'compact product product-mousepads',
     makeTitle: item => item.title,
     renderDetails: item => item.year ? [String(item.year)] : [],
@@ -163,7 +165,7 @@ const CATEGORY = {
         score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
         year: (row['Release'] || '').toString().trim(),
         scoreDate: row['Score Date']?.trim() || '',
-        posterUrl: '',
+        posterUrl: buildMousepadAssetUrl(brand, name),
       };
     },
   },
@@ -230,6 +232,16 @@ function buildMouseAssetUrl(brand, model) {
     .replace(/\.+$/, '');
 
   return `assets/mice/${encodeURIComponent(name)}.webp?v=${MOUSE_ASSET_VERSION}`;
+}
+
+function buildMousepadAssetUrl(brand, model) {
+  const name = `${brand.trim()} - ${model.trim()}`
+    .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\.+$/, '');
+
+  return `assets/mousepads/${encodeURIComponent(name)}.png?v=${MOUSEPAD_ASSET_VERSION}`;
 }
 
 function getEl(id) {

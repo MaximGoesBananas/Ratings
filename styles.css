@@ -459,7 +459,8 @@ select option {
   background: #202433;
 }
 
-.mouse-card .media-wrap img {
+.mouse-card .media-wrap img,
+.mousepad-card .media-wrap img {
   aspect-ratio: 378 / 425;
 }
 
