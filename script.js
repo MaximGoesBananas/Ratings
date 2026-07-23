@@ -11,7 +11,7 @@ const SIMPLE_GAMES_GID = '1303529120';
 const COMPLEX_GAMES_GID = '1556084448';
 const MICE_GID = '1727287959';
 const MOUSEPADS_GID = '929203458';
-const MOUSE_ASSET_VERSION = '1.0.0';
+const MOUSE_ASSET_VERSION = '1.0.1';
 const MOUSEPAD_ASSET_VERSION = '1.0.0';
 
 // Editable sheet deep links
