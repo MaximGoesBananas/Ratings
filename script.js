@@ -14,6 +14,15 @@ const MOUSEPADS_GID = '929203458';
 const MOUSE_ASSET_VERSION = '1.0.1';
 const MOUSEPAD_ASSET_VERSION = '1.0.0';
 
+const GAME_POSTER_OVERRIDES = {
+  'grand theft auto|1997': 'https://images.igdb.com/igdb/image/upload/t_cover_big/co2lb0.jpg',
+};
+
+function getGamePosterUrl(title, year, posterUrl) {
+  const key = `${title.toLowerCase()}|${year}`;
+  return GAME_POSTER_OVERRIDES[key] || posterUrl;
+}
+
 // Editable sheet deep links
 const SHEET_ID = '1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4';
 const SHEET_EDIT_BASE = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
@@ -88,14 +97,20 @@ const CATEGORY = {
     placeholderClasses: '',
     makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
     renderDetails: item => item.person ? [item.person] : [],
-    mapRow: row => ({
-      title: row['Title']?.trim() || '',
-      score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
-      year: (row['Year'] || '').toString().trim(),
-      person: row['Developers']?.trim() || '',
-      scoreDate: row['Score Date']?.trim() || '',
-      posterUrl: row['PosterURL']?.trim() || '',
-    }),
+    mapRow: row => {
+      const title = row['Title']?.trim() || '';
+      const year = (row['Year'] || '').toString().trim();
+      const posterUrl = row['PosterURL']?.trim() || '';
+
+      return {
+        title,
+        score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
+        year,
+        person: row['Developers']?.trim() || '',
+        scoreDate: row['Score Date']?.trim() || '',
+        posterUrl: getGamePosterUrl(title, year, posterUrl),
+      };
+    },
   },
 
   mice: {
