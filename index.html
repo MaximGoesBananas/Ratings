@@ -13,10 +13,10 @@
   <!-- Font Awesome (no integrity to avoid blocking) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <link rel="stylesheet" href="styles.css?v=2.0.1">
+  <link rel="stylesheet" href="styles.css?v=2.1.0">
 </head>
 <body>
-  <header id="topbar" class="topbar hidden">
+  <header id="topbar" class="topbar">
     <div class="topbar-inner">
       <button class="brand" type="button" data-section="home">Maxim's Ratings</button>
       <nav class="tabs" aria-label="Categories">
@@ -31,35 +31,16 @@
 
   <main>
     <!-- Home section -->
-    <section id="home" class="section">
-      <h1>Maxim's Ratings</h1>
-      <div class="categories">
-        <button class="category-button" data-section="movies">
-          <i class="fa-solid fa-film" aria-hidden="true"></i>
-          <span>Movies</span>
-        </button>
-
-        <button class="category-button" data-section="shows">
-          <i class="fa-solid fa-tv" aria-hidden="true"></i>
-          <span>Shows</span>
-        </button>
-
-        <button class="category-button" data-section="games">
-          <i class="fa-brands fa-steam" aria-hidden="true"></i>
-          <span>Games</span>
-        </button>
-
-        <button class="category-button" data-section="mice">
-          <i class="fa-solid fa-computer-mouse" aria-hidden="true"></i>
-          <span>Mice</span>
-        </button>
-
-        <!-- Mousepads icon -->
-        <button class="category-button" data-section="mousepads">
-          <i class="fa-solid fa-tablet" aria-hidden="true"></i>
-          <span>Mousepads</span>
-        </button>
+    <section id="home" class="section home-page">
+      <div class="hero">
+        <div class="hero-backdrop" id="heroBackdrop" aria-hidden="true"></div>
+        <div class="hero-content">
+          <h1>Maxim's Ratings</h1>
+          <p class="hero-sub">Everything I've watched, played and used, scored out of 10.</p>
+          <div class="hero-stats" id="heroStats"></div>
+        </div>
       </div>
+      <div id="homeRows" class="home-rows"></div>
     </section>
 
     <section id="movies" class="section category-page hidden" aria-labelledby="moviesTitle"></section>
@@ -73,12 +54,12 @@
     <section id="mousepads" class="section category-page hidden" aria-labelledby="mousepadsTitle"></section>
   </main>
 
-  <footer id="siteFooter" class="site-footer hidden">
+  <footer id="siteFooter" class="site-footer">
     Ratings are pulled live from
     <a href="https://docs.google.com/spreadsheets/d/1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer">my Google Sheet</a>.
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-  <script src="script.js?v=2.0.1"></script>
+  <script src="script.js?v=2.1.0"></script>
 </body>
 </html>

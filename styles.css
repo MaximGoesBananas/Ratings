@@ -10,12 +10,6 @@
   --accent-ink: #1a1305;
   --accent-soft: rgba(255, 213, 74, 0.12);
 
-  /* Kept for the home page until it is redesigned. */
-  --panel: #141823;
-  --panel-2: #10131c;
-  --border: rgba(255, 255, 255, 0.06);
-  --shadow: 0 10px 30px rgba(0,0,0,0.35);
-
   --radius: 12px;
   --radius-sm: 8px;
   --page: min(1240px, 92vw);
@@ -61,186 +55,6 @@ main {
 .hidden {
   display: none !important;
 }
-
-/* --------------------------------
-   HOME — full-bleed hero
---------------------------------- */
-
-#home {
-  position: relative;
-
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-
-  height: 100vh;
-  height: 100svh;
-  height: 100dvh;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  text-align: center;
-
-  overflow: hidden;
-  overflow: clip;
-
-  padding: clamp(18px, 4vh, 44px) 0 clamp(28px, 6vh, 64px);
-}
-
-/* Single full-bleed ambient layer */
-#home::before{
-  content: "";
-  position: absolute;
-
-  /* Overdraw keeps the blurred glow outside the viewport edges. */
-  inset: -18vh -18vw;
-
-  background:
-    radial-gradient(900px 520px at 50% 8%, rgba(255,213,74,0.14), transparent 62%),
-    radial-gradient(1000px 620px at 50% 92%, rgba(255,213,74,0.12), transparent 65%),
-    radial-gradient(900px 520px at 10% 10%, rgba(120,160,255,0.10), transparent 60%),
-    radial-gradient(900px 520px at 90% 90%, rgba(120,160,255,0.08), transparent 60%),
-    radial-gradient(700px 400px at 20% 85%, rgba(255,213,74,0.06), transparent 60%),
-    radial-gradient(700px 400px at 80% 15%, rgba(255,213,74,0.06), transparent 60%);
-
-  pointer-events: none;
-  filter: blur(16px);
-  opacity: 1;
-}
-
-/* Soft depth/vignette */
-#home::after{
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(180deg, rgba(0,0,0,0.12), transparent 32%, transparent 68%, rgba(0,0,0,0.20)),
-    radial-gradient(1200px 700px at 50% 50%, transparent 60%, rgba(0,0,0,0.24));
-
-  pointer-events: none;
-}
-
-/* Ensure content sits above glow */
-#home h1,
-#home .categories {
-  position: relative;
-  z-index: 1;
-}
-
-#home h1 {
-  font-size: clamp(2.2rem, 4vw, 3.1rem);
-  font-weight: 900;
-  letter-spacing: -0.8px;
-  margin: 0 0 22px;
-}
-
-/* Home category grid */
-.categories {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 18px;
-
-  width: min(980px, 92vw);
-  margin: 0 auto;
-  padding: 0 6px;
-}
-
-/* Five buttons: an odd last one spans the row on phones, 3 + 2 on tablets, one row on wide screens. */
-.category-button:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
-}
-
-@media (min-width: 720px) {
-  .categories {
-    grid-template-columns: repeat(6, minmax(0,1fr));
-  }
-
-  .category-button {
-    grid-column: span 2;
-  }
-
-  .category-button:nth-child(n+4):nth-last-child(-n+2) {
-    grid-column: span 3;
-  }
-}
-
-@media (min-width: 1140px) {
-  .categories {
-    grid-template-columns: repeat(5, minmax(0,1fr));
-    width: min(1180px, 94vw);
-  }
-
-  .category-button,
-  .category-button:nth-child(n+4):nth-last-child(-n+2) {
-    grid-column: auto;
-  }
-}
-
-.category-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-
-  padding: 22px 20px;
-  border-radius: 18px;
-  min-height: 84px;
-
-  background: linear-gradient(180deg, var(--panel), var(--panel-2));
-  border: 1px solid var(--border);
-  color: var(--text);
-  cursor: pointer;
-
-  box-shadow: var(--shadow);
-  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease, box-shadow 120ms ease;
-}
-
-.category-button i {
-  font-size: 1.6rem;
-  opacity: 0.98;
-}
-
-.category-button span {
-  font-weight: 700;
-  font-size: 1.12rem;
-  letter-spacing: 0.1px;
-}
-
-/* Home cards */
-#home .category-button{
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
-    linear-gradient(180deg, var(--panel), var(--panel-2));
-  border-color: rgba(255,255,255,0.08);
-}
-
-#home .category-button:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 213, 74, 0.22);
-  box-shadow:
-    0 12px 34px rgba(0,0,0,0.45),
-    0 0 18px rgba(255,213,74,0.08);
-}
-
-@media (min-width: 720px) {
-  .category-button {
-    padding: 26px 22px;
-    min-height: 98px;
-  }
-
-  .category-button i {
-    font-size: 1.75rem;
-  }
-
-  .category-button span {
-    font-size: 1.18rem;
-  }
-}
-
 
 /* --------------------------------
    Top bar
@@ -625,13 +439,21 @@ main {
 }
 
 /* Product photos sit on a soft studio backdrop instead of filling the frame. */
-.product-grid .poster {
-  aspect-ratio: 378 / 425;
-  background: radial-gradient(90% 80% at 50% 40%, #232836, #12151d);
+.product-card .poster {
+  background: #0d0f14;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
 }
 
-.product-grid .poster img {
+.product-card:hover .poster {
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.55);
+}
+
+.product-card .poster img {
   object-fit: contain;
+}
+
+.product-grid .poster {
+  aspect-ratio: 378 / 425;
 }
 
 .poster-badges {
@@ -688,6 +510,7 @@ main {
 
 .pick-badge {
   height: 24px;
+  white-space: nowrap;
   padding: 0 8px;
   border-radius: 999px;
   display: inline-flex;
@@ -785,6 +608,197 @@ main {
 }
 
 /* --------------------------------
+   Home
+--------------------------------- */
+.home-page {
+  padding-bottom: 40px;
+}
+
+.hero {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: clamp(56px, 9vw, 110px) 0 clamp(40px, 6vw, 70px);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero-backdrop {
+  position: absolute;
+  inset: -20px 0 0;
+  z-index: -1;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+  transform: rotate(-4deg) scale(1.15);
+  opacity: 0.32;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.75) 45%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.75) 45%, transparent 100%);
+}
+
+.hero-backdrop img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+
+.hero-backdrop img.loaded {
+  opacity: 1;
+}
+
+/* Darkens the mosaic so the text stays readable. */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(70% 90% at 20% 40%, rgba(11, 13, 18, 0.92), rgba(11, 13, 18, 0.55) 70%),
+    linear-gradient(180deg, transparent 60%, var(--bg));
+}
+
+.hero-content {
+  width: var(--page);
+  margin: 0 auto;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+}
+
+.hero-sub {
+  margin: 16px 0 0;
+  max-width: 34ch;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 26px;
+  min-height: 38px;
+}
+
+.stat {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(18, 21, 29, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.stat strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.stat:hover {
+  color: var(--text);
+  border-color: rgba(255, 213, 74, 0.45);
+}
+
+.home-rows {
+  display: grid;
+  gap: 44px;
+}
+
+.home-row-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.home-row-title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.see-all {
+  background: none;
+  border: 0;
+  padding: 4px 0;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.see-all::after {
+  content: " →";
+}
+
+.see-all:hover {
+  color: var(--accent);
+}
+
+.home-row-skeleton {
+  width: 180px;
+  height: 22px;
+  margin: 0 0 16px;
+}
+
+/* One full row at every width; cards that don't fit are left out. */
+.row-track {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-rows: auto;
+  grid-auto-rows: 0;
+  column-gap: 20px;
+  row-gap: 0;
+  overflow: hidden;
+  /* Top room for the hover lift; no bottom room, so the hidden rows stay fully clipped. */
+  padding: 8px 0 0;
+  margin: -8px 0 0;
+}
+
+/* Phones swipe through the row instead. */
+@media (max-width: 720px) {
+  .row-track {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin: -8px -4vw 0;
+    padding: 8px 4vw 0;
+    scroll-padding: 0 4vw;
+  }
+
+  .row-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .row-track .card {
+    flex: 0 0 42vw;
+    scroll-snap-align: start;
+  }
+
+  .hero-backdrop {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* --------------------------------
    Footer
 --------------------------------- */
 .site-footer {
@@ -819,20 +833,10 @@ main {
   to { background-position: -100% 0; }
 }
 
-#home h1,.categories{opacity:0;transform:translateY(10px);animation:in 700ms ease forwards}
-.categories{animation-delay:140ms}
-@keyframes in{to{opacity:1;transform:none}}
-#home::before{animation:bgMove 10s ease-in-out infinite alternate}
-@keyframes bgMove{to{transform:translate3d(2vw,-2vh,0) scale(1.03)}}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;
-  }
-
-  #home h1, .categories {
-    opacity: 1;
-    transform: none;
   }
 }

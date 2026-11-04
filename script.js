@@ -204,7 +204,7 @@ function saveSort(key, value) {
 }
 
 const state = Object.fromEntries(Object.keys(CATEGORY).map(key => [
-  key, { data: null, loading: false, sort: loadSavedSort(key), minScore: null },
+  key, { data: null, request: null, sort: loadSavedSort(key), minScore: null },
 ]));
 
 const sections = ['home', ...Object.keys(CATEGORY)];
@@ -362,8 +362,6 @@ function showSection(id) {
   sections.forEach(sec => getEl(sec)?.classList.toggle('hidden', sec !== id));
 
   const onCategory = id !== 'home';
-  getEl('topbar').classList.toggle('hidden', !onCategory);
-  getEl('siteFooter').classList.toggle('hidden', !onCategory);
   document.querySelectorAll('.tab').forEach(tab => {
     const active = tab.dataset.section === id;
     tab.classList.toggle('active', active);
@@ -382,8 +380,10 @@ function showSection(id) {
     history.replaceState(null, '', window.location.pathname);
   }
 
-  if (CATEGORY[id] && state[id].data === null && !state[id].loading) {
-    fetchCategory(id);
+  if (CATEGORY[id]) {
+    showCategory(id);
+  } else {
+    renderHome();
   }
 }
 
@@ -416,33 +416,42 @@ function renderSkeletons(container, count) {
   }
 }
 
-async function fetchCategory(key) {
+function loadCategory(key) {
   const cfg = CATEGORY[key];
   const st = state[key];
-  const container = getEl(`${key}Container`);
-
-  st.loading = true;
-  renderSkeletons(container, 8);
-
-  try {
-    const texts = await Promise.all(
+  if (!st.request) {
+    st.request = Promise.all(
       cfg.gids.map(gid => fetch(buildPublishedCsvUrl(gid)).then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.text();
       }))
-    );
+    ).then(texts => {
+      st.data = texts.flatMap((t, i) => parseCsvWithMap(t, cfg.mapRow, cfg.gids[i]));
+      populateYearFilter(key);
+      return st.data;
+    }).catch(err => {
+      console.error(`${cfg.label} CSV error:`, err);
+      st.request = null;
+      throw err;
+    });
+  }
+  return st.request;
+}
 
-    st.data = texts.flatMap((t, i) => parseCsvWithMap(t, cfg.mapRow, cfg.gids[i]));
-
-    populateYearFilter(key);
+async function showCategory(key) {
+  const container = getEl(`${key}Container`);
+  if (state[key].data) {
     renderCategory(key);
-  } catch (err) {
-    console.error(`${cfg.label} CSV error:`, err);
-    st.data = null;
+    return;
+  }
+
+  renderSkeletons(container, 8);
+  try {
+    await loadCategory(key);
+    renderCategory(key);
+  } catch {
     container.innerHTML = '';
-    container.appendChild(el('p', 'empty-state', `Could not load ${cfg.label.toLowerCase()} right now. Reload the page to try again.`));
-  } finally {
-    st.loading = false;
+    container.appendChild(el('p', 'empty-state', `Could not load ${CATEGORY[key].label.toLowerCase()} right now. Reload the page to try again.`));
   }
 }
 
@@ -518,7 +527,7 @@ function buildPoster(item) {
 }
 
 function buildCard(cfg, item) {
-  const card = el('article', 'card');
+  const card = el('article', cfg.product ? 'card product-card' : 'card');
   card.appendChild(buildPoster(item));
 
   // Title, details and date each take exactly one line, so every row lines up.
@@ -575,6 +584,117 @@ function renderCategory(key) {
   const fragment = document.createDocumentFragment();
   filtered.forEach(item => fragment.appendChild(buildCard(cfg, item)));
   container.appendChild(fragment);
+}
+
+/* ---------------------------
+   Home
+---------------------------- */
+const HOME_ROW_LIMIT = 12;
+let homeRendered = false;
+
+function scoredItems(key) {
+  return (state[key].data || []).filter(item => Number.isFinite(item.score));
+}
+
+function newestFirst(items) {
+  return items.slice().sort((a, b) => byDate(a, b) || byTitle(a, b));
+}
+
+function buildHomeRow(title, items, options = {}) {
+  const row = el('section', 'home-row');
+  const head = el('div', 'home-row-head');
+  head.appendChild(el('h2', 'home-row-title', title));
+  if (options.section) {
+    const more = el('button', 'see-all', 'See all');
+    more.type = 'button';
+    more.dataset.section = options.section;
+    more.addEventListener('click', () => showSection(options.section));
+    head.appendChild(more);
+  }
+  row.appendChild(head);
+
+  const track = el('div', `row-track${options.product ? ' product-grid' : ''}`);
+  items.forEach(({ key, item }) => track.appendChild(buildCard(CATEGORY[key], item)));
+  row.appendChild(track);
+  return row;
+}
+
+function renderHomeSkeleton() {
+  const rows = getEl('homeRows');
+  rows.innerHTML = '';
+  for (let r = 0; r < 2; r++) {
+    const row = el('section', 'home-row');
+    row.appendChild(el('div', 'skeleton-line home-row-skeleton'));
+    const track = el('div', 'row-track');
+    renderSkeletons(track, 6);
+    row.appendChild(track);
+    rows.appendChild(row);
+  }
+}
+
+function renderHeroStats() {
+  const stats = getEl('heroStats');
+  stats.innerHTML = '';
+  Object.keys(CATEGORY).forEach(key => {
+    const count = scoredItems(key).length;
+    if (!count) return;
+    const [one, many] = CATEGORY[key].noun;
+    const chip = el('button', 'stat');
+    chip.type = 'button';
+    chip.append(el('strong', '', String(count)), document.createTextNode(` ${count === 1 ? one : many}`));
+    chip.addEventListener('click', () => showSection(key));
+    stats.appendChild(chip);
+  });
+}
+
+function renderHeroBackdrop() {
+  const backdrop = getEl('heroBackdrop');
+  const posters = newestFirst(['movies', 'shows', 'games'].flatMap(key => scoredItems(key)))
+    .map(item => item.posterUrl)
+    .filter(Boolean)
+    .slice(0, 16);
+  backdrop.innerHTML = '';
+  posters.forEach(url => {
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = '';
+    img.decoding = 'async';
+    img.addEventListener('load', () => img.classList.add('loaded'));
+    backdrop.appendChild(img);
+  });
+}
+
+async function renderHome() {
+  if (homeRendered) return;
+  renderHomeSkeleton();
+
+  const keys = Object.keys(CATEGORY);
+  await Promise.allSettled(keys.map(loadCategory));
+
+  const rows = getEl('homeRows');
+  rows.innerHTML = '';
+
+  // Posters only: product photos look out of place between film and game posters.
+  const recent = newestFirst(keys.filter(key => !CATEGORY[key].product)
+    .flatMap(key => scoredItems(key).map(item => ({ key, item, scoreDate: item.scoreDate, title: item.title }))))
+    .slice(0, HOME_ROW_LIMIT);
+  if (recent.length) rows.appendChild(buildHomeRow('Recently rated', recent));
+
+  keys.forEach(key => {
+    const items = newestFirst(scoredItems(key)).slice(0, HOME_ROW_LIMIT).map(item => ({ key, item }));
+    if (items.length) {
+      rows.appendChild(buildHomeRow(CATEGORY[key].label, items, { section: key, product: CATEGORY[key].product }));
+    }
+  });
+
+  if (!rows.children.length) {
+    rows.appendChild(el('p', 'empty-state', 'Could not load the ratings right now. Reload the page to try again.'));
+    return;
+  }
+  homeRendered = true;
+
+  renderHeroStats();
+  renderHeroBackdrop();
 }
 
 /* ---------------------------
