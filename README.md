@@ -1,11 +1,11 @@
 # Maxim's Ratings
 
-My personal ratings for movies, games, gaming mice, and mousepads.
+My personal ratings for movies, TV shows, games, gaming mice, and mousepads.
 
 **Live site:** [maximsratings.com](https://maximsratings.com)
 
-Ratings are maintained in Google Sheets and loaded when the site opens. Movie
-and game posters use the URLs stored in the sheet, while product images live in
+Ratings are maintained in Google Sheets and loaded when the site opens. Movie,
+show and game posters use the URLs stored in the sheet, while product images live in
 [`assets/mice`](assets/mice) and [`assets/mousepads`](assets/mousepads).
 
 The site is plain HTML, CSS, and JavaScript hosted with GitHub Pages. There is

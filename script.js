@@ -7,6 +7,7 @@ function buildPublishedCsvUrl(gid) {
 
 // Published sheet tabs
 const MOVIES_GID = '1920189918';
+const SHOWS_GID = '791640483';
 const SIMPLE_GAMES_GID = '1303529120';
 const COMPLEX_GAMES_GID = '1556084448';
 const MICE_GID = '1727287959';
@@ -76,6 +77,40 @@ const CATEGORY = {
       scoreDate: row['Score Date']?.trim() || '',
       posterUrl: row['PosterURL']?.trim() || '',
       recommendationLevel: getMovieRecommendationLevel(row),
+    }),
+  },
+
+  shows: {
+    label: 'Shows',
+    gids: [SHOWS_GID],
+    dom: {
+      container: 'showsContainer',
+      minScore: 'showsMinScoreFilter',
+      maxScore: 'showsMaxScoreFilter',
+      year: 'showsYearFilter',
+      search: 'showsSearchFilter',
+      back: 'backToHomeShows',
+    },
+    sortDefault: 'latest',
+    searchKeys: ['title'],
+    hasImages: true,
+    isListView: false,
+    placeholderClasses: '',
+    makeTitle: item => {
+      if (!item.year) return item.title;
+      const span = item.endYear && item.endYear !== item.year ? `${item.year}–${item.endYear}` : item.year;
+      return `${item.title} (${span})`;
+    },
+    renderDetails: item => item.seasons ? [`${item.seasons} season${item.seasons === 1 ? '' : 's'}`] : [],
+    // Final Score stays empty until a show is finished, so unfinished shows are hidden.
+    mapRow: row => ({
+      title: row['Title']?.trim() || '',
+      score: row['Final Score']?.trim() ? parseFloat(row['Final Score']) : null,
+      year: (row['Release Year'] || '').toString().trim(),
+      endYear: (row['Release End'] || '').toString().trim(),
+      seasons: Number.parseInt(row['Seasons'], 10) || 0,
+      scoreDate: row['Last Score Date']?.trim() || '',
+      posterUrl: row['PosterURL']?.trim() || '',
     }),
   },
 
@@ -191,6 +226,7 @@ const CATEGORY = {
 ---------------------------- */
 const state = {
   movies: { data: null, sort: CATEGORY.movies.sortDefault },
+  shows: { data: null, sort: CATEGORY.shows.sortDefault },
   games: { data: null, sort: CATEGORY.games.sortDefault },
   mice: { data: null, sort: CATEGORY.mice.sortDefault },
   mousepads: { data: null, sort: CATEGORY.mousepads.sortDefault },
@@ -199,7 +235,7 @@ const state = {
 /* ---------------------------
    Sections
 ---------------------------- */
-const sections = ['home', 'movies', 'games', 'mice', 'mousepads'];
+const sections = ['home', 'movies', 'shows', 'games', 'mice', 'mousepads'];
 const sectionElements = {};
 
 /* ---------------------------

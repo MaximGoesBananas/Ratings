@@ -13,7 +13,7 @@
   <!-- Font Awesome (no integrity to avoid blocking) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <link rel="stylesheet" href="styles.css?v=1.1.0">
+  <link rel="stylesheet" href="styles.css?v=1.2.0">
 </head>
 <body>
   <main>
@@ -24,6 +24,11 @@
         <button class="category-button" data-section="movies">
           <i class="fa-solid fa-film" aria-hidden="true"></i>
           <span>Movies</span>
+        </button>
+
+        <button class="category-button" data-section="shows">
+          <i class="fa-solid fa-tv" aria-hidden="true"></i>
+          <span>Shows</span>
         </button>
 
         <button class="category-button" data-section="games">
@@ -111,6 +116,75 @@
       </div>
 
       <div id="moviesContainer" class="cards-container"></div>
+    </section>
+
+    <!-- Shows section -->
+    <section id="shows" class="section hidden">
+      <div class="section-header">
+        <div class="section-title-row">
+          <button id="backToHomeShows" class="back-button" type="button">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+          </button>
+          <h2>Shows</h2>
+        </div>
+
+        <div class="controls">
+          <div class="filters">
+            <label>Score:</label>
+            <div class="score-range">
+              <select id="showsMinScoreFilter" aria-label="Minimum score">
+                <option value="">Min</option>
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+              <span class="score-range-sep">–</span>
+              <select id="showsMaxScoreFilter" aria-label="Maximum score">
+                <option value="">Max</option>
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+
+            <label for="showsYearFilter">Year:</label>
+            <select id="showsYearFilter">
+              <option value="">All</option>
+            </select>
+
+            <label for="showsSearchFilter">Search:</label>
+            <input
+              id="showsSearchFilter"
+              class="search-input"
+              type="search"
+              placeholder="Title..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+
+          <div class="sorting">
+            <span>Sort by:</span>
+            <button class="sort-button active" data-target="shows" data-sort="latest">Latest</button>
+            <button class="sort-button" data-target="shows" data-sort="score">Top Rated</button>
+            <button class="sort-button" data-target="shows" data-sort="date">Recently Rated</button>
+          </div>
+        </div>
+
+        <p class="disclaimer">
+          Ratings on this page are pulled live from the raw data in this
+          <a
+            href="https://docs.google.com/spreadsheets/d/1yl4E9f5lV_RVF9NItBrW_KwwM41x6YVDKRFONByFZE4/edit?gid=0#gid=0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Google Sheet</a>.
+        </p>
+      </div>
+
+      <div id="showsContainer" class="cards-container"></div>
     </section>
 
     <!-- Games section -->
@@ -322,6 +396,6 @@
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-  <script src="script.js?v=1.1.2"></script>
+  <script src="script.js?v=1.2.0"></script>
 </body>
 </html>

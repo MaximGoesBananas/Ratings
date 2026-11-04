@@ -139,9 +139,34 @@ main {
   padding: 0 6px;
 }
 
+/* Five buttons: an odd last one spans the row on phones, 3 + 2 on tablets, one row on wide screens. */
+.category-button:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
 @media (min-width: 720px) {
   .categories {
-    grid-template-columns: repeat(4, minmax(0,1fr));
+    grid-template-columns: repeat(6, minmax(0,1fr));
+  }
+
+  .category-button {
+    grid-column: span 2;
+  }
+
+  .category-button:nth-child(n+4):nth-last-child(-n+2) {
+    grid-column: span 3;
+  }
+}
+
+@media (min-width: 1140px) {
+  .categories {
+    grid-template-columns: repeat(5, minmax(0,1fr));
+    width: min(1180px, 94vw);
+  }
+
+  .category-button,
+  .category-button:nth-child(n+4):nth-last-child(-n+2) {
+    grid-column: auto;
   }
 }
 
