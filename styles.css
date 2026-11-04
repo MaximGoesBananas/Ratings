@@ -155,6 +155,183 @@ main {
 }
 
 /* --------------------------------
+   Search across every category
+--------------------------------- */
+.global-search {
+  position: relative;
+  margin-left: auto;
+  width: min(300px, 30vw);
+}
+
+.global-search > i {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--faint);
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+
+.global-search input {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px 0 34px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  outline: none;
+  font-size: 0.88rem;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.global-search input::placeholder {
+  color: var(--faint);
+}
+
+.global-search input:focus {
+  border-color: rgba(255, 213, 74, 0.45);
+  background: var(--surface-2);
+}
+
+.global-results {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(420px, 92vw);
+  max-height: min(70vh, 560px);
+  overflow-y: auto;
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  z-index: 30;
+}
+
+.global-result {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.global-result[aria-selected="true"] {
+  background: var(--surface-2);
+}
+
+.global-thumb {
+  width: 40px;
+  aspect-ratio: 2 / 3;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.global-thumb.product {
+  aspect-ratio: 378 / 425;
+}
+
+.global-thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.global-text {
+  display: grid;
+  min-width: 0;
+}
+
+.global-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.global-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.global-meta::first-letter {
+  text-transform: uppercase;
+}
+
+.global-result .score-badge {
+  min-width: 42px;
+  height: 26px;
+  font-size: 0.85rem;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.global-empty {
+  margin: 0;
+  padding: 14px 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.global-search-open {
+  display: none;
+}
+
+/* Phones: a search button beside the site name opens the field in its place. */
+@media (max-width: 720px) {
+  .topbar-inner {
+    position: relative;
+  }
+
+  .global-search-open {
+    display: grid;
+    place-items: center;
+    position: absolute;
+    top: 6px;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    cursor: pointer;
+  }
+
+  .global-search {
+    display: none;
+    position: absolute;
+    top: 6px;
+    left: 0;
+    right: 0;
+    width: auto;
+    margin: 0;
+    z-index: 2;
+  }
+
+  .search-open .global-search {
+    display: block;
+  }
+
+  .search-open .global-search-open {
+    display: none;
+  }
+
+  .global-results {
+    left: 0;
+    width: auto;
+  }
+}
+
+/* --------------------------------
    Category pages and toolbar
 --------------------------------- */
 .category-page {

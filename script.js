@@ -287,7 +287,7 @@ function formatHours(hours) {
 }
 
 function normalize(s) {
-  return (s || '').toString().toLowerCase();
+  return (s || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 }
 
 function buildAssetName(brand, model) {
@@ -841,6 +841,160 @@ function wireDetails() {
 }
 
 /* ---------------------------
+   Search across every category
+---------------------------- */
+const GLOBAL_RESULT_LIMIT = 8;
+let globalMatches = [];
+let globalActive = -1;
+
+function globalSearchMatches(term) {
+  const matches = [];
+  Object.keys(CATEGORY).forEach(key => {
+    const cfg = CATEGORY[key];
+    (state[key].data || []).forEach(item => {
+      if (!Number.isFinite(item.score)) return;
+      const title = normalize(item.title);
+      let rank;
+      if (title.startsWith(term)) rank = 0;
+      else if (title.split(/\s+/).some(word => word.startsWith(term))) rank = 1;
+      else if (cfg.searchKeys.some(k => normalize(item[k]).includes(term))) rank = 2;
+      else return;
+      matches.push({ key, item, rank });
+    });
+  });
+  matches.sort((a, b) => a.rank - b.rank || byDate(a.item, b.item) || byTitle(a.item, b.item));
+  return matches.slice(0, GLOBAL_RESULT_LIMIT);
+}
+
+function closeGlobalResults() {
+  const results = getEl('globalResults');
+  results.hidden = true;
+  results.innerHTML = '';
+  globalMatches = [];
+  globalActive = -1;
+  getEl('globalSearch').setAttribute('aria-expanded', 'false');
+}
+
+function highlightGlobal(index) {
+  const options = [...getEl('globalResults').querySelectorAll('.global-result')];
+  globalActive = index;
+  options.forEach((option, i) => option.setAttribute('aria-selected', String(i === index)));
+  options[index]?.scrollIntoView({ block: 'nearest' });
+  getEl('globalSearch').setAttribute('aria-activedescendant', options[index]?.id || '');
+}
+
+function chooseGlobal(index) {
+  const match = globalMatches[index];
+  if (!match) return;
+  const input = getEl('globalSearch');
+  input.value = '';
+  input.blur();
+  closeGlobalResults();
+  document.querySelector('.topbar').classList.remove('search-open');
+  openDetails(CATEGORY[match.key], match.item);
+}
+
+function runGlobalSearch() {
+  const input = getEl('globalSearch');
+  const term = normalize(input.value).trim();
+  const results = getEl('globalResults');
+  if (!term) {
+    closeGlobalResults();
+    return;
+  }
+
+  globalMatches = globalSearchMatches(term);
+  results.innerHTML = '';
+  if (!globalMatches.length) {
+    const loading = Object.keys(CATEGORY).some(key => !state[key].data);
+    results.appendChild(el('p', 'global-empty', loading ? 'Loading ratings…' : `Nothing rated matches "${input.value.trim()}".`));
+  }
+  globalMatches.forEach(({ key, item }, i) => {
+    const cfg = CATEGORY[key];
+    const option = el('div', 'global-result');
+    option.id = `globalResult${i}`;
+    option.setAttribute('role', 'option');
+
+    const thumb = el('div', `global-thumb${cfg.product ? ' product' : ''}`);
+    if (item.posterUrl) {
+      const img = document.createElement('img');
+      img.src = cfg.product ? item.posterUrl : cardPosterUrl(item.posterUrl);
+      img.alt = '';
+      img.loading = 'lazy';
+      thumb.appendChild(img);
+    }
+    option.appendChild(thumb);
+
+    const text = el('div', 'global-text');
+    text.appendChild(el('span', 'global-title', cfg.makeTitle ? cfg.makeTitle(item) : item.title));
+    const meta = (cfg.makeMeta && cfg.makeMeta(item)) || '';
+    text.appendChild(el('span', 'global-meta', [cfg.noun[0], meta].filter(Boolean).join(' · ')));
+    option.appendChild(text);
+    option.appendChild(buildScoreBadge(item.score));
+
+    option.addEventListener('mousedown', event => event.preventDefault());
+    option.addEventListener('click', () => chooseGlobal(i));
+    option.addEventListener('mousemove', () => highlightGlobal(i));
+    results.appendChild(option);
+  });
+
+  results.hidden = false;
+  input.setAttribute('aria-expanded', 'true');
+  highlightGlobal(globalMatches.length ? 0 : -1);
+}
+
+function wireGlobalSearch() {
+  const input = getEl('globalSearch');
+  const topbar = document.querySelector('.topbar');
+
+  // Every category is needed, so start loading the moment someone reaches for search.
+  const loadAll = () => Object.keys(CATEGORY).forEach(key => loadCategory(key).then(() => {
+    if (input.value.trim()) runGlobalSearch();
+  }).catch(() => {}));
+
+  input.addEventListener('focus', () => {
+    loadAll();
+    if (input.value.trim()) runGlobalSearch();
+  });
+  input.addEventListener('input', runGlobalSearch);
+  input.addEventListener('keydown', event => {
+    if (event.key === 'ArrowDown' && globalMatches.length) {
+      event.preventDefault();
+      highlightGlobal((globalActive + 1) % globalMatches.length);
+    } else if (event.key === 'ArrowUp' && globalMatches.length) {
+      event.preventDefault();
+      highlightGlobal((globalActive - 1 + globalMatches.length) % globalMatches.length);
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      chooseGlobal(globalActive);
+    } else if (event.key === 'Escape') {
+      input.value = '';
+      closeGlobalResults();
+      topbar.classList.remove('search-open');
+      input.blur();
+    }
+  });
+  input.addEventListener('blur', () => {
+    closeGlobalResults();
+    if (!input.value.trim()) topbar.classList.remove('search-open');
+  });
+
+  // Phones show a search button that opens the field over the site name.
+  getEl('globalSearchOpen').addEventListener('click', () => {
+    topbar.classList.add('search-open');
+    input.focus();
+  });
+
+  // "/" jumps to search, as on many sites, unless someone is typing elsewhere.
+  document.addEventListener('keydown', event => {
+    if (event.key !== '/' || event.ctrlKey || event.metaKey || event.altKey) return;
+    if (event.target.closest('input, textarea, select, dialog')) return;
+    event.preventDefault();
+    input.focus();
+  });
+}
+
+/* ---------------------------
    Home
 ---------------------------- */
 const HOME_ROW_LIMIT = 12;
@@ -973,6 +1127,7 @@ async function renderHome() {
 function init() {
   Object.keys(CATEGORY).forEach(buildCategoryPage);
   wireDetails();
+  wireGlobalSearch();
 
   document.querySelectorAll('[data-section]').forEach(btn => {
     btn.addEventListener('click', () => showSection(btn.dataset.section));
