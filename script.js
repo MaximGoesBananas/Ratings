@@ -462,25 +462,80 @@ function renderSkeletons(container, count) {
   }
 }
 
+// The sheet is public, so a stored copy holds no personal data.
+const CACHE_PREFIX = 'maximsratings-data-';
+
+function readCachedCsv(gid) {
+  try {
+    const cached = JSON.parse(localStorage.getItem(CACHE_PREFIX + gid));
+    return typeof cached?.text === 'string' ? cached.text : null;
+  } catch {
+    return null;
+  }
+}
+
+function fetchCsv(gid) {
+  return fetch(buildPublishedCsvUrl(gid)).then(r => {
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    return r.text();
+  }).then(text => {
+    try {
+      localStorage.setItem(CACHE_PREFIX + gid, JSON.stringify({ savedAt: Date.now(), text }));
+    } catch {
+      // Storage can be full or blocked; the site still works without it.
+    }
+    return text;
+  });
+}
+
+function applyCategoryTexts(key, texts) {
+  const cfg = CATEGORY[key];
+  state[key].data = texts.flatMap((t, i) => parseCsvWithMap(t, cfg.mapRow, cfg.gids[i]));
+  populateYearFilter(key);
+}
+
+function currentSection() {
+  return sections.find(id => !getEl(id)?.classList.contains('hidden')) || 'home';
+}
+
+// Redraws whatever is on screen after fresh data replaces a stored copy.
+function refreshVisible(key) {
+  const visible = currentSection();
+  if (visible === key) renderCategory(key);
+  if (visible === 'home') {
+    homeRendered = false;
+    renderHome();
+  }
+}
+
 function loadCategory(key) {
   const cfg = CATEGORY[key];
   const st = state[key];
-  if (!st.request) {
-    st.request = Promise.all(
-      cfg.gids.map(gid => fetch(buildPublishedCsvUrl(gid)).then(r => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.text();
-      }))
-    ).then(texts => {
-      st.data = texts.flatMap((t, i) => parseCsvWithMap(t, cfg.mapRow, cfg.gids[i]));
-      populateYearFilter(key);
-      return st.data;
-    }).catch(err => {
-      console.error(`${cfg.label} CSV error:`, err);
-      st.request = null;
-      throw err;
-    });
+  if (st.request) return st.request;
+
+  const fresh = Promise.all(cfg.gids.map(fetchCsv));
+  const cached = cfg.gids.map(readCachedCsv);
+
+  if (cached.every(text => text !== null)) {
+    applyCategoryTexts(key, cached);
+    st.request = Promise.resolve(st.data);
+    fresh.then(texts => {
+      if (texts.some((text, i) => text !== cached[i])) {
+        applyCategoryTexts(key, texts);
+        refreshVisible(key);
+      }
+    }).catch(err => console.error(`${cfg.label} refresh failed:`, err));
+    return st.request;
   }
+
+  st.request = fresh.then(texts => {
+    applyCategoryTexts(key, texts);
+    return st.data;
+  }).catch(err => {
+    console.error(`${cfg.label} CSV error:`, err);
+    st.request = null;
+    throw err;
+  });
   return st.request;
 }
 
@@ -504,12 +559,14 @@ async function showCategory(key) {
 function populateYearFilter(key) {
   const cfg = CATEGORY[key];
   const yearEl = getEl(`${key}Year`);
+  const chosen = yearEl.value;
   yearEl.innerHTML = '';
   yearEl.appendChild(new Option(cfg.yearLabel, ''));
 
   const years = Array.from(new Set((state[key].data || []).map(x => x.year).filter(Boolean)));
   years.sort((a, b) => b.localeCompare(a));
   years.forEach(y => yearEl.appendChild(new Option(y, y)));
+  if (years.includes(chosen)) yearEl.value = chosen;
 }
 
 /* ---------------------------
@@ -540,12 +597,17 @@ function applySort(list, sortKey) {
 /* ---------------------------
    Cards
 ---------------------------- */
-function buildPoster(item) {
+// TMDB serves several sizes; cards only need the smaller one.
+function cardPosterUrl(url) {
+  return url.replace('image.tmdb.org/t/p/w500/', 'image.tmdb.org/t/p/w342/');
+}
+
+function buildPoster(item, size = 'card') {
   const poster = el('div', 'poster');
 
   if (item.posterUrl) {
     const img = document.createElement('img');
-    img.src = item.posterUrl;
+    img.src = size === 'card' ? cardPosterUrl(item.posterUrl) : item.posterUrl;
     img.alt = '';
     img.loading = 'lazy';
     img.decoding = 'async';
@@ -699,7 +761,7 @@ function openDetails(cfg, item) {
   body.innerHTML = '';
   dialog.classList.toggle('is-product', Boolean(cfg.product));
 
-  const media = buildPoster(item);
+  const media = buildPoster(item, 'large');
   media.classList.add('details-poster');
   media.querySelector('.poster-badges')?.remove();
   body.appendChild(media);
@@ -808,8 +870,23 @@ function buildHomeRow(title, items, options = {}) {
   const track = el('div', `row-track${options.product ? ' product-grid' : ''}`);
   items.forEach(({ key, item }) => track.appendChild(buildCard(CATEGORY[key], item)));
   row.appendChild(track);
+  rowObserver?.observe(track);
   return row;
 }
+
+function hideOverflowCards(track) {
+  const cards = [...track.children];
+  const firstTop = cards[0]?.offsetTop;
+  cards.forEach(card => {
+    const hidden = card.offsetTop > firstTop;
+    card.inert = hidden;
+    card.toggleAttribute('aria-hidden', hidden);
+  });
+}
+
+const rowObserver = 'ResizeObserver' in window
+  ? new ResizeObserver(entries => entries.forEach(entry => hideOverflowCards(entry.target)))
+  : null;
 
 function renderHomeSkeleton() {
   const rows = getEl('homeRows');
@@ -858,12 +935,13 @@ function renderHeroBackdrop() {
 
 async function renderHome() {
   if (homeRendered) return;
-  renderHomeSkeleton();
-
   const keys = Object.keys(CATEGORY);
-  await Promise.allSettled(keys.map(loadCategory));
+  const loads = keys.map(loadCategory);
+  if (keys.some(key => !state[key].data)) renderHomeSkeleton();
+  await Promise.allSettled(loads);
 
   const rows = getEl('homeRows');
+  rowObserver?.disconnect();
   rows.innerHTML = '';
 
   // Posters only: product photos look out of place between film and game posters.
