@@ -48,6 +48,14 @@ function getMovieRecommendationLevel(row) {
   return [1, 2, 3].includes(level) ? level : null;
 }
 
+// Shows have no recommendation criterion, so their score sets the pick.
+// It reads the score as shown on the site, so 8.1 and 9.1 are the first to qualify.
+function getShowRecommendationLevel(score) {
+  const shown = Number(score?.toFixed(1));
+  if (shown > 9) return 3;
+  return shown > 8 ? 2 : 1;
+}
+
 
 /* ---------------------------
    Categories
@@ -95,15 +103,20 @@ const CATEGORY = {
     ],
     hasSeasons: true,
     // Final Score stays empty while a show is still airing, so it stays hidden.
-    mapRow: row => ({
-      title: row['Title']?.trim() || '',
-      score: row['Final Score']?.trim() ? parseFloat(row['Final Score']) : null,
-      year: (row['Release Year'] || '').toString().trim(),
-      endYear: (row['Release End'] || '').toString().trim(),
-      scoreDate: row['Last Score Date']?.trim() || '',
-      posterUrl: row['PosterURL']?.trim() || '',
-      minutes: Number.parseInt(row['Minutes'], 10) || 0,
-    }),
+    mapRow: row => {
+      const score = row['Final Score']?.trim() ? parseFloat(row['Final Score']) : null;
+
+      return {
+        title: row['Title']?.trim() || '',
+        score,
+        year: (row['Release Year'] || '').toString().trim(),
+        endYear: (row['Release End'] || '').toString().trim(),
+        scoreDate: row['Last Score Date']?.trim() || '',
+        posterUrl: row['PosterURL']?.trim() || '',
+        minutes: Number.parseInt(row['Minutes'], 10) || 0,
+        recommendationLevel: getShowRecommendationLevel(score),
+      };
+    },
   },
 
   games: {
@@ -260,8 +273,18 @@ function scoreTierClass(score) {
   return 'tier-low';
 }
 
-function buildScoreBadge(score) {
-  const badge = el('div', 'score-badge ' + scoreTierClass(score), formatScore(score));
+function isPick(level) {
+  return level === 2 || level === 3;
+}
+
+// A pick is always yellow, whatever its score.
+function scoreBadgeTierClass(score, level) {
+  const tier = scoreTierClass(score);
+  return isPick(level) && tier !== 'tier-peak' ? 'tier-high' : tier;
+}
+
+function buildScoreBadge(score, level) {
+  const badge = el('div', 'score-badge ' + scoreBadgeTierClass(score, level), formatScore(score));
   badge.setAttribute('aria-label', `Score ${formatScore(score)} out of 10`);
   return badge;
 }
@@ -643,8 +666,8 @@ function buildPoster(item, size = 'card') {
   }
 
   const badges = el('div', 'poster-badges');
-  badges.appendChild(buildScoreBadge(item.score || 0));
-  if ([2, 3].includes(item.recommendationLevel)) badges.appendChild(buildPickBadge(item.recommendationLevel));
+  badges.appendChild(buildScoreBadge(item.score || 0, item.recommendationLevel));
+  if (isPick(item.recommendationLevel)) badges.appendChild(buildPickBadge(item.recommendationLevel));
   poster.appendChild(badges);
   return poster;
 }
@@ -794,8 +817,8 @@ function openDetails(cfg, item) {
   info.appendChild(title);
 
   const scoreRow = el('div', 'details-score');
-  scoreRow.appendChild(buildScoreBadge(item.score));
-  if ([2, 3].includes(item.recommendationLevel)) scoreRow.appendChild(buildPickBadge(item.recommendationLevel));
+  scoreRow.appendChild(buildScoreBadge(item.score, item.recommendationLevel));
+  if (isPick(item.recommendationLevel)) scoreRow.appendChild(buildPickBadge(item.recommendationLevel));
   if (item.scoreDate) scoreRow.appendChild(el('span', 'details-date', `Rated ${formatRatedDate(item.scoreDate)}`));
   info.appendChild(scoreRow);
 
@@ -951,7 +974,7 @@ function runGlobalSearch() {
     const meta = (cfg.makeMeta && cfg.makeMeta(item)) || '';
     text.appendChild(el('span', 'global-meta', [cfg.noun[0], meta].filter(Boolean).join(' · ')));
     option.appendChild(text);
-    option.appendChild(buildScoreBadge(item.score));
+    option.appendChild(buildScoreBadge(item.score, item.recommendationLevel));
 
     option.addEventListener('mousedown', event => event.preventDefault());
     option.addEventListener('click', () => chooseGlobal(i));
