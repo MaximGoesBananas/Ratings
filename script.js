@@ -245,9 +245,10 @@ const sections = ['home', ...Object.keys(CATEGORY)];
 /* ---------------------------
    Helpers
 ---------------------------- */
+// A perfect score reads "10"; everything else keeps one decimal, like "9.0".
 function formatScore(score) {
   if (!Number.isFinite(score)) return '0';
-  return score.toFixed(1);
+  return score >= 10 ? '10' : score.toFixed(1);
 }
 
 function scoreTierClass(score) {
