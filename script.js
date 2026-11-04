@@ -62,7 +62,7 @@ const CATEGORY = {
       search: 'searchFilter',
       back: 'backToHomeMovies',
     },
-    sortDefault: 'latest',
+    sortDefault: 'date',
     searchKeys: ['title', 'person'],
     hasImages: true,
     isListView: false,
@@ -91,7 +91,7 @@ const CATEGORY = {
       search: 'showsSearchFilter',
       back: 'backToHomeShows',
     },
-    sortDefault: 'latest',
+    sortDefault: 'date',
     searchKeys: ['title'],
     hasImages: true,
     isListView: false,
@@ -123,7 +123,7 @@ const CATEGORY = {
       search: 'gamesSearchFilter',
       back: 'backToHomeGames',
     },
-    sortDefault: 'latest',
+    sortDefault: 'date',
     searchKeys: ['title', 'person'],
     hasImages: true,
     isListView: false,
@@ -157,7 +157,7 @@ const CATEGORY = {
       search: 'miceSearchFilter',
       back: 'backToHomeMice',
     },
-    sortDefault: 'latest',
+    sortDefault: 'date',
     searchKeys: ['brand', 'name', 'title'],
     hasImages: true,
     isListView: false,
@@ -193,7 +193,7 @@ const CATEGORY = {
       search: 'mousepadsSearchFilter',
       back: 'backToHomeMousepads',
     },
-    sortDefault: 'latest',
+    sortDefault: 'date',
     searchKeys: ['brand', 'name', 'title'],
     hasImages: true,
     isListView: false,
@@ -222,12 +222,39 @@ const CATEGORY = {
 /* ---------------------------
    State
 ---------------------------- */
+// The visitor's chosen sort per page, kept only in their own browser.
+const SORT_STORAGE_PREFIX = 'maximsratings-sort-';
+const SORT_VALUES = ['latest', 'score', 'date'];
+
+function loadSavedSort(key) {
+  try {
+    const saved = localStorage.getItem(SORT_STORAGE_PREFIX + key);
+    return SORT_VALUES.includes(saved) ? saved : CATEGORY[key].sortDefault;
+  } catch {
+    return CATEGORY[key].sortDefault;
+  }
+}
+
+function saveSort(key, value) {
+  try {
+    localStorage.setItem(SORT_STORAGE_PREFIX + key, value);
+  } catch {
+    // Storage can be blocked; the choice then lasts for this visit only.
+  }
+}
+
+function markActiveSort(key) {
+  document.querySelectorAll(`.sort-button[data-target="${key}"]`).forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-sort') === state[key].sort);
+  });
+}
+
 const state = {
-  movies: { data: null, sort: CATEGORY.movies.sortDefault },
-  shows: { data: null, sort: CATEGORY.shows.sortDefault },
-  games: { data: null, sort: CATEGORY.games.sortDefault },
-  mice: { data: null, sort: CATEGORY.mice.sortDefault },
-  mousepads: { data: null, sort: CATEGORY.mousepads.sortDefault },
+  movies: { data: null, sort: loadSavedSort('movies') },
+  shows: { data: null, sort: loadSavedSort('shows') },
+  games: { data: null, sort: loadSavedSort('games') },
+  mice: { data: null, sort: loadSavedSort('mice') },
+  mousepads: { data: null, sort: loadSavedSort('mousepads') },
 };
 
 /* ---------------------------
@@ -684,17 +711,15 @@ function init() {
 
       if (!target || !state[target]) return;
 
-      document.querySelectorAll(`.sort-button[data-target="${target}"]`)
-        .forEach(b => b.classList.remove('active'));
-
-      button.classList.add('active');
-
       state[target].sort = sortValue;
+      saveSort(target, sortValue);
+      markActiveSort(target);
       renderCategory(target);
     });
   });
 
   Object.keys(CATEGORY).forEach(wireCategoryFilters);
+  Object.keys(CATEGORY).forEach(markActiveSort);
 
   handleHashChange();
   window.addEventListener('hashchange', handleHashChange);
