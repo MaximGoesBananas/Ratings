@@ -318,6 +318,24 @@ function el(tag, className, text) {
   return node;
 }
 
+function setSearchValue(input, value) {
+  input.value = value;
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+function wireClearButton(input) {
+  const button = input.parentElement.querySelector('.search-clear');
+  const sync = () => { button.hidden = !input.value; };
+  input.addEventListener('input', sync);
+  // Keeps the field focused, so its results don't close before the click lands.
+  button.addEventListener('mousedown', event => event.preventDefault());
+  button.addEventListener('click', () => {
+    setSearchValue(input, '');
+    input.focus();
+  });
+  sync();
+}
+
 function matchesSearch(item, term, keys) {
   if (!term) return true;
   return (keys || []).some(k => normalize(item[k]).includes(term));
@@ -339,10 +357,11 @@ function buildCategoryPage(key) {
         </div>
       </div>
       <div class="toolbar-filters">
-        <label class="search-field">
+        <div class="search-field">
           <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
           <input id="${key}Search" type="search" placeholder="${cfg.searchPlaceholder}" autocomplete="off" spellcheck="false" aria-label="${cfg.searchPlaceholder}">
-        </label>
+          <button type="button" class="search-clear" aria-label="Clear search" hidden><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
         <button type="button" class="filter-toggle" id="${key}FilterToggle" aria-expanded="false" aria-controls="${key}Filters">
           <i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Filters</span>
         </button>
@@ -360,6 +379,7 @@ function buildCategoryPage(key) {
   `;
 
   getEl(`${key}Search`).addEventListener('input', () => renderCategory(key));
+  wireClearButton(getEl(`${key}Search`));
   getEl(`${key}Year`).addEventListener('change', () => renderCategory(key));
 
   const toggle = getEl(`${key}FilterToggle`);
@@ -888,7 +908,7 @@ function chooseGlobal(index) {
   const match = globalMatches[index];
   if (!match) return;
   const input = getEl('globalSearch');
-  input.value = '';
+  setSearchValue(input, '');
   input.blur();
   closeGlobalResults();
   document.querySelector('.topbar').classList.remove('search-open');
@@ -958,6 +978,7 @@ function wireGlobalSearch() {
     if (input.value.trim()) runGlobalSearch();
   });
   input.addEventListener('input', runGlobalSearch);
+  wireClearButton(input);
   input.addEventListener('keydown', event => {
     if (event.key === 'ArrowDown' && globalMatches.length) {
       event.preventDefault();
@@ -969,7 +990,7 @@ function wireGlobalSearch() {
       event.preventDefault();
       chooseGlobal(globalActive);
     } else if (event.key === 'Escape') {
-      input.value = '';
+      setSearchValue(input, '');
       closeGlobalResults();
       topbar.classList.remove('search-open');
       input.blur();
