@@ -58,7 +58,7 @@ const CATEGORY = {
     gids: [MOVIES_GID],
     sortDefault: 'date',
     searchKeys: ['title', 'person'],
-    searchPlaceholder: 'Search movies or directors',
+    searchPlaceholder: 'Search movies',
     yearLabel: 'All years',
     makeMeta: item => [item.year, item.person].filter(Boolean).join(' · '),
     mapRow: row => ({
@@ -98,7 +98,7 @@ const CATEGORY = {
     gids: [SIMPLE_GAMES_GID, COMPLEX_GAMES_GID],
     sortDefault: 'date',
     searchKeys: ['title', 'person'],
-    searchPlaceholder: 'Search games or developers',
+    searchPlaceholder: 'Search games',
     yearLabel: 'All years',
     makeMeta: item => [item.year, item.person].filter(Boolean).join(' · '),
     mapRow: row => {
@@ -123,10 +123,11 @@ const CATEGORY = {
     gids: [MICE_GID],
     sortDefault: 'date',
     searchKeys: ['brand', 'name', 'title'],
-    searchPlaceholder: 'Search models or brands',
+    searchPlaceholder: 'Search mice',
     yearLabel: 'All releases',
     product: true,
-    makeMeta: item => item.year,
+    makeTitle: item => item.name || item.title,
+    makeMeta: item => [item.brand, item.year].filter(Boolean).join(' · '),
     mapRow: row => {
       const brand = row['Brand']?.trim() || '';
       const name = row['Model']?.trim() || '';
@@ -149,10 +150,11 @@ const CATEGORY = {
     gids: [MOUSEPADS_GID],
     sortDefault: 'date',
     searchKeys: ['brand', 'name', 'title'],
-    searchPlaceholder: 'Search products or brands',
+    searchPlaceholder: 'Search mousepads',
     yearLabel: 'All releases',
     product: true,
-    makeMeta: item => item.year,
+    makeTitle: item => item.name || item.title,
+    makeMeta: item => [item.brand, item.year].filter(Boolean).join(' · '),
     mapRow: row => {
       const brand = row['Brand']?.trim() || '';
       const name = row['Product']?.trim() || '';
@@ -519,13 +521,16 @@ function buildCard(cfg, item) {
   const card = el('article', 'card');
   card.appendChild(buildPoster(item));
 
+  // Title, details and date each take exactly one line, so every row lines up.
   const body = el('div', 'card-body');
-  const title = el('h2', 'card-title', item.title);
+  const titleText = cfg.makeTitle ? cfg.makeTitle(item) : item.title;
+  const title = el('h2', 'card-title', titleText);
   title.title = item.title;
   body.appendChild(title);
 
-  const meta = cfg.makeMeta ? cfg.makeMeta(item) : '';
-  if (meta) body.appendChild(el('p', 'card-meta', meta));
+  const meta = el('p', 'card-meta', (cfg.makeMeta && cfg.makeMeta(item)) || ' ');
+  meta.title = meta.textContent.trim();
+  body.appendChild(meta);
 
   const date = el('a', 'card-date', item.scoreDate ? `Rated ${formatRatedDate(item.scoreDate)}` : 'Rated —');
   date.href = buildRowLink(item._gid, item._row);
