@@ -47,28 +47,20 @@ function getMovieRecommendationLevel(row) {
   return [1, 2, 3].includes(level) ? level : null;
 }
 
+
 /* ---------------------------
    Categories
 ---------------------------- */
 const CATEGORY = {
   movies: {
     label: 'Movies',
+    noun: ['movie', 'movies'],
     gids: [MOVIES_GID],
-    dom: {
-      container: 'moviesContainer',
-      minScore: 'minScoreFilter',
-      maxScore: 'maxScoreFilter',
-      year: 'yearFilter',
-      search: 'searchFilter',
-      back: 'backToHomeMovies',
-    },
     sortDefault: 'date',
     searchKeys: ['title', 'person'],
-    hasImages: true,
-    isListView: false,
-    placeholderClasses: '',
-    makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
-    renderDetails: item => item.person ? [item.person] : [],
+    searchPlaceholder: 'Search movies or directors',
+    yearLabel: 'All years',
+    makeMeta: item => [item.year, item.person].filter(Boolean).join(' · '),
     mapRow: row => ({
       title: row['Title']?.trim() || '',
       score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
@@ -82,25 +74,13 @@ const CATEGORY = {
 
   shows: {
     label: 'Shows',
+    noun: ['show', 'shows'],
     gids: [SHOWS_GID],
-    dom: {
-      container: 'showsContainer',
-      minScore: 'showsMinScoreFilter',
-      maxScore: 'showsMaxScoreFilter',
-      year: 'showsYearFilter',
-      search: 'showsSearchFilter',
-      back: 'backToHomeShows',
-    },
     sortDefault: 'date',
     searchKeys: ['title'],
-    hasImages: true,
-    isListView: false,
-    placeholderClasses: '',
-    makeTitle: item => {
-      if (!item.year) return item.title;
-      const span = item.endYear && item.endYear !== item.year ? `${item.year}–${item.endYear}` : item.year;
-      return `${item.title} (${span})`;
-    },
+    searchPlaceholder: 'Search shows',
+    yearLabel: 'All years',
+    makeMeta: item => (item.endYear && item.endYear !== item.year ? `${item.year}–${item.endYear}` : item.year),
     // Final Score stays empty while a show is still airing, so it stays hidden.
     mapRow: row => ({
       title: row['Title']?.trim() || '',
@@ -114,22 +94,13 @@ const CATEGORY = {
 
   games: {
     label: 'Games',
+    noun: ['game', 'games'],
     gids: [SIMPLE_GAMES_GID, COMPLEX_GAMES_GID],
-    dom: {
-      container: 'gamesContainer',
-      minScore: 'gamesMinScoreFilter',
-      maxScore: 'gamesMaxScoreFilter',
-      year: 'gamesYearFilter',
-      search: 'gamesSearchFilter',
-      back: 'backToHomeGames',
-    },
     sortDefault: 'date',
     searchKeys: ['title', 'person'],
-    hasImages: true,
-    isListView: false,
-    placeholderClasses: '',
-    makeTitle: item => item.year ? `${item.title} (${item.year})` : item.title,
-    renderDetails: item => item.person ? [item.person] : [],
+    searchPlaceholder: 'Search games or developers',
+    yearLabel: 'All years',
+    makeMeta: item => [item.year, item.person].filter(Boolean).join(' · '),
     mapRow: row => {
       const title = row['Title']?.trim() || '';
       const year = (row['Year'] || '').toString().trim();
@@ -148,30 +119,20 @@ const CATEGORY = {
 
   mice: {
     label: 'Mice',
+    noun: ['mouse', 'mice'],
     gids: [MICE_GID],
-    dom: {
-      container: 'miceContainer',
-      minScore: 'miceMinScoreFilter',
-      maxScore: 'miceMaxScoreFilter',
-      year: 'miceYearFilter',
-      search: 'miceSearchFilter',
-      back: 'backToHomeMice',
-    },
     sortDefault: 'date',
     searchKeys: ['brand', 'name', 'title'],
-    hasImages: true,
-    isListView: false,
-    cardClasses: 'mouse-card',
-    placeholderClasses: 'product product-mice',
-    makeTitle: item => item.title,
-    renderDetails: item => item.year ? [String(item.year)] : [],
+    searchPlaceholder: 'Search models or brands',
+    yearLabel: 'All releases',
+    product: true,
+    makeMeta: item => item.year,
     mapRow: row => {
       const brand = row['Brand']?.trim() || '';
       const name = row['Model']?.trim() || '';
-      const title = `${brand} ${name}`.trim();
 
       return {
-        title,
+        title: `${brand} ${name}`.trim(),
         brand,
         name,
         score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
@@ -184,30 +145,20 @@ const CATEGORY = {
 
   mousepads: {
     label: 'Mousepads',
+    noun: ['mousepad', 'mousepads'],
     gids: [MOUSEPADS_GID],
-    dom: {
-      container: 'mousepadsContainer',
-      minScore: 'mousepadsMinScoreFilter',
-      maxScore: 'mousepadsMaxScoreFilter',
-      year: 'mousepadsYearFilter',
-      search: 'mousepadsSearchFilter',
-      back: 'backToHomeMousepads',
-    },
     sortDefault: 'date',
     searchKeys: ['brand', 'name', 'title'],
-    hasImages: true,
-    isListView: false,
-    cardClasses: 'mousepad-card',
-    placeholderClasses: 'compact product product-mousepads',
-    makeTitle: item => item.title,
-    renderDetails: item => item.year ? [String(item.year)] : [],
+    searchPlaceholder: 'Search products or brands',
+    yearLabel: 'All releases',
+    product: true,
+    makeMeta: item => item.year,
     mapRow: row => {
       const brand = row['Brand']?.trim() || '';
       const name = row['Product']?.trim() || '';
-      const title = `${brand} ${name}`.trim();
 
       return {
-        title,
+        title: `${brand} ${name}`.trim(),
         brand,
         name,
         score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
@@ -219,12 +170,19 @@ const CATEGORY = {
   },
 };
 
+const SORT_OPTIONS = [
+  { value: 'date', label: 'Recent' },
+  { value: 'score', label: 'Top rated' },
+  { value: 'latest', label: 'Newest' },
+];
+const SCORE_CHIPS = [null, 9, 8, 7];
+
 /* ---------------------------
    State
 ---------------------------- */
 // The visitor's chosen sort per page, kept only in their own browser.
 const SORT_STORAGE_PREFIX = 'maximsratings-sort-';
-const SORT_VALUES = ['latest', 'score', 'date'];
+const SORT_VALUES = SORT_OPTIONS.map(o => o.value);
 
 function loadSavedSort(key) {
   try {
@@ -243,101 +201,72 @@ function saveSort(key, value) {
   }
 }
 
-function markActiveSort(key) {
-  document.querySelectorAll(`.sort-button[data-target="${key}"]`).forEach(b => {
-    b.classList.toggle('active', b.getAttribute('data-sort') === state[key].sort);
-  });
-}
+const state = Object.fromEntries(Object.keys(CATEGORY).map(key => [
+  key, { data: null, loading: false, sort: loadSavedSort(key), minScore: null },
+]));
 
-const state = {
-  movies: { data: null, sort: loadSavedSort('movies') },
-  shows: { data: null, sort: loadSavedSort('shows') },
-  games: { data: null, sort: loadSavedSort('games') },
-  mice: { data: null, sort: loadSavedSort('mice') },
-  mousepads: { data: null, sort: loadSavedSort('mousepads') },
-};
-
-/* ---------------------------
-   Sections
----------------------------- */
-const sections = ['home', 'movies', 'shows', 'games', 'mice', 'mousepads'];
-const sectionElements = {};
+const sections = ['home', ...Object.keys(CATEGORY)];
 
 /* ---------------------------
    Helpers
 ---------------------------- */
-function clamp(n, min, max) {
-  return Math.max(min, Math.min(max, n));
-}
-
 function formatScore(score) {
   if (!Number.isFinite(score)) return '0';
   return score.toFixed(1);
 }
 
+function scoreTierClass(score) {
+  if (!Number.isFinite(score)) return 'tier-low';
+  if (score >= 9.5) return 'tier-peak';
+  if (score >= 9.0) return 'tier-high';
+  if (score >= 8.0) return 'tier-good';
+  if (score >= 5.0) return 'tier-mid';
+  return 'tier-low';
+}
+
 function buildScoreBadge(score) {
-  const badge = document.createElement('div');
-  badge.className = 'score-badge ' + scoreTierClass(score);
-
-  const value = document.createElement('span');
-  value.className = 'score-value';
-  value.textContent = formatScore(score);
-  badge.appendChild(value);
-
+  const badge = el('div', 'score-badge ' + scoreTierClass(score), formatScore(score));
+  badge.setAttribute('aria-label', `Score ${formatScore(score)} out of 10`);
   return badge;
 }
 
-function scoreTierClass(score) {
-  if (!Number.isFinite(score)) return 'tier-gray';
-  if (score >= 9.5) return 'tier-peak';
-  if (score >= 9.0) return 'tier-high';
-  if (score >= 8.0) return 'tier-yellow';
-  if (score >= 5.0) return 'tier-muted';
-  return 'tier-gray';
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+// Sheet dates are YYYY-MM-DD; read them as written so no time zone can shift the day.
+function formatRatedDate(value) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
+  return m ? `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]} ${m[1]}` : value;
 }
 
 function normalize(s) {
   return (s || '').toString().toLowerCase();
 }
 
-function buildMouseAssetUrl(brand, model) {
-  const name = `${brand.trim()} - ${model.trim()}`
+function buildAssetName(brand, model) {
+  return `${brand.trim()} - ${model.trim()}`
     .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-')
     .replace(/\s+/g, ' ')
     .trim()
     .replace(/\.+$/, '');
+}
 
-  return `assets/mice/${encodeURIComponent(name)}.webp?v=${MOUSE_ASSET_VERSION}`;
+function buildMouseAssetUrl(brand, model) {
+  return `assets/mice/${encodeURIComponent(buildAssetName(brand, model))}.webp?v=${MOUSE_ASSET_VERSION}`;
 }
 
 function buildMousepadAssetUrl(brand, model) {
-  const name = `${brand.trim()} - ${model.trim()}`
-    .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/\.+$/, '');
-
-  return `assets/mousepads/${encodeURIComponent(name)}.png?v=${MOUSEPAD_ASSET_VERSION}`;
+  return `assets/mousepads/${encodeURIComponent(buildAssetName(brand, model))}.png?v=${MOUSEPAD_ASSET_VERSION}`;
 }
 
 function getEl(id) {
   return document.getElementById(id);
 }
 
-function getScoreBounds(minEl, maxEl) {
-  const minVal = parseFloat(minEl?.value);
-  const maxVal = parseFloat(maxEl?.value);
-
-  let minScore = Number.isFinite(minVal) ? minVal : -Infinity;
-  let maxScore = Number.isFinite(maxVal) ? maxVal : Infinity;
-
-  if (minScore > maxScore) {
-    const tmp = minScore;
-    minScore = maxScore;
-    maxScore = tmp;
-  }
-
-  return { minScore, maxScore };
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
 }
 
 function matchesSearch(item, term, keys) {
@@ -346,32 +275,119 @@ function matchesSearch(item, term, keys) {
 }
 
 /* ---------------------------
+   Page toolbars
+---------------------------- */
+function buildCategoryPage(key) {
+  const cfg = CATEGORY[key];
+  const page = getEl(key);
+
+  page.innerHTML = `
+    <div class="toolbar">
+      <div class="toolbar-head">
+        <h1 class="page-title" id="${key}Title">${cfg.label}<span class="result-count" id="${key}Count"></span></h1>
+        <div class="segmented" role="group" aria-label="Sort by">
+          ${SORT_OPTIONS.map(o => `<button type="button" class="sort-button" data-sort="${o.value}">${o.label}</button>`).join('')}
+        </div>
+      </div>
+      <div class="toolbar-filters">
+        <label class="search-field">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input id="${key}Search" type="search" placeholder="${cfg.searchPlaceholder}" autocomplete="off" spellcheck="false" aria-label="${cfg.searchPlaceholder}">
+        </label>
+        <button type="button" class="filter-toggle" id="${key}FilterToggle" aria-expanded="false" aria-controls="${key}Filters">
+          <i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Filters</span>
+        </button>
+        <div class="filter-group" id="${key}Filters">
+          <div class="chips" role="group" aria-label="Minimum score">
+            ${SCORE_CHIPS.map(min => `<button type="button" class="chip" data-min="${min ?? ''}">${min ? `${min}+` : 'Any score'}</button>`).join('')}
+          </div>
+          <select id="${key}Year" class="year-select" aria-label="${cfg.yearLabel}">
+            <option value="">${cfg.yearLabel}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div id="${key}Container" class="cards-container${cfg.product ? ' product-grid' : ''}"></div>
+  `;
+
+  getEl(`${key}Search`).addEventListener('input', () => renderCategory(key));
+  getEl(`${key}Year`).addEventListener('change', () => renderCategory(key));
+
+  const toggle = getEl(`${key}FilterToggle`);
+  toggle.addEventListener('click', () => {
+    const open = page.classList.toggle('filters-open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+
+  page.querySelectorAll('.sort-button').forEach(button => {
+    button.addEventListener('click', () => {
+      state[key].sort = button.dataset.sort;
+      saveSort(key, state[key].sort);
+      markActiveControls(key);
+      renderCategory(key);
+    });
+  });
+
+  page.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      state[key].minScore = chip.dataset.min ? Number(chip.dataset.min) : null;
+      markActiveControls(key);
+      renderCategory(key);
+    });
+  });
+
+  markActiveControls(key);
+}
+
+function markActiveControls(key) {
+  const page = getEl(key);
+  page.querySelectorAll('.sort-button').forEach(b => {
+    const active = b.dataset.sort === state[key].sort;
+    b.classList.toggle('active', active);
+    b.setAttribute('aria-pressed', String(active));
+  });
+  page.querySelectorAll('.chip').forEach(c => {
+    const active = (c.dataset.min ? Number(c.dataset.min) : null) === state[key].minScore;
+    c.classList.toggle('active', active);
+    c.setAttribute('aria-pressed', String(active));
+  });
+}
+
+/* ---------------------------
    Navigation
 ---------------------------- */
 function showSection(id) {
-  sections.forEach(sec => {
-    const el = sectionElements[sec];
-    if (el) el.classList.toggle('hidden', sec !== id);
+  sections.forEach(sec => getEl(sec)?.classList.toggle('hidden', sec !== id));
+
+  const onCategory = id !== 'home';
+  getEl('topbar').classList.toggle('hidden', !onCategory);
+  getEl('siteFooter').classList.toggle('hidden', !onCategory);
+  document.querySelectorAll('.tab').forEach(tab => {
+    const active = tab.dataset.section === id;
+    tab.classList.toggle('active', active);
+    if (active) {
+      tab.setAttribute('aria-current', 'page');
+    } else {
+      tab.removeAttribute('aria-current');
+    }
   });
 
-  if (id !== 'home') {
-    window.location.hash = `#${id}`;
+  if (onCategory) {
+    if (window.location.hash !== `#${id}`) window.location.hash = `#${id}`;
+    document.querySelector('.tab.active')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    window.scrollTo(0, 0);
   } else {
     history.replaceState(null, '', window.location.pathname);
   }
 
-  if (CATEGORY[id] && state[id].data === null) {
+  if (CATEGORY[id] && state[id].data === null && !state[id].loading) {
     fetchCategory(id);
   }
 }
 
 function handleHashChange() {
   const hash = window.location.hash.replace('#', '');
-  if (sections.includes(hash) && hash !== '') {
-    showSection(hash);
-  } else {
-    showSection('home');
-  }
+  showSection(sections.includes(hash) && hash !== '' ? hash : 'home');
 }
 
 /* ---------------------------
@@ -388,338 +404,183 @@ function parseCsvWithMap(text, mapRow, gid) {
   }).filter(x => x.title);
 }
 
+function renderSkeletons(container, count) {
+  container.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const card = el('div', 'card skeleton');
+    card.setAttribute('aria-hidden', 'true');
+    card.append(el('div', 'poster'), el('div', 'skeleton-line'), el('div', 'skeleton-line short'));
+    container.appendChild(card);
+  }
+}
+
 async function fetchCategory(key) {
   const cfg = CATEGORY[key];
   const st = state[key];
-  const container = getEl(cfg.dom.container);
+  const container = getEl(`${key}Container`);
 
-  if (container) {
-    container.innerHTML = `<div class="loading-text">Loading entries...</div>`;
-  }
-
-  // Yield once so the loading state is visible before network work begins.
-  await new Promise(resolve => requestAnimationFrame(() => resolve()));
+  st.loading = true;
+  renderSkeletons(container, 8);
 
   try {
     const texts = await Promise.all(
-      cfg.gids.map(gid => fetch(buildPublishedCsvUrl(gid)).then(r => r.text()))
+      cfg.gids.map(gid => fetch(buildPublishedCsvUrl(gid)).then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.text();
+      }))
     );
 
-    const merged = texts.flatMap((t, i) => {
-      const gid = cfg.gids[i];
-      return parseCsvWithMap(t, cfg.mapRow, gid);
-    });
-
-    st.data = merged;
+    st.data = texts.flatMap((t, i) => parseCsvWithMap(t, cfg.mapRow, cfg.gids[i]));
 
     populateYearFilter(key);
     renderCategory(key);
   } catch (err) {
     console.error(`${cfg.label} CSV error:`, err);
-    st.data = [];
-
-    if (container) {
-      container.innerHTML = `
-        <div class="card">
-          <div class="card-content">
-            <div class="card-title">Could not load ${cfg.label}</div>
-            <div class="card-details">Check publishing and gid values.</div>
-          </div>
-        </div>
-      `;
-    }
+    st.data = null;
+    container.innerHTML = '';
+    container.appendChild(el('p', 'empty-state', `Could not load ${cfg.label.toLowerCase()} right now. Reload the page to try again.`));
+  } finally {
+    st.loading = false;
   }
 }
 
 function populateYearFilter(key) {
   const cfg = CATEGORY[key];
-  const st = state[key];
-  const yearEl = getEl(cfg.dom.year);
+  const yearEl = getEl(`${key}Year`);
+  yearEl.innerHTML = '';
+  yearEl.appendChild(new Option(cfg.yearLabel, ''));
 
-  if (!yearEl) return;
-
-  yearEl.innerHTML = '<option value="">All</option>';
-
-  const years = Array.from(new Set((st.data || []).map(x => x.year).filter(Boolean)));
+  const years = Array.from(new Set((state[key].data || []).map(x => x.year).filter(Boolean)));
   years.sort((a, b) => b.localeCompare(a));
-
-  years.forEach(y => {
-    const opt = document.createElement('option');
-    opt.value = y;
-    opt.textContent = y;
-    yearEl.appendChild(opt);
-  });
+  years.forEach(y => yearEl.appendChild(new Option(y, y)));
 }
 
 /* ---------------------------
    Sorting
 ---------------------------- */
+const byDate = (a, b) => (Date.parse(b.scoreDate || '1970-01-01') || 0) - (Date.parse(a.scoreDate || '1970-01-01') || 0);
+const byYear = (a, b) => (parseInt(b.year, 10) || 0) - (parseInt(a.year, 10) || 0);
+const byScore = (a, b) => (b.score || 0) - (a.score || 0);
+const byTitle = (a, b) => (a.title || '').localeCompare(b.title || '');
+
+const SORT_ORDERS = {
+  latest: [byYear, byDate, byScore, byTitle],
+  score: [byScore, byYear, byTitle],
+  date: [byDate],
+};
+
 function applySort(list, sortKey) {
-  if (sortKey === 'latest') {
-    list.sort((a, b) => {
-      const ya = parseInt(a.year, 10) || 0;
-      const yb = parseInt(b.year, 10) || 0;
-      const dy = yb - ya;
-      if (dy !== 0) return dy;
-
-      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
-      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
-      const dd = db - da;
-      if (dd !== 0) return dd;
-
-      const ds = (b.score || 0) - (a.score || 0);
-      if (ds !== 0) return ds;
-
-      return (a.title || '').localeCompare(b.title || '');
-    });
-  }
-
-  if (sortKey === 'score') {
-    list.sort((a, b) => {
-      const ds = (b.score || 0) - (a.score || 0);
-      if (ds !== 0) return ds;
-
-      const ya = parseInt(a.year, 10) || 0;
-      const yb = parseInt(b.year, 10) || 0;
-      const dy = yb - ya;
-      if (dy !== 0) return dy;
-
-      return (a.title || '').localeCompare(b.title || '');
-    });
-  }
-
-  if (sortKey === 'date') {
-    list.sort((a, b) => {
-      const da = Date.parse(a.scoreDate || '1970-01-01') || 0;
-      const db = Date.parse(b.scoreDate || '1970-01-01') || 0;
-      return db - da;
-    });
-  }
+  const order = SORT_ORDERS[sortKey] || SORT_ORDERS.date;
+  list.sort((a, b) => {
+    for (const compare of order) {
+      const d = compare(a, b);
+      if (d !== 0) return d;
+    }
+    return 0;
+  });
 }
 
 /* ---------------------------
-   Media cards
+   Cards
 ---------------------------- */
-function buildMedia(cfg, item) {
-  const wrap = document.createElement('div');
-  wrap.className = 'media-wrap';
+function buildPoster(item) {
+  const poster = el('div', 'poster');
 
-  if (cfg.hasImages && item.posterUrl) {
+  if (item.posterUrl) {
     const img = document.createElement('img');
     img.src = item.posterUrl;
-    img.alt = item.title || '';
+    img.alt = '';
     img.loading = 'lazy';
     img.decoding = 'async';
-    img.onerror = () => {
-      img.src = '';
-      img.style.backgroundColor = '#3a3a3a';
-    };
-    wrap.appendChild(img);
+    img.addEventListener('load', () => poster.classList.add('loaded'));
+    img.addEventListener('error', () => {
+      img.remove();
+      poster.classList.add('missing');
+    });
+    poster.appendChild(img);
   } else {
-    const placeholder = document.createElement('div');
-    placeholder.className = cfg.placeholderClasses
-      ? `media-placeholder ${cfg.placeholderClasses}`
-      : 'media-placeholder';
-
-    wrap.appendChild(placeholder);
+    poster.classList.add('missing');
   }
 
-  const badgeRow = document.createElement('div');
-  badgeRow.className = 'media-badge-row';
-  badgeRow.appendChild(buildScoreBadge(item.score || 0));
-
+  const badges = el('div', 'poster-badges');
+  badges.appendChild(buildScoreBadge(item.score || 0));
   if ([2, 3].includes(item.recommendationLevel)) {
-    badgeRow.classList.add('media-badge-row-pick');
-    const isTopPick = item.recommendationLevel === 3;
-    const pickBadge = document.createElement('span');
-    pickBadge.className = `pick-badge ${isTopPick ? 'pick-badge-top' : 'pick-badge-strong'}`;
-    pickBadge.textContent = isTopPick ? 'TOP PICK' : 'STRONG PICK';
-    badgeRow.appendChild(pickBadge);
+    const top = item.recommendationLevel === 3;
+    const pick = el('span', `pick-badge${top ? ' pick-top' : ''}`);
+    pick.innerHTML = '<i class="fa-solid fa-star" aria-hidden="true"></i>';
+    pick.appendChild(document.createTextNode(top ? 'Top pick' : 'Strong pick'));
+    badges.appendChild(pick);
   }
+  poster.appendChild(badges);
+  return poster;
+}
 
-  wrap.appendChild(badgeRow);
-  return wrap;
+function buildCard(cfg, item) {
+  const card = el('article', 'card');
+  card.appendChild(buildPoster(item));
+
+  const body = el('div', 'card-body');
+  const title = el('h2', 'card-title', item.title);
+  title.title = item.title;
+  body.appendChild(title);
+
+  const meta = cfg.makeMeta ? cfg.makeMeta(item) : '';
+  if (meta) body.appendChild(el('p', 'card-meta', meta));
+
+  const date = el('a', 'card-date', item.scoreDate ? `Rated ${formatRatedDate(item.scoreDate)}` : 'Rated —');
+  date.href = buildRowLink(item._gid, item._row);
+  date.target = '_blank';
+  date.rel = 'noopener noreferrer';
+  body.appendChild(date);
+
+  card.appendChild(body);
+  return card;
 }
 
 /* ---------------------------
-   List items
----------------------------- */
-function buildListItem(cfg, item) {
-  const listItem = document.createElement('div');
-  listItem.className = 'list-item';
-
-  const infoSection = document.createElement('div');
-  infoSection.className = 'list-item-info';
-
-  const title = document.createElement('div');
-  title.className = 'list-item-title';
-  title.textContent = cfg.makeTitle ? cfg.makeTitle(item) : item.title;
-  infoSection.appendChild(title);
-
-  const details = cfg.renderDetails ? cfg.renderDetails(item) : [];
-  details.filter(Boolean).forEach(line => {
-    const d = document.createElement('div');
-    d.className = 'list-item-details';
-    d.textContent = line;
-    infoSection.appendChild(d);
-  });
-
-  listItem.appendChild(infoSection);
-
-  const metaSection = document.createElement('div');
-  metaSection.className = 'list-item-meta';
-
-  const scoreBadge = buildScoreBadge(item.score || 0);
-  scoreBadge.classList.add('list-score-badge');
-  metaSection.appendChild(scoreBadge);
-
-  const dateLink = document.createElement('a');
-  dateLink.className = 'rated-pill';
-  dateLink.textContent = item.scoreDate ? `Rated: ${item.scoreDate}` : 'Rated: —';
-  dateLink.href = buildRowLink(item._gid, item._row);
-  dateLink.target = '_blank';
-  dateLink.rel = 'noopener noreferrer';
-  metaSection.appendChild(dateLink);
-
-  listItem.appendChild(metaSection);
-
-  return listItem;
-}
-
-/* ---------------------------
-   Main Render Function
+   Render
 ---------------------------- */
 function renderCategory(key) {
   const cfg = CATEGORY[key];
   const st = state[key];
-
   if (!st.data) return;
 
-  const container = getEl(cfg.dom.container);
-  const minEl = getEl(cfg.dom.minScore);
-  const maxEl = getEl(cfg.dom.maxScore);
-  const yearEl = getEl(cfg.dom.year);
-  const searchEl = getEl(cfg.dom.search);
+  const container = getEl(`${key}Container`);
+  const selectedYear = getEl(`${key}Year`).value;
+  const searchTerm = normalize(getEl(`${key}Search`).value).trim();
 
-  const selectedYear = yearEl?.value || '';
-  const { minScore, maxScore } = getScoreBounds(minEl, maxEl);
-  const searchTerm = normalize(searchEl?.value).trim();
-
-  let filtered = (st.data || []).filter(item => {
-    // Only show items that have a score
-    if (item.score === null || item.score === undefined) return false;
-
-    const yearMatch = selectedYear ? item.year === selectedYear : true;
-    const scoreMatch = (item.score ?? 0) >= minScore && (item.score ?? 0) <= maxScore;
-    const searchMatch = matchesSearch(item, searchTerm, cfg.searchKeys);
-    return yearMatch && scoreMatch && searchMatch;
+  const filtered = st.data.filter(item => {
+    if (!Number.isFinite(item.score)) return false;
+    if (selectedYear && item.year !== selectedYear) return false;
+    if (st.minScore !== null && item.score < st.minScore) return false;
+    return matchesSearch(item, searchTerm, cfg.searchKeys);
   });
 
   applySort(filtered, st.sort);
 
-  if (!container) return;
+  const [one, many] = cfg.noun;
+  getEl(`${key}Count`).textContent = `${filtered.length} ${filtered.length === 1 ? one : many}`;
 
   container.innerHTML = '';
-
   if (filtered.length === 0) {
-    container.innerHTML = `<div class="loading-text">No entries match your filters.</div>`;
+    container.appendChild(el('p', 'empty-state', `No ${many} match these filters.`));
     return;
   }
 
-  if (cfg.isListView) {
-    filtered.forEach(item => {
-      container.appendChild(buildListItem(cfg, item));
-    });
-  } else {
-    filtered.forEach(item => {
-      const card = document.createElement('div');
-      card.className = cfg.cardClasses ? `card ${cfg.cardClasses}` : 'card';
-
-      card.appendChild(buildMedia(cfg, item));
-
-      const content = document.createElement('div');
-      content.className = 'card-content';
-
-      const titleEl = document.createElement('div');
-      titleEl.className = 'card-title';
-      titleEl.textContent = cfg.makeTitle ? cfg.makeTitle(item) : item.title;
-      content.appendChild(titleEl);
-
-      const details = cfg.renderDetails ? cfg.renderDetails(item) : [];
-      details.filter(Boolean).forEach(line => {
-        const d = document.createElement('div');
-        d.className = 'card-details';
-        d.textContent = line;
-        content.appendChild(d);
-      });
-
-      const dateLink = document.createElement('a');
-      dateLink.className = 'rated-pill';
-      dateLink.textContent = item.scoreDate ? `Rated: ${item.scoreDate}` : 'Rated: —';
-      dateLink.href = buildRowLink(item._gid, item._row);
-      dateLink.target = '_blank';
-      dateLink.rel = 'noopener noreferrer';
-      content.appendChild(dateLink);
-
-      card.appendChild(content);
-      container.appendChild(card);
-    });
-  }
-}
-
-/* ---------------------------
-   Events
----------------------------- */
-function wireCategoryFilters(key) {
-  const cfg = CATEGORY[key];
-
-  const minEl = getEl(cfg.dom.minScore);
-  const maxEl = getEl(cfg.dom.maxScore);
-  const yearEl = getEl(cfg.dom.year);
-  const searchEl = getEl(cfg.dom.search);
-  const backEl = getEl(cfg.dom.back);
-
-  minEl?.addEventListener('change', () => renderCategory(key));
-  maxEl?.addEventListener('change', () => renderCategory(key));
-  yearEl?.addEventListener('change', () => renderCategory(key));
-  searchEl?.addEventListener('input', () => renderCategory(key));
-
-  backEl?.addEventListener('click', () => showSection('home'));
+  const fragment = document.createDocumentFragment();
+  filtered.forEach(item => fragment.appendChild(buildCard(cfg, item)));
+  container.appendChild(fragment);
 }
 
 /* ---------------------------
    Init
 ---------------------------- */
 function init() {
-  sections.forEach(id => {
-    sectionElements[id] = getEl(id);
+  Object.keys(CATEGORY).forEach(buildCategoryPage);
+
+  document.querySelectorAll('[data-section]').forEach(btn => {
+    btn.addEventListener('click', () => showSection(btn.dataset.section));
   });
-
-  const categoryButtons = document.querySelectorAll('.category-button');
-  categoryButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.getAttribute('data-section');
-      showSection(target);
-    });
-  });
-
-  const sortButtons = document.querySelectorAll('.sort-button');
-  sortButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const target = button.getAttribute('data-target');
-      const sortValue = button.getAttribute('data-sort');
-
-      if (!target || !state[target]) return;
-
-      state[target].sort = sortValue;
-      saveSort(target, sortValue);
-      markActiveSort(target);
-      renderCategory(target);
-    });
-  });
-
-  Object.keys(CATEGORY).forEach(wireCategoryFilters);
-  Object.keys(CATEGORY).forEach(markActiveSort);
 
   handleHashChange();
   window.addEventListener('hashchange', handleHashChange);
