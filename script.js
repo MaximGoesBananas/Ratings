@@ -8,6 +8,7 @@ function buildPublishedCsvUrl(gid) {
 // Published sheet tabs
 const MOVIES_GID = '1920189918';
 const SHOWS_GID = '791640483';
+const SHOW_SEASONS_GID = '697316854';
 const SIMPLE_GAMES_GID = '1303529120';
 const COMPLEX_GAMES_GID = '1556084448';
 const MICE_GID = '1727287959';
@@ -61,6 +62,11 @@ const CATEGORY = {
     searchPlaceholder: 'Search movies',
     yearLabel: 'All years',
     makeMeta: item => [item.year, item.person].filter(Boolean).join(' · '),
+    makeFacts: item => [
+      ['Year', item.year],
+      ['Director', item.person],
+      ['Runtime', formatMinutes(item.runtime)],
+    ],
     mapRow: row => ({
       title: row['Title']?.trim() || '',
       score: row['Score']?.trim() ? parseFloat(row['Score']) : null,
@@ -69,6 +75,8 @@ const CATEGORY = {
       scoreDate: row['Score Date']?.trim() || '',
       posterUrl: row['PosterURL']?.trim() || '',
       recommendationLevel: getMovieRecommendationLevel(row),
+      runtime: Number.parseInt(row['Runtime'], 10) || 0,
+      note: row['Personal notes']?.trim() || '',
     }),
   },
 
@@ -81,6 +89,11 @@ const CATEGORY = {
     searchPlaceholder: 'Search shows',
     yearLabel: 'All years',
     makeMeta: item => (item.endYear && item.endYear !== item.year ? `${item.year}–${item.endYear}` : item.year),
+    makeFacts: item => [
+      ['Aired', CATEGORY.shows.makeMeta(item)],
+      ['Watch time', formatHours(item.minutes / 60)],
+    ],
+    hasSeasons: true,
     // Final Score stays empty while a show is still airing, so it stays hidden.
     mapRow: row => ({
       title: row['Title']?.trim() || '',
@@ -89,6 +102,7 @@ const CATEGORY = {
       endYear: (row['Release End'] || '').toString().trim(),
       scoreDate: row['Last Score Date']?.trim() || '',
       posterUrl: row['PosterURL']?.trim() || '',
+      minutes: Number.parseInt(row['Minutes'], 10) || 0,
     }),
   },
 
@@ -101,6 +115,11 @@ const CATEGORY = {
     searchPlaceholder: 'Search games',
     yearLabel: 'All years',
     makeMeta: item => [item.year, item.person].filter(Boolean).join(' · '),
+    makeFacts: item => [
+      ['Year', item.year],
+      ['Developer', item.person],
+      ['Main story', formatHours(item.storyHours)],
+    ],
     mapRow: row => {
       const title = row['Title']?.trim() || '';
       const year = (row['Year'] || '').toString().trim();
@@ -113,6 +132,8 @@ const CATEGORY = {
         person: row['Developers']?.trim() || '',
         scoreDate: row['Score Date']?.trim() || '',
         posterUrl: getGamePosterUrl(title, year, posterUrl),
+        storyHours: Number.parseFloat(row['Main Story']) || 0,
+        note: row['Notes']?.trim() || '',
       };
     },
   },
@@ -128,6 +149,10 @@ const CATEGORY = {
     product: true,
     makeTitle: item => item.name || item.title,
     makeMeta: item => [item.brand, item.year].filter(Boolean).join(' · '),
+    makeFacts: item => [
+      ['Brand', item.brand],
+      ['Release', item.year],
+    ],
     mapRow: row => {
       const brand = row['Brand']?.trim() || '';
       const name = row['Model']?.trim() || '';
@@ -140,6 +165,7 @@ const CATEGORY = {
         year: (row['Release'] || '').toString().trim(),
         scoreDate: row['Score Date']?.trim() || '',
         posterUrl: buildMouseAssetUrl(brand, name),
+        note: row['Personal Notes & Feelings']?.trim() || '',
       };
     },
   },
@@ -155,6 +181,11 @@ const CATEGORY = {
     product: true,
     makeTitle: item => item.name || item.title,
     makeMeta: item => [item.brand, item.year].filter(Boolean).join(' · '),
+    makeFacts: item => [
+      ['Brand', item.brand],
+      ['Release', item.year],
+      ['Glide speed', item.glide],
+    ],
     mapRow: row => {
       const brand = row['Brand']?.trim() || '';
       const name = row['Product']?.trim() || '';
@@ -167,6 +198,8 @@ const CATEGORY = {
         year: (row['Release'] || '').toString().trim(),
         scoreDate: row['Score Date']?.trim() || '',
         posterUrl: buildMousepadAssetUrl(brand, name),
+        note: row['Personal Notes']?.trim() || '',
+        glide: (Object.entries(row).find(([key]) => key.startsWith('Glide Speed'))?.[1] || '').trim(),
       };
     },
   },
@@ -238,6 +271,19 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 function formatRatedDate(value) {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
   return m ? `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]} ${m[1]}` : value;
+}
+
+function formatMinutes(minutes) {
+  if (!minutes) return '';
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return h ? `${h} h${m ? ` ${m} min` : ''}` : `${m} min`;
+}
+
+function formatHours(hours) {
+  if (!hours) return '';
+  const rounded = Math.round(hours);
+  return `${rounded} hour${rounded === 1 ? '' : 's'}`;
 }
 
 function normalize(s) {
@@ -515,13 +561,7 @@ function buildPoster(item) {
 
   const badges = el('div', 'poster-badges');
   badges.appendChild(buildScoreBadge(item.score || 0));
-  if ([2, 3].includes(item.recommendationLevel)) {
-    const top = item.recommendationLevel === 3;
-    const pick = el('span', `pick-badge${top ? ' pick-top' : ''}`);
-    pick.innerHTML = '<i class="fa-solid fa-star" aria-hidden="true"></i>';
-    pick.appendChild(document.createTextNode(top ? 'Top pick' : 'Strong pick'));
-    badges.appendChild(pick);
-  }
+  if ([2, 3].includes(item.recommendationLevel)) badges.appendChild(buildPickBadge(item.recommendationLevel));
   poster.appendChild(badges);
   return poster;
 }
@@ -541,13 +581,19 @@ function buildCard(cfg, item) {
   meta.title = meta.textContent.trim();
   body.appendChild(meta);
 
-  const date = el('a', 'card-date', item.scoreDate ? `Rated ${formatRatedDate(item.scoreDate)}` : 'Rated —');
-  date.href = buildRowLink(item._gid, item._row);
-  date.target = '_blank';
-  date.rel = 'noopener noreferrer';
-  body.appendChild(date);
+  body.appendChild(el('p', 'card-date', item.scoreDate ? `Rated ${formatRatedDate(item.scoreDate)}` : 'Rated —'));
 
   card.appendChild(body);
+  card.tabIndex = 0;
+  card.setAttribute('role', 'button');
+  card.setAttribute('aria-label', `${item.title}, score ${formatScore(item.score)}. Show details`);
+  card.addEventListener('click', () => openDetails(cfg, item));
+  card.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openDetails(cfg, item);
+    }
+  });
   return card;
 }
 
@@ -584,6 +630,152 @@ function renderCategory(key) {
   const fragment = document.createDocumentFragment();
   filtered.forEach(item => fragment.appendChild(buildCard(cfg, item)));
   container.appendChild(fragment);
+}
+
+/* ---------------------------
+   Details panel
+---------------------------- */
+let seasonsRequest = null;
+
+function loadShowSeasons() {
+  if (!seasonsRequest) {
+    seasonsRequest = fetch(buildPublishedCsvUrl(SHOW_SEASONS_GID))
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.text();
+      })
+      .then(text => Papa.parse(text.trim(), { header: true, skipEmptyLines: true }).data
+        .map(row => ({
+          title: row['Title']?.trim() || '',
+          season: Number.parseInt(row['Season'], 10),
+          score: Number.parseFloat(row['Score']),
+        }))
+        .filter(row => row.title && Number.isFinite(row.season) && Number.isFinite(row.score)))
+      .catch(err => {
+        seasonsRequest = null;
+        throw err;
+      });
+  }
+  return seasonsRequest;
+}
+
+async function fillSeasons(list, title) {
+  try {
+    const seasons = (await loadShowSeasons())
+      .filter(row => row.title === title)
+      .sort((a, b) => a.season - b.season);
+    list.innerHTML = '';
+    if (!seasons.length) {
+      list.closest('.details-seasons')?.remove();
+      return;
+    }
+    seasons.forEach(({ season, score }) => {
+      const li = el('li', 'season-row');
+      li.appendChild(el('span', 'season-name', `Season ${season}`));
+      const bar = el('span', 'season-bar');
+      const fill = el('span', `season-fill ${scoreTierClass(score)}`);
+      fill.style.width = `${Math.max(0, Math.min(10, score)) * 10}%`;
+      bar.appendChild(fill);
+      li.appendChild(bar);
+      li.appendChild(buildScoreBadge(score));
+      list.appendChild(li);
+    });
+  } catch {
+    list.closest('.details-seasons')?.remove();
+  }
+}
+
+function buildPickBadge(level) {
+  const top = level === 3;
+  const pick = el('span', `pick-badge${top ? ' pick-top' : ''}`);
+  pick.innerHTML = '<i class="fa-solid fa-star" aria-hidden="true"></i>';
+  pick.appendChild(document.createTextNode(top ? 'Top pick' : 'Strong pick'));
+  return pick;
+}
+
+function openDetails(cfg, item) {
+  const dialog = getEl('details');
+  const body = getEl('detailsBody');
+  body.innerHTML = '';
+  dialog.classList.toggle('is-product', Boolean(cfg.product));
+
+  const media = buildPoster(item);
+  media.classList.add('details-poster');
+  media.querySelector('.poster-badges')?.remove();
+  body.appendChild(media);
+
+  const info = el('div', 'details-info');
+  info.appendChild(el('p', 'details-kind', cfg.noun[0]));
+  const title = el('h2', 'details-title', item.title);
+  title.id = 'detailsTitle';
+  info.appendChild(title);
+
+  const scoreRow = el('div', 'details-score');
+  scoreRow.appendChild(buildScoreBadge(item.score));
+  if ([2, 3].includes(item.recommendationLevel)) scoreRow.appendChild(buildPickBadge(item.recommendationLevel));
+  if (item.scoreDate) scoreRow.appendChild(el('span', 'details-date', `Rated ${formatRatedDate(item.scoreDate)}`));
+  info.appendChild(scoreRow);
+
+  const facts = (cfg.makeFacts ? cfg.makeFacts(item) : []).filter(([, value]) => value);
+  if (facts.length) {
+    const dl = el('dl', 'details-facts');
+    facts.forEach(([label, value]) => {
+      const row = el('div');
+      row.append(el('dt', '', label), el('dd', '', value));
+      dl.appendChild(row);
+    });
+    info.appendChild(dl);
+  }
+
+  if (item.note) {
+    const note = el('blockquote', 'details-note');
+    note.appendChild(el('p', '', item.note));
+    info.appendChild(note);
+  }
+
+  if (cfg.hasSeasons) {
+    const seasons = el('section', 'details-seasons');
+    seasons.appendChild(el('h3', '', 'Seasons'));
+    const list = el('ul', 'season-list');
+    list.appendChild(el('li', 'season-loading', 'Loading seasons…'));
+    seasons.appendChild(list);
+    info.appendChild(seasons);
+    fillSeasons(list, item.title);
+  }
+
+  const sheet = el('a', 'details-sheet', 'See it in my sheet');
+  sheet.href = buildRowLink(item._gid, item._row);
+  sheet.target = '_blank';
+  sheet.rel = 'noopener noreferrer';
+  info.appendChild(sheet);
+
+  body.appendChild(info);
+
+  if (!dialog.open) {
+    dialog.showModal();
+    // A history entry lets the phone back button close the panel.
+    history.pushState({ details: true }, '');
+  }
+  body.scrollTop = 0;
+}
+
+function closeDetails() {
+  const dialog = getEl('details');
+  if (dialog.open) dialog.close();
+}
+
+function wireDetails() {
+  const dialog = getEl('details');
+  getEl('detailsClose').addEventListener('click', closeDetails);
+  dialog.addEventListener('click', event => {
+    if (event.target === dialog) closeDetails();
+  });
+  dialog.addEventListener('close', () => {
+    if (history.state?.details) history.back();
+  });
+  window.addEventListener('popstate', () => {
+    if (dialog.open) dialog.close();
+  });
 }
 
 /* ---------------------------
@@ -702,6 +894,7 @@ async function renderHome() {
 ---------------------------- */
 function init() {
   Object.keys(CATEGORY).forEach(buildCategoryPage);
+  wireDetails();
 
   document.querySelectorAll('[data-section]').forEach(btn => {
     btn.addEventListener('click', () => showSection(btn.dataset.section));

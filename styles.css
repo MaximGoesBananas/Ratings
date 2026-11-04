@@ -799,6 +799,288 @@ main {
 }
 
 /* --------------------------------
+   Details panel
+--------------------------------- */
+.card {
+  cursor: pointer;
+  outline: none;
+}
+
+.card:focus-visible .poster {
+  box-shadow: 0 0 0 2px var(--accent), 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+body:has(.details[open]) {
+  overflow: hidden;
+}
+
+.details {
+  width: min(880px, 94vw);
+  max-width: none;
+  max-height: 88vh;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.details[open] {
+  animation: detailsIn 220ms var(--ease);
+}
+
+.details::backdrop {
+  background: rgba(5, 6, 9, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.details-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: rgba(10, 12, 17, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.details-close:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.details-body {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 30px;
+  padding: 30px;
+  max-height: 88vh;
+  overflow-y: auto;
+}
+
+.details-poster {
+  align-self: start;
+}
+
+.details.is-product .details-poster {
+  aspect-ratio: 378 / 425;
+}
+
+.details-info {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  padding-right: 34px;
+}
+
+.details-kind {
+  margin: 0 0 -10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.details-title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+.details-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.details-score .score-badge {
+  min-width: 62px;
+  height: 40px;
+  font-size: 1.3rem;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.details-date {
+  color: var(--faint);
+  font-size: 0.88rem;
+}
+
+.details-facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 14px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.details-facts dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.details-facts dd {
+  margin: 4px 0 0;
+  font-weight: 600;
+}
+
+.details-note {
+  margin: 0;
+  padding: 16px 18px;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  background: var(--surface-2);
+}
+
+.details-note p {
+  margin: 0;
+  line-height: 1.65;
+  color: #d8dce6;
+}
+
+.details-seasons h3 {
+  margin: 0 0 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.season-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.season-row {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+}
+
+.season-name {
+  color: var(--muted);
+}
+
+.season-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.season-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #7d869b;
+}
+
+.season-fill.tier-peak,
+.season-fill.tier-high {
+  background: var(--accent);
+}
+
+.season-fill.tier-good {
+  background: #c9a640;
+}
+
+.season-fill.tier-low {
+  background: #555c6d;
+}
+
+.season-row .score-badge {
+  min-width: 44px;
+  height: 26px;
+  font-size: 0.85rem;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.season-loading {
+  color: var(--faint);
+  font-size: 0.88rem;
+}
+
+.details-sheet {
+  justify-self: start;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.details-sheet::after {
+  content: " →";
+}
+
+.details-sheet:hover {
+  color: var(--accent);
+}
+
+/* Phones get a sheet that rises from the bottom. */
+@media (max-width: 720px) {
+  .details {
+    width: 100vw;
+    max-height: 92vh;
+    margin: auto 0 0;
+    border-radius: 20px 20px 0 0;
+    border-bottom: 0;
+  }
+
+  .details[open] {
+    animation: sheetIn 260ms var(--ease);
+  }
+
+  .details-body {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 22px 18px 30px;
+    max-height: 92vh;
+  }
+
+  .details-poster {
+    width: min(200px, 52vw);
+  }
+
+  .details-info {
+    padding-right: 0;
+  }
+}
+
+@keyframes detailsIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes sheetIn {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+
+/* --------------------------------
    Footer
 --------------------------------- */
 .site-footer {
