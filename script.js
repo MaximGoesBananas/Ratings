@@ -101,14 +101,12 @@ const CATEGORY = {
       const span = item.endYear && item.endYear !== item.year ? `${item.year}–${item.endYear}` : item.year;
       return `${item.title} (${span})`;
     },
-    renderDetails: item => item.seasons ? [`${item.seasons} season${item.seasons === 1 ? '' : 's'}`] : [],
-    // Final Score stays empty until a show is finished, so unfinished shows are hidden.
+    // Final Score stays empty while a show is still airing, so it stays hidden.
     mapRow: row => ({
       title: row['Title']?.trim() || '',
       score: row['Final Score']?.trim() ? parseFloat(row['Final Score']) : null,
       year: (row['Release Year'] || '').toString().trim(),
       endYear: (row['Release End'] || '').toString().trim(),
-      seasons: Number.parseInt(row['Seasons'], 10) || 0,
       scoreDate: row['Last Score Date']?.trim() || '',
       posterUrl: row['PosterURL']?.trim() || '',
     }),
